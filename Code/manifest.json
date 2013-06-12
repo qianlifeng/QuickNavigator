@@ -1,0 +1,29 @@
+﻿{
+  "name": "QuickNavigator",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "",
+  "browser_action": {
+    "default_icon": "icon_gray.png"
+  },
+  "background":{
+	"page":"bg.html"
+  },
+   "icons": {
+      "128": "icon.png",
+      "16": "icon.png",
+      "48": "icon.png"
+   },  
+  "content_scripts":[
+  {
+    "js":["util/jquery-1.7.2.min.js","util/jquery.hotkeys-0.7.9.min.js","content_scripts/omnibox.js"],
+    "css":["content_scripts/omnibox.css" ],
+    "matches":["http://*/*","https://*/*"],
+    "run_at":"document_end"
+  }],
+  "permissions": [
+	"http://*/*",
+	"https://*/*",
+    "tabs"],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

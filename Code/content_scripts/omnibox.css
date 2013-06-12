@@ -1,0 +1,99 @@
+.omniboxReset,
+div.omniboxReset,
+span.omniboxReset,
+table.omniboxReset,
+a.omniboxReset,
+a:visited.omniboxReset,
+a:link.omniboxReset,
+a:hover.omniboxReset,
+td.omniboxReset,
+tr.omniboxReset {
+  background: none;
+  border: none;
+  bottom: auto;
+  box-shadow: none;
+  color: black;
+  cursor: auto;
+  display: inline;
+  float: none;
+  font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: inherit;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  height: auto;
+  left: auto;
+  letter-spacing: 0;
+  line-height: 100%;
+  margin: 0;
+  max-height: none;
+  max-width: none;
+  min-height: 0;
+  min-width: 0;
+  opacity: 1;
+  padding: 0;
+  position: static;
+  right: auto;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+  text-shadow: none;
+  text-transform: none;
+  top: auto;
+  vertical-align: baseline;
+  white-space: normal;
+  width: auto;
+  z-index: 99999999;
+}
+
+#quickNavigator-omnibox
+{
+    display:none;
+    position: fixed;
+    width: 80%;
+    min-width: 400px;
+    top: 70px;
+    left: 50%;
+    margin: 0px 0px 0px -40%;
+    font-family: sans-serif;
+    background: rgb(241, 241, 241);
+    text-align: left;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0px 2px 10px;
+    border: 1px solid rgb(170, 170, 170);
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    z-index: 99999996;
+}
+
+#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea
+{
+    display: block;
+    padding: 10px;
+    background-color: rgb(241, 241, 241);
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid rgb(198, 201, 206);
+}
+
+#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea input
+{
+    font-size: 20px;
+    height: 34px;
+    margin-bottom: 0px;
+    padding: 4px;
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid rgb(232, 232, 232);
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    box-shadow: rgb(68, 68, 68) 0px 0px 1px;
+    width: 100%;
+    outline: none;
+    box-sizing: border-box;
+}

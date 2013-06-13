@@ -1,22 +1,23 @@
-function exec(fn) {
-    var script = document.createElement('script');
-    script.setAttribute("type", "application/javascript");
-    script.textContent = '(' + fn + ')();';
-    document.documentElement.appendChild(script); // run the script
-    document.documentElement.removeChild(script); // clean up
-}
-
-
 omnibox = function(){
 
-    var box,input,lastActiveElement;
+    var box,input,lastActiveElement,keydownConnect;
 
     function initDom(){
         var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">\n  <div class=\"quickNavigator-omnibox-SearchArea omniboxReset\">\n    <input id=\"quickNavigator-omnibox-input\" type=\"text\" />\n  </div>\n  <ul class=\"quickNavigator-omnibox-Result-ul omniboxReset\"></ul>\n</div>";
         $(document.body).append(boxHTML);
         this.box = $("#quickNavigator-omnibox");
         this.input = $("#quickNavigator-omnibox-input");
-    };
+    }
+
+    function initConnectTunnel(){
+        keydownConnect = chrome.extension.connect({name: "keydown"});
+        keydownConnect.onMessage.addListener(function(msg) {
+          //console.log("get connect message from bg ==> " + msg);
+          if(msg.requestHandler === "responseSuggestions"){
+
+          }
+        });
+    }
 
     function bindHotKey(){
       $(document).bind('keydown','o', function(e){
@@ -30,7 +31,16 @@ omnibox = function(){
            closeOmnibox(); 
       });
 
-    };
+      var me = this;
+      this.input.bind("keyup",function(e){
+          console.log(me.input.val());
+          keydownConnect.postMessage({
+              requestHandler: "requestSuggestions",
+              value:me.input.val()
+          });
+      });
+
+    }
 
     function isEditable(target)
     {
@@ -66,6 +76,7 @@ omnibox = function(){
     return{
         init:function(){
                  initDom();     
+                 initConnectTunnel();
                  bindHotKey();
         } 
     };

@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "",
   "browser_action": {
-    "default_icon": "icon_gray.png"
+    "default_icon": "icon.png"
   },
   "background":{
 	"page":"bg.html"

@@ -97,3 +97,62 @@ tr.omniboxReset {
     outline: none;
     box-sizing: border-box;
 }
+
+#quickNavigator-omnibox ul
+{
+    border-radius: 0px 0px 4px 4px;
+    list-style: none;
+    padding: 0px 0px 10px;
+}
+
+#quickNavigator-omnibox li
+{
+     background-color: white;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    line-height: 1.1em;
+    padding: 7px 10px;
+    font-size: 16px;
+    color: black;
+    position: relative;
+}
+
+#quickNavigator-omnibox li p
+{
+    display:inline;
+}
+
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-top
+{
+    display: block;
+    overflow: hidden;
+    padding-bottom:2px;
+}
+
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-bottom
+{
+    font-size: 15px;
+    margin-top: 3px;
+    padding: 2px 0px;
+}
+
+.quickNavigator-omnibox-suggestions-sourcetype
+{
+    color:#999;
+}
+
+.quickNavigator-omnibox-suggestions-title
+{
+    padding-left:15px;
+}
+
+.quickNavigator-omnibox-suggestions-url
+{
+    white-space: nowrap;
+    color: rgb(34, 70, 132);
+    padding-top:5px;
+}
+.quickNavigator-omnibox-Result-li-selected
+{
+    background-color: rgb(187, 206, 233) !important;
+    font-weight: normal;
+}

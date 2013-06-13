@@ -3,7 +3,7 @@
 
     if(port.name == "keydown"){
         port.onMessage.addListener(function(msg) {
-            console.log("get connect message ==> " + msg);
+            //console.log("get connect message ==> " + msg);
 
             if(msg.requestHandler === "requestSuggestions"){
                 var text = msg.value;

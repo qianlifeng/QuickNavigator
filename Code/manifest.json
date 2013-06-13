@@ -24,6 +24,8 @@
   "permissions": [
 	"http://*/*",
 	"https://*/*",
-    "tabs"],
+    "tabs",
+    "bookmarks"
+    ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

@@ -7,6 +7,7 @@ omnibox = function(){
         $(document.body).append(boxHTML);
         this.box = $("#quickNavigator-omnibox");
         this.input = $("#quickNavigator-omnibox-input");
+        this.ul = $("#quickNavigator-omnibox .quickNavigator-omnibox-Result-ul");
     }
 
     function initConnectTunnel(){
@@ -14,9 +15,23 @@ omnibox = function(){
         keydownConnect.onMessage.addListener(function(msg) {
           //console.log("get connect message from bg ==> " + msg);
           if(msg.requestHandler === "responseSuggestions"){
-
+                showSuggestions(msg.value); 
           }
         });
+    }
+
+    function showSuggestions(suggestionList){
+        if(!suggestionList || suggestionList.length == 0) return;
+
+        var html = "";
+        $.each(suggestionList,function(n,value) {
+           html += "<li>\n<div class=\"quickNavigator-omnibox-suggestions-top omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-sourcetype omniboxReset\">"+value.sourceType+"</p><p  class=\"quickNavigator-omnibox-suggestions-title omniboxReset\">"+value.title+"</p></div>\n<div class=\"quickNavigator-omnibox-suggestions-bottom omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-url omniboxReset\">"+value.url+"</p></div></li>";
+        });
+
+        if(html.length > 0) {
+            this.ul.html(html);
+            this.ul.children("li").eq(0).addClass("quickNavigator-omnibox-Result-li-selected");
+        }
     }
 
     function bindHotKey(){
@@ -29,6 +44,10 @@ omnibox = function(){
 
       this.input.bind('keydown', 'esc', function(e){
            closeOmnibox(); 
+      });
+
+      this.input.bind('keyup', 'down', function(e){
+          alert("down");
       });
 
       var me = this;
@@ -68,6 +87,7 @@ omnibox = function(){
         this.input.val("");
         this.input.blur(); //一定要取消焦点，否则下次打不开box
         this.box.css("display","none");
+        this.ul.html("");
         if(this.lastActiveElement){
             this.lastActiveElement.focus();
         }

@@ -151,8 +151,17 @@ tr.omniboxReset {
     color: rgb(34, 70, 132);
     padding-top:5px;
 }
+.quickNavigator-omnibox-suggestions-url-hidden
+{
+    display:none !important;
+}
 .quickNavigator-omnibox-Result-li-selected
 {
     background-color: rgb(187, 206, 233) !important;
     font-weight: normal;
+}
+.quickNavigator-omnibox-suggestions-highlight
+{
+    font-weight:bold;
+    color:black;
 }

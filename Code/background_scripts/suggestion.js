@@ -1,12 +1,31 @@
 filter = function(){
+
+    var tempElement =  $("<input type='text' />");
+
+    function match(source,target){
+       if(!source || !target) return false; 
+
+       //exact match
+       if(source.indexOf(target) > 0) return true;
+
+       //pinyin match
+       try{
+           var pinyin = py.convert(source).join("");
+           if(pinyin.indexOf(target) > 0) return true;
+       }
+       catch(err){}
+
+       return false;
+    }
+
     return{
         filter:function(dataSourceList,queryText){
             var result = [];
             $.each(dataSourceList,function(n,value) {
-                if(value.title && value.title.toLowerCase().indexOf(queryText) > 0){
+                if(match(value.title,queryText) || match(value.url,queryText)) 
                    result.push(value); 
                 } 
-            });
+            );
             return result;
         },
         //list here like: {title:"",url:"",sourceType:""}

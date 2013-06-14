@@ -13,52 +13,121 @@ omnibox = function(){
     function initConnectTunnel(){
         keydownConnect = chrome.extension.connect({name: "keydown"});
         keydownConnect.onMessage.addListener(function(msg) {
-          //console.log("get connect message from bg ==> " + msg);
-          if(msg.requestHandler === "responseSuggestions"){
+            //console.log("get connect message from bg ==> " + msg);
+            if(msg.requestHandler === "responseSuggestions"){
                 showSuggestions(msg.value); 
-          }
+            }
         });
     }
 
     function showSuggestions(suggestionList){
-        if(!suggestionList || suggestionList.length == 0) return;
+        if(!suggestionList || suggestionList.length == 0){
+            this.ul.html("");
+            return;
+        }
 
+        var currentSearch = this.input.val();
         var html = "";
         $.each(suggestionList,function(n,value) {
-           html += "<li>\n<div class=\"quickNavigator-omnibox-suggestions-top omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-sourcetype omniboxReset\">"+value.sourceType+"</p><p  class=\"quickNavigator-omnibox-suggestions-title omniboxReset\">"+value.title+"</p></div>\n<div class=\"quickNavigator-omnibox-suggestions-bottom omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-url omniboxReset\">"+value.url+"</p></div></li>";
+            var title = highlightSearchWords(value.title,currentSearch);
+            var url = highlightSearchWords(value.url,currentSearch);
+            html += "<li>\n<div class=\"quickNavigator-omnibox-suggestions-top omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-sourcetype omniboxReset\">"+value.sourceType+"</p>"
+            +"<p  class=\"quickNavigator-omnibox-suggestions-title omniboxReset\">"+title+"</p></div>"
+            +"<div class=\"quickNavigator-omnibox-suggestions-bottom omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-url omniboxReset\">"+url+"</p>"
+            +"<p class=\"quickNavigator-omnibox-suggestions-url-hidden omniboxReset\">"+value.url+"</p></div></li>";
         });
 
-        if(html.length > 0) {
-            this.ul.html(html);
-            this.ul.children("li").eq(0).addClass("quickNavigator-omnibox-Result-li-selected");
-        }
+        this.ul.html(html);
+        this.ul.children("li").eq(0).addClass("quickNavigator-omnibox-Result-li-selected");
+    }
+
+    function highlightSearchWords(source,words){
+        //exact match
+        var r = new RegExp(words,"gi");
+        source = source.replace(r, "<span class=\"quickNavigator-omnibox-suggestions-highlight\">"+words+"</span>"); 
+
+        //pinyin
+        var pinyinSource = py.convert(source);
+
+        return source;
     }
 
     function bindHotKey(){
-      $(document).bind('keydown','o', function(e){
-           if(!isEditable(document.activeElement) ){
-               showOmnibox(); 
-               return false; // preventDefault event
-           }
-      });  
+        $(document).bind('keydown','o', function(e){
+            if(!isEditable(document.activeElement) ){
+                showOmnibox(); 
+                return false; // preventDefault event
+            }
+        });  
 
-      this.input.bind('keydown', 'esc', function(e){
-           closeOmnibox(); 
-      });
+        this.input.bind('keydown', 'esc', function(e){
+            closeOmnibox(); 
+        });
 
-      this.input.bind('keyup', 'down', function(e){
-          alert("down");
-      });
+        var me = this;
+        this.input.bind("keyup",function(e){
+            switch(e.keyCode){
+                case 38: //up
+                    movePreSelected();
+                    return;
+                case 40://down
+                    moveNextSelected();
+                    return;
+                case 13:
+                    e.shiftKey ? navigate(true):navigate(false);
+                    closeOmnibox();
+                    return;
 
-      var me = this;
-      this.input.bind("keyup",function(e){
-          console.log(me.input.val());
-          keydownConnect.postMessage({
-              requestHandler: "requestSuggestions",
-              value:me.input.val()
-          });
-      });
+                case 37: //left
+                case 39: //right
+                    return;
+            }
 
+            if(me.input.val().length > 0){
+                keydownConnect.postMessage({
+                    requestHandler: "requestSuggestions",
+                    value:me.input.val()
+                });
+            }
+            else{
+                me.ul.html(""); 
+            }
+        });
+
+    }
+
+    function navigate(openInNewTab){
+        var url = this.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
+        if(!url) return;
+
+        if(openInNewTab){
+            window.open(url, '_blank') 
+        }else{
+            window.location.href = url;
+        }
+    }
+
+    function moveNextSelected(){
+        var selected = this.ul.children("li[class*='quickNavigator-omnibox-Result-li-selected']");
+        selected.removeClass("quickNavigator-omnibox-Result-li-selected"); 
+        var next = selected.next();
+        if(next.length > 0){
+            next.addClass("quickNavigator-omnibox-Result-li-selected"); 
+        }
+        else{
+            this.ul.children("li").eq(0).addClass("quickNavigator-omnibox-Result-li-selected"); 
+        }
+    }
+    function movePreSelected(){
+        var selected = this.ul.children("li[class*='quickNavigator-omnibox-Result-li-selected']");
+        selected.removeClass("quickNavigator-omnibox-Result-li-selected"); 
+        var prev = selected.prev();
+        if(prev.length > 0){
+            prev.addClass("quickNavigator-omnibox-Result-li-selected"); 
+        }
+        else{
+            this.ul.children("li").last().addClass("quickNavigator-omnibox-Result-li-selected"); 
+        }
     }
 
     function isEditable(target)
@@ -74,14 +143,14 @@ omnibox = function(){
         }
         focusableElements = ["textarea", "select"];
         return focusableElements.indexOf(nodeName) >= 0;
-    };
+    }
 
     function showOmnibox(){
         this.lastActiveElement = document.activeElement;
         this.box.css("display","block"); 
         this.input.val("");
         this.input.focus();
-    };
+    }
 
     function closeOmnibox(){
         this.input.val("");
@@ -91,14 +160,14 @@ omnibox = function(){
         if(this.lastActiveElement){
             this.lastActiveElement.focus();
         }
-    };
+    }
 
     return{
         init:function(){
                  initDom();     
                  initConnectTunnel();
                  bindHotKey();
-        } 
+             } 
     };
 }();
 

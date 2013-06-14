@@ -16,7 +16,7 @@
    },  
   "content_scripts":[
   {
-    "js":["util/jquery-1.7.2.min.js","util/jquery.hotkeys-0.7.9.min.js","content_scripts/omnibox.js"],
+    "js":["util/jquery-1.7.2.min.js","util/pinyin-dict-combo.js","util/pinyin.js","util/jquery.hotkeys-0.7.9.min.js","content_scripts/omnibox.js"],
     "css":["content_scripts/omnibox.css" ],
     "matches":["http://*/*","https://*/*"],
     "run_at":"document_end"

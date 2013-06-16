@@ -14,7 +14,7 @@ tr.omniboxReset {
   box-shadow: none;
   color: black;
   cursor: auto;
-  display: inline;
+  /*display: inline;*/
   float: none;
   font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-size: inherit;
@@ -32,7 +32,7 @@ tr.omniboxReset {
   min-width: 0;
   opacity: 1;
   padding: 0;
-  position: static;
+  /*position: static;*/
   right: auto;
   text-align: left;
   text-decoration: none;
@@ -102,7 +102,6 @@ tr.omniboxReset {
 {
     border-radius: 0px 0px 4px 4px;
     list-style: none;
-    padding: 0px 0px 10px;
 }
 
 #quickNavigator-omnibox li

@@ -31,9 +31,9 @@ omnibox = function(){
         $.each(suggestionList,function(n,value) {
             var title = highlightSearchWords(value.title,currentSearch);
             var url = highlightSearchWords(value.url,currentSearch);
-            html += "<li>\n<div class=\"quickNavigator-omnibox-suggestions-top omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-sourcetype omniboxReset\">"+value.sourceType+"</p>"
+            html += "<li class=\"omniboxReset\">\n<div class=\"quickNavigator-omnibox-suggestions-top omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-sourcetype omniboxReset\">"+value.sourceType+"</p>"
             +"<p  class=\"quickNavigator-omnibox-suggestions-title omniboxReset\">"+title+"</p></div>"
-            +"<div class=\"quickNavigator-omnibox-suggestions-bottom omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-url omniboxReset\">"+url+"</p>"
+            +"<div class=\"quickNavigator-omnibox-suggestions-bottom omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-url omniboxReset\">"+url+"</p>&nbsp;&nbsp;<p>"+value.relevancy+"</p>"
             +"<p class=\"quickNavigator-omnibox-suggestions-url-hidden omniboxReset\">"+value.url+"</p></div></li>";
         });
 
@@ -42,12 +42,21 @@ omnibox = function(){
     }
 
     function highlightSearchWords(source,words){
+        var matched = '';
+
         //exact match
         var r = new RegExp(words,"gi");
-        source = source.replace(r, "<span class=\"quickNavigator-omnibox-suggestions-highlight\">"+words+"</span>"); 
+        matched = source.replace(r, "<span class=\"quickNavigator-omnibox-suggestions-highlight\">"+words+"</span>"); 
+        if(source !== matched) return matched; 
 
-        //pinyin
-        var pinyinSource = py.convert(source);
+        //pinyin match 
+        var matchResult = py.getHans(source,words);
+        if(matchResult && matchResult.length > 0){
+            var startIndex = matchResult[0];
+            var endIndex = matchResult[matchResult.length-1];
+            matched = source.substr(0,startIndex)+ "<span class=\"quickNavigator-omnibox-suggestions-highlight\">"+source.substr(startIndex,endIndex-startIndex+1)+"</span>"+source.substr(endIndex+1);
+            if(source !== matched) return matched;
+        }
 
         return source;
     }
@@ -60,26 +69,53 @@ omnibox = function(){
             }
         });  
 
-        this.input.bind('keydown', 'esc', function(e){
-            closeOmnibox(); 
-        });
-
         var me = this;
-        this.input.bind("keyup",function(e){
+        this.input.bind("keydown",function(e){
             switch(e.keyCode){
                 case 38: //up
                     movePreSelected();
-                    return;
-                case 40://down
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return; 
+
+               case 40://down
                     moveNextSelected();
-                    return;
-                case 13:
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return; 
+
+               case 27: //esc
+                    closeOmnibox();
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return; 
+
+               case 13:
+                    var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
+                    if(url){
+                        keydownConnect.postMessage({
+                            requestHandler: "requestNavigate",
+                            query:me.input.val(),
+                            selectUrl:url
+                        });
+                    }
                     e.shiftKey ? navigate(true):navigate(false);
                     closeOmnibox();
-                    return;
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return; 
+            }
+        });
 
+
+        this.input.bind("keyup",function(e){
+            switch(e.keyCode){
+                case 27: //esc
+                case 13: //enter
                 case 37: //left
+                case 38: //up
                 case 39: //right
+                case 40: //down
                     return;
             }
 
@@ -93,12 +129,15 @@ omnibox = function(){
                 me.ul.html(""); 
             }
         });
-
     }
 
     function navigate(openInNewTab){
         var url = this.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
         if(!url) return;
+
+        if(url.indexOf("http:") !== 0){
+            url = "http://" + url;
+        }
 
         if(openInNewTab){
             window.open(url, '_blank') 

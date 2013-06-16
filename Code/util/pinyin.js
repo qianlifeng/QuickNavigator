@@ -200,13 +200,77 @@ py = function(){
     return "";
   }
 
-  return{
-    convert:function(s){
-        return pinyin(s,{
+  function contains(s){
+     return /.*[\u4e00-\u9fa5]+.*$/.test(s);
+  }
+
+  function getSpecifiedHans(source,words){
+    //fist check if source has han
+    if(contains(source)){ 
+        var pinyinArrary =convertHans(source);
+        var matchResult = [];
+        for(var i = 0;i < pinyinArrary.length; i++){
+            splitWordAndMatch(pinyinArrary,i,words,matchResult); 
+            if(matchResult.length > 0) return matchResult;
+        }
+    } 
+    return null;
+  }
+
+    function splitWordAndMatch(pinyinArrary,startMatchIndex,words,matchResult){
+        var currentItem = pinyinArrary[startMatchIndex][0];
+        //hans must has two letters at least. this operation will filter the enligh letter
+        if(currentItem.length <= 1) return;
+
+        //if the lenght of words we want match less than the currentItem, that means
+        //1. words is not long enough to be a whole word. for this, we will not start match
+        //2. the front of words has been matched, the rest of the words(only the last word) allow fuzzy match
+        if(words.length < currentItem.length){
+           if(currentItem.indexOf(words) == 0 && matchResult.length > 0){
+                matchResult.push(startMatchIndex) 
+           } 
+           else{
+               for(var i = 0; i< matchResult.length;i++)
+               {
+                    matchResult.pop();
+               }
+           }
+           return;
+        }
+
+        if(words.indexOf(currentItem) == 0){
+            matchResult.push(startMatchIndex)
+
+            var splitWord = words.substr(currentItem.length);
+            if(splitWord.length > 0 && startMatchIndex+1 <= pinyinArrary.length -1)
+            {
+               splitWordAndMatch(pinyinArrary,startMatchIndex+1,splitWord,matchResult); 
+            }
+        } 
+    }
+
+    function convertHans(s){
+         return pinyin(s,{
           style:PINYIN_STYLE.NORMAL,
           heteronym:false 
-        });       
+        });      
     }
+
+  return{
+    convert:function(s){
+       return pinyin(s,{
+          style:PINYIN_STYLE.NORMAL,
+          heteronym:false 
+        });  
+    },
+    containHans:function(s){
+        return contains(s);            
+    },
+    //从source中得到hans的位置
+    getHans:function(source,hans){
+        return getSpecifiedHans(source,hans); 
+    }
+
   };
 
 }();

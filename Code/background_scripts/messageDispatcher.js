@@ -15,6 +15,9 @@
                     });
                 }
             }
+            else if(msg.requestHandler === "requestNavigate"){
+                window.db.saveVisitedUrl(msg.selectUrl);
+            }
         });
     }
 });

@@ -82,9 +82,9 @@ suggestions = function(){
             var visitedCount =  window.db.getUrlVisitedCount(element.url);
             //normalize(归一化)
             var ratio = window.db.getMaxCount() / 100,
-            
+            visitedCount = Math.round(visitedCount / ratio ); 
 
-            if(visitedCount > 0) {element.relevancy += 5};
+            if(visitedCount > 0) {element.relevancy += visitedCount};
         });
     }
 

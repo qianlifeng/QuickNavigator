@@ -3,16 +3,18 @@ filter = function(){
     var tempElement =  $("<input type='text' />");
 
     function match(source,target){
+       source = source.toLowerCase();
        if(!source || !target) return false; 
 
        //exact match
        if(source.indexOf(target) >= 0) return true;
 
        //pinyin match
-       //if(py.getHans(source,target)) return true;
+       //var matchPositions = py.getHans(source,target);
+       //if(matchPositions) return true;
        try{
            var pinyin = py.convert(source).join("");
-           if(pinyin.indexOf(target) >= 0) return true;
+           if(pinyin.indexOf(target) >= 0 && py.getHans(source,target)) return true;
        }
        catch(err){}
 
@@ -83,8 +85,10 @@ suggestions = function(){
             //normalize(归一化)
             var ratio = window.db.getMaxCount() / 100,
             visitedCount = Math.round(visitedCount / ratio ); 
-
             if(visitedCount > 0) {element.relevancy += visitedCount};
+
+            //top domain should have larger relevancy
+            if(/^(.*)?\.[a-z]{1,3}\/?$/.test(element.url)) element.relevancy += 2;
         });
     }
 

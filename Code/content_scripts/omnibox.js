@@ -1,6 +1,6 @@
 omnibox = function(){
 
-    var box,input,lastActiveElement,keydownConnect;
+    var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime;
 
     function initDom(){
         var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">\n  <div class=\"quickNavigator-omnibox-SearchArea omniboxReset\">\n    <input id=\"quickNavigator-omnibox-input\" type=\"text\" />\n  </div>\n  <ul class=\"quickNavigator-omnibox-Result-ul omniboxReset\"></ul>\n</div>";
@@ -107,7 +107,6 @@ omnibox = function(){
             }
         });
 
-
         this.input.bind("keyup",function(e){
             switch(e.keyCode){
                 case 27: //esc
@@ -118,17 +117,41 @@ omnibox = function(){
                 case 40: //down
                     return;
             }
+            sendRequest();
+            //me.lastEveryKeyUpTime =new Date().getTime();
+            //if(me.lastKeyUpTime == null || (me.lastKeyUpTime && new Date().getTime() - me.lastKeyUpTime > 500)){
+                //if(me.lastKeyUpTime == null) createEndTypingInterval(200);
+                //me.lastKeyUpTime = new Date().getTime();
 
-            if(me.input.val().length > 0){
-                keydownConnect.postMessage({
-                    requestHandler: "requestSuggestions",
-                    value:me.input.val()
-                });
-            }
-            else{
-                me.ul.html(""); 
-            }
+                //console.log("send request");
+                //sendRequest();
+            //}
         });
+    }
+
+    function sendRequest(){
+        if(this.input.val().length > 0){
+                    keydownConnect.postMessage({
+                        requestHandler: "requestSuggestions",
+                        value:this.input.val()
+                    });
+        }
+        else{
+            this.ul.html(""); 
+        }
+    }
+
+    function createEndTypingInterval(ms){
+        var me = this;
+        var id = setInterval(function(){
+           //console.log("show");
+           if(me.lastEveryKeyUpTime &&  new Date().getTime() - me.lastEveryKeyUpTime > ms){
+               //console.log("end");
+               sendRequest();
+               me.lastKeyUpTime = null;
+               clearInterval(id);
+           }
+        },ms);
     }
 
     function navigate(openInNewTab){

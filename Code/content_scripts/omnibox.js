@@ -65,6 +65,8 @@ omnibox = function(){
         $(document).bind('keydown','o', function(e){
             if(!isEditable(document.activeElement) ){
                 showOmnibox(); 
+                //list MRU items
+                //todo:
                 return false; // preventDefault event
             }
         });  

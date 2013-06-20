@@ -106,7 +106,7 @@ tr.omniboxReset {
 
 #quickNavigator-omnibox li
 {
-     background-color: white;
+    background-color: white;
     border-bottom: 1px solid rgb(221, 221, 221);
     line-height: 1.1em;
     padding: 7px 10px;
@@ -119,7 +119,6 @@ tr.omniboxReset {
 {
     display:inline;
 }
-
 #quickNavigator-omnibox .quickNavigator-omnibox-suggestions-top
 {
     display: block;
@@ -134,32 +133,51 @@ tr.omniboxReset {
     padding: 2px 0px;
 }
 
-.quickNavigator-omnibox-suggestions-sourcetype
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-sourcetype
 {
     color:#999;
+    float:left;
 }
-
-.quickNavigator-omnibox-suggestions-title
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-icon
 {
-    padding-left:15px;
+    float:left;
+    margin-right:10px;
+}
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-icon img
+{
+    width:16px;
+    height:16px;
+    border:0 solid gray;
 }
 
-.quickNavigator-omnibox-suggestions-url
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-title
+{
+    overflow:hidden;
+    cursor: pointer;
+    float:left;
+}
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-title:hover
+{
+    text-decoration:underline;
+}
+
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-url
 {
     white-space: nowrap;
     color: rgb(34, 70, 132);
+    overflow:hidden;
     padding-top:5px;
 }
-.quickNavigator-omnibox-suggestions-url-hidden
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-url-hidden
 {
     display:none !important;
 }
-.quickNavigator-omnibox-Result-li-selected
+#quickNavigator-omnibox .quickNavigator-omnibox-Result-li-selected
 {
     background-color: rgb(187, 206, 233) !important;
     font-weight: normal;
 }
-.quickNavigator-omnibox-suggestions-highlight
+#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-highlight
 {
     font-weight:bold;
     color:black;

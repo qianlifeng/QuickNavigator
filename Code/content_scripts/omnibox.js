@@ -22,22 +22,52 @@ omnibox = function(){
 
     function showSuggestions(suggestionList){
         if(!suggestionList || suggestionList.length == 0){
-            this.ul.html("");
             return;
         }
 
+        this.ul.html("");
         var currentSearch = this.input.val();
-        var html = "";
+        var me = this;
         $.each(suggestionList,function(n,value) {
             var title = highlightSearchWords(value.title,currentSearch);
             var url = highlightSearchWords(value.url,currentSearch);
-            html += "<li class=\"omniboxReset\">\n<div class=\"quickNavigator-omnibox-suggestions-top omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-sourcetype omniboxReset\">"+value.sourceType+"</p>"
-            +"<p  class=\"quickNavigator-omnibox-suggestions-title omniboxReset\">"+title+"</p></div>"
-            +"<div class=\"quickNavigator-omnibox-suggestions-bottom omniboxReset\"><p class=\"quickNavigator-omnibox-suggestions-url omniboxReset\">"+url+"</p>&nbsp;&nbsp;<p>"+value.relevancy+"</p>"
-            +"<p class=\"quickNavigator-omnibox-suggestions-url-hidden omniboxReset\">"+value.url+"</p></div></li>";
+
+            var li = $("<li></li>").addClass("omniboxReset");
+
+            var topContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-top omniboxReset");
+            var sourceTypeElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourcetype omniboxReset").html(value.sourceType);
+            
+            var iconElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-icon omniboxReset");
+            var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
+            var urlArrary = reg.exec(value.url);
+            var iconUrl = "";
+            if(urlArrary && urlArrary.length >= 2){
+                if(urlArrary[1].indexOf("http:") !== 0){
+                    iconUrl = "http://";
+                }
+                iconUrl += urlArrary[1] + "/favicon.ico";
+            }
+            var iconImg = $("<img src='"+iconUrl+"'/>");
+            var titleElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-title omniboxReset").html(title);
+            titleElement.click(function(){
+                navigate(false,value.url);
+            });
+            iconImg.appendTo(iconElement);
+            iconElement.appendTo(topContainer);
+            //sourceTypeElement.appendTo(topContainer);
+            titleElement.appendTo(topContainer);
+
+            var bottomContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-bottom omniboxReset");
+            var urlElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url omniboxReset").html(url+" "+value.relevancy);
+            var urlHiddenElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url-hidden omniboxReset").html(value.url);
+            urlElement.appendTo(bottomContainer);
+            urlHiddenElement.appendTo(bottomContainer);
+
+            topContainer.appendTo(li);
+            bottomContainer.appendTo(li);
+            li.appendTo(me.ul);
         });
 
-        this.ul.html(html);
         this.ul.children("li").eq(0).addClass("quickNavigator-omnibox-Result-li-selected");
     }
 
@@ -156,9 +186,15 @@ omnibox = function(){
         },ms);
     }
 
-    function navigate(openInNewTab){
-        var url = this.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
-        if(!url) return;
+    function navigate(openInNewTab,uri){
+        var url;
+        if(uri == null){
+            url = this.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
+            if(!url) return;
+        }
+        else{
+           url = uri; 
+        }
 
         if(url.indexOf("http:") !== 0){
             url = "http://" + url;

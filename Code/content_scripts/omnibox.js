@@ -53,8 +53,8 @@ omnibox = function(){
                 navigate(false,value.url);
             });
             iconImg.appendTo(iconElement);
-            iconElement.appendTo(topContainer);
-            //sourceTypeElement.appendTo(topContainer);
+            //iconElement.appendTo(topContainer);
+            sourceTypeElement.appendTo(topContainer);
             titleElement.appendTo(topContainer);
 
             var bottomContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-bottom omniboxReset");
@@ -218,6 +218,7 @@ omnibox = function(){
             this.ul.children("li").eq(0).addClass("quickNavigator-omnibox-Result-li-selected"); 
         }
     }
+
     function movePreSelected(){
         var selected = this.ul.children("li[class*='quickNavigator-omnibox-Result-li-selected']");
         selected.removeClass("quickNavigator-omnibox-Result-li-selected"); 

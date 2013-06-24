@@ -4,20 +4,21 @@
   "manifest_version": 2,
   "description": "",
   "browser_action": {
-    "default_icon": "icon.png"
+    "default_icon": "images/icon.png"
   },
   "background":{
 	"page":"bg.html"
   },
+   "options_page": "options.html",
    "icons": {
-      "128": "icon.png",
-      "16": "icon.png",
-      "48": "icon.png"
+      "128": "images/icon.png",
+      "16": "images/icon.png",
+      "48": "images/icon.png"
    },  
   "content_scripts":[
   {
     "js":["util/jquery-1.7.2.min.js","util/pinyin-dict-combo.js","util/pinyin.js","util/jquery.hotkeys-0.7.9.min.js","content_scripts/omnibox.js"],
-    "css":["content_scripts/omnibox.css" ],
+    "css":["css/omnibox.css" ],
     "matches":["http://*/*","https://*/*"],
     "run_at":"document_start"
   }],

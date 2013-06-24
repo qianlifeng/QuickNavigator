@@ -154,6 +154,7 @@ tr.omniboxReset {
 {
     overflow:hidden;
     cursor: pointer;
+    margin-left:5px;
     float:left;
 }
 #quickNavigator-omnibox .quickNavigator-omnibox-suggestions-title:hover

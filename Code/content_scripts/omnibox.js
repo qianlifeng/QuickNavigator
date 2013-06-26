@@ -21,7 +21,7 @@ omnibox = function(){
     }
 
     function showSuggestions(suggestionList){
-        if(!suggestionList || suggestionList.length == 0){
+        if(!suggestionList || suggestionList.length === 0){
             return;
         }
 
@@ -37,7 +37,7 @@ omnibox = function(){
             var topContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-top omniboxReset");
             var sourceTypeElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourcetype omniboxReset").html(value.sourceType);
             
-            var iconElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-icon omniboxReset");
+            //var iconElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-icon omniboxReset");
             var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
             var urlArrary = reg.exec(value.url);
             var iconUrl = "";
@@ -47,12 +47,12 @@ omnibox = function(){
                 }
                 iconUrl += urlArrary[1] + "/favicon.ico";
             }
-            var iconImg = $("<img src='"+iconUrl+"'/>");
-            var titleElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-title omniboxReset").html(title);
+            //var iconImg = $("<img src='"+iconUrl+"'/>");
+            var titleElement = $("<a></a>").addClass("quickNavigator-omnibox-suggestions-title omniboxReset").html(title).attr("href",value.url);
             titleElement.click(function(){
                 navigate(false,value.url);
             });
-            iconImg.appendTo(iconElement);
+            //iconImg.appendTo(iconElement);
             //iconElement.appendTo(topContainer);
             sourceTypeElement.appendTo(topContainer);
             titleElement.appendTo(topContainer);
@@ -131,7 +131,12 @@ omnibox = function(){
                             selectUrl:url
                         });
                     }
-                    e.shiftKey ? navigate(true):navigate(false);
+                    if(e.shiftKey){
+                        navigate(true,url);
+                    }
+                    else {
+                        navigate(false,url);
+                    }
                     closeOmnibox();
                     e.stopPropagation();
                     e.preventDefault(); 
@@ -188,7 +193,7 @@ omnibox = function(){
 
     function navigate(openInNewTab,uri){
         var url;
-        if(uri == null){
+        if(uri === null){
             url = this.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
             if(!url) return;
         }
@@ -201,7 +206,7 @@ omnibox = function(){
         }
 
         if(openInNewTab){
-            window.open(url, '_blank') 
+            window.open(url, '_blank');
         }else{
             window.location.href = url;
         }

@@ -4,7 +4,6 @@
     if(port.name == "keydown"){
         port.onMessage.addListener(function(msg) {
             //console.log("get connect message ==> " + msg);
-
             if(msg.requestHandler === "requestSuggestions"){
                 var text = msg.value;
                 if(text){
@@ -24,7 +23,6 @@
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {   
     console.log("short message ==> get "+request.act+" request");
-
     if (request.act == "get"){
     }
 

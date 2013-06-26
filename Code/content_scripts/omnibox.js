@@ -123,7 +123,7 @@ omnibox = function(){
                     return; 
 
                case 13:
-                    var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
+                    var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
                     if(url){
                         keydownConnect.postMessage({
                             requestHandler: "requestNavigate",
@@ -194,7 +194,7 @@ omnibox = function(){
     function navigate(openInNewTab,uri){
         var url;
         if(uri === null){
-            url = this.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").html();
+            url = this.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
             if(!url) return;
         }
         else{

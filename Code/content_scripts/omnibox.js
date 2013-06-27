@@ -108,23 +108,6 @@ omnibox = function(){
         });  
 
         var me = this;
-        //this.input.bind("keydown",function(e){
-            //switch(e.keyCode){
-                //case 38: //up
-                   
-
-               //case 40://down
-                   
-
-               //case 27: //esc
-                 
-
-               //case 13:
-                  
-            //}
-            //sendRequest();
-        //});
-
         this.input.bind("keyup",function(e){
             switch(e.keyCode){
                 case 27: //esc
@@ -193,7 +176,6 @@ omnibox = function(){
                     });
         }
         else{
-            //alert("test");
             this.ul.html(""); 
         }
     }
@@ -221,7 +203,7 @@ omnibox = function(){
            url = uri; 
         }
 
-        if(url.indexOf("http:") !== 0){
+        if(url.indexOf("http:") !== 0 && url.indexOf("https:") !== 0){
             url = "http://" + url;
         }
 

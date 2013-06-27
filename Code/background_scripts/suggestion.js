@@ -47,8 +47,6 @@ filter = function(){
             }
 
             return list1.filter(hasnotAdded).concat(list2.filter(hasnotAdded));
-
-            return merged;
         }
     };
 }();
@@ -83,13 +81,28 @@ suggestions = function(){
             //check if this url has beed visited
             var visitedCount =  window.db.getUrlVisitedCount(element.url);
             //normalize(归一化)
-            var ratio = window.db.getMaxCount() / 100,
+            var ratio = window.db.getMaxCount() / 100;
             visitedCount = Math.round(visitedCount / ratio ); 
-            if(visitedCount > 0) {element.relevancy += visitedCount};
+            if(visitedCount > 0) {
+                element.relevancy += visitedCount;
+            }
 
             //top domain should have larger relevancy
             if(/^(.*)?\.[a-z]{1,3}\/?$/.test(element.url)) element.relevancy += 2;
         });
+    }
+
+    function queryMRU(){
+       var urls = window.db.getVisitedURLs();
+       urls.sort(function(a,b){
+            return a.visitedCount - b.visitedCount; 
+       });
+       var mruLists = [];
+       urls = urls.slice(0,11);
+       urls.forEach(function(element,n,arrary){
+           mruLists.push({title:"",url:element.url,sourceType:"MRU",relevancy:element.visitedCount}); 
+       });
+       return  mruLists;
     }
 
     function refreshDataSource(){
@@ -102,6 +115,11 @@ suggestions = function(){
         init:function(){
             refreshDataSource();     
         },
+
+        getMRU:function(){
+            return queryMRU(); 
+        },
+
         getSuggestion : function(txt){
             //console.log("get suggestion:"+txt);
             return query(txt); 
@@ -109,7 +127,6 @@ suggestions = function(){
     }; 
 
 }();
-
 
 //every data provider has two public methods:
 // 1. query     query suggestions in it's datasource

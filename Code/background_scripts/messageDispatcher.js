@@ -17,6 +17,13 @@
             else if(msg.requestHandler === "requestNavigate"){
                 window.db.saveVisitedUrl(msg.selectUrl);
             }
+            else if(msg.requestHandler === "requestMRU"){
+                var mru = suggestions.getMRU();
+                port.postMessage({
+                    requestHandler: "responseSuggestions",
+                    value: mru 
+                });
+            }
         });
     }
 });

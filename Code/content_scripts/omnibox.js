@@ -95,8 +95,9 @@ omnibox = function(){
         $(document).bind('keydown','o', function(e){
             if(!isEditable(document.activeElement) ){
                 showOmnibox(); 
-                //list MRU items
-                //todo:
+                keydownConnect.postMessage({
+                    requestHandler: "requestMRU"
+                });
                 return false; // preventDefault event
             }
         });  
@@ -174,6 +175,7 @@ omnibox = function(){
                     });
         }
         else{
+            //alert("test");
             this.ul.html(""); 
         }
     }

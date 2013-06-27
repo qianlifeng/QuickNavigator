@@ -7,7 +7,7 @@ window.db = (function(){
             var urls;
             try{
                 urls =JSON.parse(localStorage['QuickNavigator_VisitedURL']);
-                if(!urls || url.length == 0 || !(urls instanceof Array)) urls = [];
+                if(!urls || url.length === 0 || !(urls instanceof Array)) urls = [];
             }
             catch(err){
                 urls = [];
@@ -61,6 +61,14 @@ window.db = (function(){
 
           maxCache = max;
           return max;           
+        },
+        getVisitedURLs:function(){
+            var urls = JSON.parse(localStorage['QuickNavigator_VisitedURL']);
+            var urlList = [];
+            for(var i = 0; i < urls.length; i++){
+                urlList.push(urls[i]);
+            } 
+            return urlList;
         }
 	};
 })();

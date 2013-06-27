@@ -1,6 +1,6 @@
 omnibox = function(){
 
-    var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime;
+    var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime,lastSuggestions;
 
     function initDom(){
         var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">\n  <div class=\"quickNavigator-omnibox-SearchArea omniboxReset\">\n    <input id=\"quickNavigator-omnibox-input\" type=\"text\" />\n  </div>\n  <ul class=\"quickNavigator-omnibox-Result-ul omniboxReset\"></ul>\n</div>";
@@ -11,11 +11,13 @@ omnibox = function(){
     }
 
     function initConnectTunnel(){
+        var me = this;
         keydownConnect = chrome.extension.connect({name: "keydown"});
         keydownConnect.onMessage.addListener(function(msg) {
             //console.log("get connect message from bg ==> " + msg);
             if(msg.requestHandler === "responseSuggestions"){
                 showSuggestions(msg.value); 
+                me.lastSuggestions = msg.value; 
             }
         });
     }
@@ -92,44 +94,57 @@ omnibox = function(){
     }
 
     function bindHotKey(){
-        $(document).bind('keydown','o', function(e){
+        $(document).bind('keyup','o', function(e){
             if(!isEditable(document.activeElement) ){
                 showOmnibox(); 
                 keydownConnect.postMessage({
                     requestHandler: "requestMRU"
                 });
+
+                e.preventDefault();
+                e.stopPropagation();
                 return false; // preventDefault event
             }
         });  
 
         var me = this;
-        this.input.bind("keydown",function(e){
+        //this.input.bind("keydown",function(e){
+            //switch(e.keyCode){
+                //case 38: //up
+                   
+
+               //case 40://down
+                   
+
+               //case 27: //esc
+                 
+
+               //case 13:
+                  
+            //}
+            //sendRequest();
+        //});
+
+        this.input.bind("keyup",function(e){
             switch(e.keyCode){
-                case 38: //up
-                    movePreSelected();
-                    e.stopPropagation();
-                    e.preventDefault(); 
-                    return; 
-
-               case 40://down
-                    moveNextSelected();
-                    e.stopPropagation();
-                    e.preventDefault(); 
-                    return; 
-
-               case 27: //esc
+                case 27: //esc
                     closeOmnibox();
                     e.stopPropagation();
                     e.preventDefault(); 
-                    return; 
+                    return;  
 
-               case 13:
+                case 13: //enter
                     var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
-                    if(url){
-                        keydownConnect.postMessage({
-                            requestHandler: "requestNavigate",
-                            query:me.input.val(),
-                            selectUrl:url
+                    if(me.lastSuggestions && url){
+                        $.each(me.lastSuggestions,function(n,value) {
+                            if(value.url === url){
+                                keydownConnect.postMessage({
+                                    requestHandler: "requestNavigate",
+                                    url:url,
+                                    title:value.title,
+                                    sourceType:value.sourceType
+                                });
+                            }
                         });
                     }
                     if(e.shiftKey){
@@ -142,17 +157,20 @@ omnibox = function(){
                     e.stopPropagation();
                     e.preventDefault(); 
                     return; 
-            }
-        });
 
-        this.input.bind("keyup",function(e){
-            switch(e.keyCode){
-                case 27: //esc
-                case 13: //enter
-                case 37: //left
                 case 38: //up
-                case 39: //right
+                    movePreSelected();
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return; 
                 case 40: //down
+                    moveNextSelected();
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return; 
+
+                case 37: //left
+                case 39: //right
                     return;
             }
             sendRequest();

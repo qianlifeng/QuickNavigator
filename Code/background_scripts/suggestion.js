@@ -95,12 +95,12 @@ suggestions = function(){
     function queryMRU(){
        var urls = window.db.getVisitedURLs();
        urls.sort(function(a,b){
-            return a.visitedCount - b.visitedCount; 
+            return b.visitedCount - a.visitedCount; 
        });
        var mruLists = [];
-       urls = urls.slice(0,11);
+       urls = urls.slice(0,3);
        urls.forEach(function(element,n,arrary){
-           mruLists.push({title:"",url:element.url,sourceType:"MRU",relevancy:element.visitedCount}); 
+           mruLists.push({title:element.title,url:element.url,sourceType:element.sourceType,relevancy:element.visitedCount}); 
        });
        return  mruLists;
     }

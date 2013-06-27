@@ -3,27 +3,28 @@ window.db = (function(){
    var maxCache;
 
 	return {
-		saveVisitedUrl:function(url){
+		saveVisitedUrl:function(url,title,sourceType){
             var urls;
             try{
-                urls =JSON.parse(localStorage['QuickNavigator_VisitedURL']);
+                urls =JSON.parse(localStorage["QuickNavigator_VisitedURL"]);
                 if(!urls || url.length === 0 || !(urls instanceof Array)) urls = [];
             }
             catch(err){
                 urls = [];
             }
 
-
             var hasStoraged = false;
             for(var i = 0; i < urls.length; i++){
                 if(urls[i].url === url){
                     urls[i].visitedCount = urls[i].visitedCount + 1;
+                    urls[i].title = title;
+                    urls[i].sourceType = sourceType;
                     hasStoraged = true;
                     break;
                 }                
             }
 
-            if(!hasStoraged) urls.push({url:url,visitedCount:1});
+            if(!hasStoraged) urls.push({url:url,visitedCount:1,title:title,sourceType:sourceType});
             maxCache = null;
 
             localStorage['QuickNavigator_VisitedURL']= JSON.stringify(urls);

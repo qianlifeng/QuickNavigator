@@ -15,7 +15,7 @@
                 }
             }
             else if(msg.requestHandler === "requestNavigate"){
-                window.db.saveVisitedUrl(msg.selectUrl);
+                window.db.saveVisitedUrl(msg.url,msg.title,msg.sourceType);
             }
             else if(msg.requestHandler === "requestMRU"){
                 var mru = suggestions.getMRU();

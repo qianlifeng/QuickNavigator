@@ -23,11 +23,11 @@ omnibox = function(){
     }
 
     function showSuggestions(suggestionList){
+        this.ul.html("");
         if(!suggestionList || suggestionList.length === 0){
             return;
         }
 
-        this.ul.html("");
         var currentSearch = this.input.val();
         var me = this;
         $.each(suggestionList,function(n,value) {

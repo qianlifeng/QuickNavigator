@@ -3,7 +3,14 @@ omnibox = function(){
     var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime,lastSuggestions;
 
     function initDom(){
-        var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">\n  <div class=\"quickNavigator-omnibox-SearchArea omniboxReset\">\n    <input id=\"quickNavigator-omnibox-input\" type=\"text\" />\n  </div>\n  <ul class=\"quickNavigator-omnibox-Result-ul omniboxReset\"></ul>\n</div>";
+        var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">"+
+                "<div class=\"quickNavigator-omnibox-SearchArea omniboxReset\">"+
+                    "<div class='quickNavigator-omnibox-textbox'>"+
+                        "<div class='quickNavigator-omnibox-tag' id='quickNavigator-omnibox-tag-id'>test</div><div class='quickNavigator-omnibox-inputDiv'><input id=\"quickNavigator-omnibox-input\" type=\"text\" /></div>"+
+                    "</div>"+
+                "</div>"+
+                "<div style='clear:both;'></div>"+
+                "<ul class=\"quickNavigator-omnibox-Result-ul omniboxReset\"></ul>\n</div>";
         $(document.body).append(boxHTML);
         this.box = $("#quickNavigator-omnibox");
         this.input = $("#quickNavigator-omnibox-input");
@@ -112,14 +119,31 @@ omnibox = function(){
         });  
 
         var me = this;
-        this.input.bind("keyup",function(e){
-            switch(e.keyCode){
+        $(document).bind("keyup",function(e){
+              switch(e.keyCode){
                 case 27: //esc
                     closeOmnibox();
                     e.stopPropagation();
                     e.preventDefault(); 
-                    return;  
+                    return;   
+              }
+        });
 
+        this.input.bind("keydown",function(e){
+            switch(e.keyCode){
+                //tab is not trigger in keyup event 
+                case 9: //tab
+                    switchToAdvancedMode();
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return false;
+
+                default:break;
+            }
+        });
+
+        this.input.bind("keyup",function(e){
+            switch(e.keyCode){
                 case 13: //enter
                     var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
                     if(me.lastSuggestions && url){
@@ -170,6 +194,20 @@ omnibox = function(){
                 //sendRequest();
             //}
         });
+    }
+
+    function switchToAdvancedMode(){
+        var tag = $("#quickNavigator-omnibox-tag-id");
+        var showTag = false;
+        switch(this.input.val()){
+            case "u":
+                tag.html("Recently Closed Tabs:");
+                showTag = true;
+                break;
+        }
+        if(showTag){
+            tag.css("display","block");
+        }
     }
 
     function sendRequest(){
@@ -266,6 +304,7 @@ omnibox = function(){
 
     function closeOmnibox(){
         this.input.val("");
+        $("#quickNavigator-omnibox-tag-id").css("display","none");
         this.input.blur(); //一定要取消焦点，否则下次打不开box
         this.box.css("display","none");
         this.ul.html("");

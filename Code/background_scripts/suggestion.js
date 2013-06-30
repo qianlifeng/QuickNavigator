@@ -65,7 +65,8 @@ suggestions = function(){
         res.sort(function(a,b){
            return a.relevancy >= b.relevancy ? -1:1;
         });
-        return res.slice(0,11); //only return 10 results
+        var suggestionsCount =  options.getSuggestionsCount();
+        return res.slice(0,suggestionsCount);
     }
 
     //relevancy is a integer, larger integer represent larger relevancy
@@ -98,7 +99,8 @@ suggestions = function(){
             return b.visitedCount - a.visitedCount; 
        });
        var mruLists = [];
-       urls = urls.slice(0,3);
+       var maxMRUCount =  options.getMRUCount();
+       urls = urls.slice(0,maxMRUCount);
        urls.forEach(function(element,n,arrary){
            mruLists.push({title:element.title,url:element.url,sourceType:element.sourceType,relevancy:element.visitedCount}); 
        });

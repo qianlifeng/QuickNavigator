@@ -73,26 +73,42 @@ tr.omniboxReset {
 {
     display: block;
     padding: 10px;
-    background-color: rgb(241, 241, 241);
-    border-radius: 4px 4px 0px 0px;
-    border-bottom: 1px solid rgb(198, 201, 206);
+    height:34px;
 }
-
-#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea input
-{
-    font-size: 20px;
-    height: 34px;
-    margin-bottom: 0px;
-    padding: 4px;
-    background-color: white;
+#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea div{
+    float: left;
+}
+#quickNavigator-omnibox .quickNavigator-omnibox-tag{
+    line-height:34px;
+    font-size: 16px;
+    background-color: rgb(187, 206, 233);
+    padding-left: 5px;
+    display:none;
+    padding-right: 5px;
+    
+}
+#quickNavigator-omnibox .quickNavigator-omnibox-textbox{
+    width:100%;
     border-radius: 3px;
+    background-color: white;
     border: 1px solid rgb(232, 232, 232);
     border-image-source: initial;
     border-image-slice: initial;
     border-image-width: initial;
     border-image-outset: initial;
     border-image-repeat: initial;
-    box-shadow: rgb(68, 68, 68) 0px 0px 1px;
+}
+
+#quickNavigator-omnibox .quickNavigator-omnibox-inputDiv{
+    width:95%;
+}
+#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea input
+{
+    border:none;
+    font-size: 20px;
+    height: 34px;
+    margin-bottom: 0px;
+    padding: 4px;
     width: 100%;
     outline: none;
     box-sizing: border-box;

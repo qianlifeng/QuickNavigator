@@ -28,6 +28,7 @@
             <ul class="nav nav-list bs-docs-sidenav affix">
               <li class="active"><a href="#Hotkey"><i class="icon-chevron-right"></i>Hotkey</a></li>
               <li><a href="#Disable"><i class="icon-chevron-right"></i>Disable</a></li>
+              <li><a href="#MRU"><i class="icon-chevron-right"></i>MRU</a></li>
               <li><a href="#Language"><i class="icon-chevron-right"></i>Language</a></li>
             </ul>
           </div>
@@ -47,6 +48,22 @@
               </div>
             </section>
 
+            <!-- MRU --> 
+            <section id="MRU">
+                <div class="page-header">
+                    <h1>MRU</h1>
+                    <p>You can disable MRU on the start of omnibox</p>
+                </div>
+                <div class="page-body">
+                    <fieldset>
+                        <label class="checkbox">
+                          <input type="checkbox" id="disableMRU">Disable MRU
+                        </label>
+                        MRU Dispaly Count:<input type="text" id="MRUCount" />
+                    </fieldset>
+                </div>
+            </section>
+
             <!-- Language --> 
             <section id="Disable">
               <div class="page-header">
@@ -60,5 +77,6 @@
   </div>
   <script src="util/jquery-1.7.2.min.js"></script>
   <script src="util/bootstrap.min.js"></script>
+  <script src="util/options.js"></script>
   </body>
 </html>

@@ -66,3 +66,8 @@
   top: auto;
   bottom: 270px;
 }
+
+.page-body
+{
+    padding-left:20px;
+}

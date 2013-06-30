@@ -33,7 +33,6 @@ omnibox = function(){
         $.each(suggestionList,function(n,value) {
             var title = highlightSearchWords(value.title,currentSearch);
             var url = highlightSearchWords(value.url,currentSearch);
-
             var li = $("<li></li>").addClass("omniboxReset");
 
             var topContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-top omniboxReset");
@@ -97,10 +96,15 @@ omnibox = function(){
         $(document).bind('keyup','o', function(e){
             if(!isEditable(document.activeElement) ){
                 showOmnibox(); 
-                keydownConnect.postMessage({
-                    requestHandler: "requestMRU"
+                chrome.extension.sendMessage({requestHandler: "getOptions",option:"disableMRU"}, function(response) {
+                    if(response.responseHandler === 'options' && response.option === "disableMRU"){
+                        if(!response.value){
+                            keydownConnect.postMessage({
+                                requestHandler: "requestMRU"
+                            });
+                        }
+                    }
                 });
-
                 e.preventDefault();
                 e.stopPropagation();
                 return false; // preventDefault event

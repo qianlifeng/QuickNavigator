@@ -29,8 +29,14 @@
 });
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {   
-    console.log("short message ==> get "+request.act+" request");
-    if (request.act == "get"){
+    console.log("short message ==> get "+request.requestHandler+" request");
+    if (request.requestHandler == "getOptions"){
+        switch(request.option){
+            case "disableMRU":
+                    var disabled = options.getMRUDisabled();
+                    sendResponse({responseHandler:"options",option:"disableMRU",value:disabled});
+                break;
+        }
     }
 
     //这里要返回true表明了要等待异步发送给sender

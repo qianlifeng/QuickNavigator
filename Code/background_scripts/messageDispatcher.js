@@ -6,8 +6,17 @@
             //console.log("get connect message ==> " + msg);
             if(msg.requestHandler === "requestSuggestions"){
                 var text = msg.value;
+                var mode = suggestionMode[msg.suggestionMode];
                 if(text){
-                    var res = suggestions.getSuggestion(text);
+                    var res = [];
+                    switch(mode){
+                        case suggestionMode.normal.key:
+                            res = suggestions.getSuggestion(text);
+                            break;
+                        case suggestionMode.closedTab.key:
+                            res = suggestions.getClosedTabs(text);
+                            break;
+                    }
                     port.postMessage({
                         requestHandler: "responseSuggestions",
                         value: res
@@ -22,13 +31,6 @@
                 port.postMessage({
                     requestHandler: "responseSuggestions",
                     value: mru 
-                });
-            }
-            else if(msg.requestHandler === "requestClosedTabs"){
-                var closedTabs= suggestions.getClosedTabs();
-                port.postMessage({
-                    requestHandler: "responseSuggestions",
-                    value: closedTabs 
                 });
             }
         });

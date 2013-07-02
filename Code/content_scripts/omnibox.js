@@ -16,6 +16,7 @@ omnibox = function(){
         this.textbox= $("#quickNavigator-omnibox-textbox-id");
         this.input = $("#quickNavigator-omnibox-input");
         this.tag = $("#quickNavigator-omnibox-tag-id");
+        this.tag.attr("data-mode",suggestionMode.Normal);
         this.ul = $("#quickNavigator-omnibox .quickNavigator-omnibox-Result-ul");
     }
 
@@ -215,29 +216,31 @@ omnibox = function(){
         });
     }
 
+    //triggered by tab button
     function switchToAdvancedMode(){
-        var showTag = false;
-        switch(this.input.val()){
-            case "u":
-                this.tag.html("Recently Closed Tabs:");
-                showTag = true;
-                keydownConnect.postMessage({
-                    requestHandler: "requestClosedTabs",
-                });
+        for(var i in suggestionMode){
+            var mode = suggestionMode[i];
+            if(mode.hotkey === "none") continue;
+            if(mode.hotkey === this.input.val()){
+                this.tag.html(mode.text);
+                this.tag.attr("data-mode",mode.key);
+                this.input.val("");
+                this.tag.css("display","block");
+                calculateInputWidth();
+                sendRequest();
                 break;
-        }
-        if(showTag){
-            this.tag.css("display","block");
-            calculateInputWidth();
+            }
         }
     }
 
     function sendRequest(){
         if(this.input.val().length > 0){
-                    keydownConnect.postMessage({
-                        requestHandler: "requestSuggestions",
-                        value:this.input.val()
-                    });
+            var mode = this.tag.attr("data-mode");
+            keydownConnect.postMessage({
+                requestHandler: "requestSuggestions",
+                suggestionMode: mode,
+                value:this.input.val()
+            });
         }
         else{
             this.ul.html(""); 

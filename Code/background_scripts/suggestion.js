@@ -53,6 +53,8 @@ filter = function(){
 
 suggestions = function(){
 
+    var tabInfos = {};
+
     function query(txt){
         var bookMarkResult = bookMarkProvider.query(txt);
         var historyResult = historyProvider.query(txt);
@@ -113,8 +115,24 @@ suggestions = function(){
         popDomainsProvider.refresh();
     }
 
+
+    function RegisteEvents(){
+        chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+            // Note: this event is fired twice:
+            // Once with `changeInfo.status` = "loading" and another time with "complete"
+            tabInfos[tabId] = tab.url;
+        });
+        
+        chrome.tabs.onRemoved.addListener(function(tabId,removeInfo) {
+            console.log("tab closed:"+tab.title+tab.url);
+            // Remove information for non-existent tab
+            delete tabInfos[tabId];
+        });
+    }
+
     return {
         init:function(){
+            RegisteEvents();
             refreshDataSource();     
         },
 

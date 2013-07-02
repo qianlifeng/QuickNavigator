@@ -24,6 +24,13 @@
                     value: mru 
                 });
             }
+            else if(msg.requestHandler === "requestClosedTabs"){
+                var closedTabs= suggestions.getClosedTabs();
+                port.postMessage({
+                    requestHandler: "responseSuggestions",
+                    value: closedTabs 
+                });
+            }
         });
     }
 });

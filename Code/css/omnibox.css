@@ -105,6 +105,7 @@ tr.omniboxReset {
 #quickNavigator-omnibox .quickNavigator-omnibox-SearchArea input
 {
     border:none;
+    margin:0;
     font-size: 20px;
     height: 34px;
     margin-bottom: 0px;

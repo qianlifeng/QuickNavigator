@@ -5,7 +5,7 @@ omnibox = function(){
     function initDom(){
         var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">"+
                 "<div class=\"quickNavigator-omnibox-SearchArea omniboxReset\">"+
-                    "<div class='quickNavigator-omnibox-textbox'>"+
+                    "<div class='quickNavigator-omnibox-textbox' id='quickNavigator-omnibox-textbox-id'>"+
                         "<div class='quickNavigator-omnibox-tag' id='quickNavigator-omnibox-tag-id'>test</div><div class='quickNavigator-omnibox-inputDiv'><input id=\"quickNavigator-omnibox-input\" type=\"text\" /></div>"+
                     "</div>"+
                 "</div>"+
@@ -13,7 +13,9 @@ omnibox = function(){
                 "<ul class=\"quickNavigator-omnibox-Result-ul omniboxReset\"></ul>\n</div>";
         $(document.body).append(boxHTML);
         this.box = $("#quickNavigator-omnibox");
+        this.textbox= $("#quickNavigator-omnibox-textbox-id");
         this.input = $("#quickNavigator-omnibox-input");
+        this.tag = $("#quickNavigator-omnibox-tag-id");
         this.ul = $("#quickNavigator-omnibox .quickNavigator-omnibox-Result-ul");
     }
 
@@ -99,7 +101,20 @@ omnibox = function(){
         return source;
     }
 
-    function bindHotKey(){
+    function calculateInputWidth(){
+        if(this.tag) {
+            var totalWidth = this.textbox.outerWidth();
+            var tagWidth = this.tag.outerWidth(); 
+            this.input.parent().width(totalWidth - tagWidth - 3);
+        }
+    }
+
+    function bindEvents(){
+
+        $(window).resize(function(){
+            calculateInputWidth();
+        });
+
         $(document).bind('keyup','o', function(e){
             if(!isEditable(document.activeElement) ){
                 showOmnibox(); 
@@ -133,9 +148,9 @@ omnibox = function(){
             switch(e.keyCode){
                 //tab is not trigger in keyup event 
                 case 9: //tab
-                    switchToAdvancedMode();
                     e.stopPropagation();
                     e.preventDefault(); 
+                    switchToAdvancedMode();
                     return false;
 
                 default:break;
@@ -144,6 +159,10 @@ omnibox = function(){
 
         this.input.bind("keyup",function(e){
             switch(e.keyCode){
+                case 9: //tab
+                    e.stopPropagation();
+                    e.preventDefault(); 
+                    return false;
                 case 13: //enter
                     var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
                     if(me.lastSuggestions && url){
@@ -197,16 +216,19 @@ omnibox = function(){
     }
 
     function switchToAdvancedMode(){
-        var tag = $("#quickNavigator-omnibox-tag-id");
         var showTag = false;
         switch(this.input.val()){
             case "u":
-                tag.html("Recently Closed Tabs:");
+                this.tag.html("Recently Closed Tabs:");
                 showTag = true;
+                keydownConnect.postMessage({
+                    requestHandler: "requestClosedTabs",
+                });
                 break;
         }
         if(showTag){
-            tag.css("display","block");
+            this.tag.css("display","block");
+            calculateInputWidth();
         }
     }
 
@@ -304,7 +326,7 @@ omnibox = function(){
 
     function closeOmnibox(){
         this.input.val("");
-        $("#quickNavigator-omnibox-tag-id").css("display","none");
+        this.tag.css("display","none");
         this.input.blur(); //一定要取消焦点，否则下次打不开box
         this.box.css("display","none");
         this.ul.html("");
@@ -317,7 +339,7 @@ omnibox = function(){
         init:function(){
                  initDom();     
                  initConnectTunnel();
-                 bindHotKey();
+                 bindEvents();
              } 
     };
 }();

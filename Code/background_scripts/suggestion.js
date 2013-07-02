@@ -113,31 +113,20 @@ suggestions = function(){
         bookMarkProvider.refresh();
         historyProvider.refresh();
         popDomainsProvider.refresh();
-    }
-
-
-    function RegisteEvents(){
-        chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-            // Note: this event is fired twice:
-            // Once with `changeInfo.status` = "loading" and another time with "complete"
-            tabInfos[tabId] = tab.url;
-        });
-        
-        chrome.tabs.onRemoved.addListener(function(tabId,removeInfo) {
-            console.log("tab closed:"+tab.title+tab.url);
-            // Remove information for non-existent tab
-            delete tabInfos[tabId];
-        });
+        recentlyCloseTabsProvider.refresh();
     }
 
     return {
         init:function(){
-            RegisteEvents();
             refreshDataSource();     
         },
 
         getMRU:function(){
             return queryMRU(); 
+        },
+
+        getClosedTabs:function(){
+            return recentlyCloseTabsProvider.query("");
         },
 
         getSuggestion : function(txt){
@@ -172,6 +161,38 @@ popDomainsProvider = function(){
         refresh:function(){
                   refreshInternal(); 
         }
+    };
+}();
+
+recentlyCloseTabsProvider = function(){
+    var hasBindEvents = false;
+    var tabInfos = {};
+    var closedTabs = [];
+
+    function RegisteEvents(){
+        hasBindEvents = true;
+        chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+            tabInfos[tabId] = tab;
+        });
+        
+        chrome.tabs.onRemoved.addListener(function(tabId,removeInfo) {
+            if(tabInfos[tabId]){
+                var tab = tabInfos[tabId];
+                console.log("tab closed:"+tab.title+tab.url);
+                closedTabs.push({title:tab.title,url:tab.url,sourceType:"ClosedTab",relevancy:0}); 
+                delete tabInfos[tabId];
+            }
+        }); 
+    }
+
+    return {
+        query:function(txt) {
+            if(txt === "") return closedTabs.reverse();
+        },
+        refresh:function(){
+            if(!hasBindEvents) RegisteEvents();
+        }
+    
     };
 }();
 

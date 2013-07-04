@@ -6,7 +6,7 @@ omnibox = function(){
         var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">"+
                 "<div class=\"quickNavigator-omnibox-SearchArea omniboxReset\">"+
                     "<div class='quickNavigator-omnibox-textbox' id='quickNavigator-omnibox-textbox-id'>"+
-                        "<div class='quickNavigator-omnibox-tag' id='quickNavigator-omnibox-tag-id'>test</div><div class='quickNavigator-omnibox-inputDiv'><input id=\"quickNavigator-omnibox-input\" type=\"text\" /></div>"+
+                        "<div class='quickNavigator-omnibox-tag' id='quickNavigator-omnibox-tag-id' data-mode='normal'></div><div class='quickNavigator-omnibox-inputDiv'><input id=\"quickNavigator-omnibox-input\" type=\"text\" /></div>"+
                     "</div>"+
                 "</div>"+
                 "<div style='clear:both;'></div>"+
@@ -123,7 +123,8 @@ omnibox = function(){
                     if(response.responseHandler === 'options' && response.option === "disableMRU"){
                         if(!response.value){
                             keydownConnect.postMessage({
-                                requestHandler: "requestMRU"
+                                requestHandler: "requestSuggestions",
+                                suggestionMode: "mru"
                             });
                         }
                     }
@@ -234,17 +235,12 @@ omnibox = function(){
     }
 
     function sendRequest(){
-        if(this.input.val().length > 0){
-            var mode = this.tag.attr("data-mode");
-            keydownConnect.postMessage({
-                requestHandler: "requestSuggestions",
-                suggestionMode: mode,
-                value:this.input.val()
-            });
-        }
-        else{
-            this.ul.html(""); 
-        }
+        var mode = this.tag.attr("data-mode");
+        keydownConnect.postMessage({
+            requestHandler: "requestSuggestions",
+            suggestionMode: mode,
+            value:this.input.val()
+        });
     }
 
     function createEndTypingInterval(ms){
@@ -330,6 +326,7 @@ omnibox = function(){
     function closeOmnibox(){
         this.input.val("");
         this.tag.css("display","none");
+        this.tag.attr("data-mode","normal");
         this.input.blur(); //一定要取消焦点，否则下次打不开box
         this.box.css("display","none");
         this.ul.html("");

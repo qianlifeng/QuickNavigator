@@ -7,31 +7,14 @@
             if(msg.requestHandler === "requestSuggestions"){
                 var text = msg.value;
                 var mode = suggestionMode[msg.suggestionMode];
-                if(text){
-                    var res = [];
-                    switch(mode){
-                        case suggestionMode.normal.key:
-                            res = suggestions.getSuggestion(text);
-                            break;
-                        case suggestionMode.closedTab.key:
-                            res = suggestions.getClosedTabs(text);
-                            break;
-                    }
-                    port.postMessage({
-                        requestHandler: "responseSuggestions",
-                        value: res
-                    });
-                }
+                var res = suggestions.getSuggestion(text,mode.dataProvider,mode.applyRelevancy);
+                port.postMessage({
+                    requestHandler: "responseSuggestions",
+                    value: res
+                });
             }
             else if(msg.requestHandler === "requestNavigate"){
                 window.db.saveVisitedUrl(msg.url,msg.title,msg.sourceType);
-            }
-            else if(msg.requestHandler === "requestMRU"){
-                var mru = suggestions.getMRU();
-                port.postMessage({
-                    requestHandler: "responseSuggestions",
-                    value: mru 
-                });
             }
         });
     }

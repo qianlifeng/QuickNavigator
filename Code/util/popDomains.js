@@ -1,4 +1,4 @@
-window.popDomains = [{title:"百度知道 ",url:"zhidao.baidu.com",sourceType:"popdomain",relevancy:0},
+popDomains = [{title:"百度知道 ",url:"zhidao.baidu.com",sourceType:"popdomain",relevancy:0},
 {title:"百度地图",url:"map.baidu.com",sourceType:"popdomain",relevancy:0},
 {title:"人民网",url:"www.people.com.cn",sourceType:"popdomain",relevancy:0},
 {title:"淘宝网",url:"www.taobao.com",sourceType:"popdomain",relevancy:0},

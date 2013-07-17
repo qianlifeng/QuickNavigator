@@ -173,6 +173,7 @@ tr.omniboxReset {
     cursor: pointer;
     margin-left:5px;
     float:left;
+    color:black;
 }
 #quickNavigator-omnibox .quickNavigator-omnibox-suggestions-title:hover
 {

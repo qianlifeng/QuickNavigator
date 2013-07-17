@@ -1,6 +1,10 @@
 omnibox = function(){
 
     var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime,lastSuggestions;
+    //keycodes that omnibox accept
+    var whiteList = [
+            8 //back
+        ];
 
     function initDom(){
         var boxHTML = "<div id=\"quickNavigator-omnibox\" class=\"quickNavigator-omnibox-Container omniboxReset\">"+
@@ -83,6 +87,8 @@ omnibox = function(){
     }
 
     function highlightSearchWords(source,words){
+        if(words === "")return source;
+
         var matched = '';
 
         //exact match
@@ -111,38 +117,29 @@ omnibox = function(){
     }
 
     function bindEvents(){
-
+        var me = this;
         $(window).resize(function(){
             calculateInputWidth();
         });
 
-        $(document).bind('keyup','o', function(e){
-            if(!isEditable(document.activeElement) ){
-                showOmnibox(); 
-                chrome.extension.sendMessage({requestHandler: "getOptions",option:"disableMRU"}, function(response) {
-                    if(response.responseHandler === 'options' && response.option === "disableMRU"){
-                        if(!response.value){
-                            keydownConnect.postMessage({
-                                requestHandler: "requestSuggestions",
-                                suggestionMode: "mru"
-                            });
-                        }
-                    }
-                });
-                e.preventDefault();
-                e.stopPropagation();
-                return false; // preventDefault event
-            }
-        });  
-
-        var me = this;
         $(document).bind("keyup",function(e){
               switch(e.keyCode){
                 case 27: //esc
                     closeOmnibox();
                     e.stopPropagation();
                     e.preventDefault(); 
-                    return;   
+                    break;   
+
+                case 79: //o
+                    if(!isEditable(document.activeElement) ){
+                        showOmnibox(); 
+                        sendMRURequest(); 
+
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return false; // preventDefault event
+                    }
+                    break;
               }
         });
 
@@ -153,18 +150,8 @@ omnibox = function(){
                     e.stopPropagation();
                     e.preventDefault(); 
                     switchToAdvancedMode();
-                    return false;
+                    break;
 
-                default:break;
-            }
-        });
-
-        this.input.bind("keyup",function(e){
-            switch(e.keyCode){
-                case 9: //tab
-                    e.stopPropagation();
-                    e.preventDefault(); 
-                    return false;
                 case 13: //enter
                     var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
                     if(me.lastSuggestions && url){
@@ -188,32 +175,36 @@ omnibox = function(){
                     closeOmnibox();
                     e.stopPropagation();
                     e.preventDefault(); 
-                    return; 
+                    break;
 
                 case 38: //up
                     movePreSelected();
                     e.stopPropagation();
                     e.preventDefault(); 
-                    return; 
+                    break;
+
                 case 40: //down
                     moveNextSelected();
                     e.stopPropagation();
                     e.preventDefault(); 
-                    return; 
+                    break;
+            }
+        });
 
-                case 37: //left
-                case 39: //right
-                    return;
+        this.input.bind("keyup",function(e){
+            //only accept a-z 0-9 and whitelist to trigger sendrequest()
+            if((e.keyCode < 48 || e.keyCode > 90) && whiteList.indexOf(e.keyCode) === -1) return true;
+
+            switch(e.keyCode){
+                case 8:  //back
+                    if(me.input.val() === "") 
+                    {
+                       sendMRURequest();
+                       return;
+                    }
+                    break;
             }
             sendRequest();
-            //me.lastEveryKeyUpTime =new Date().getTime();
-            //if(me.lastKeyUpTime == null || (me.lastKeyUpTime && new Date().getTime() - me.lastKeyUpTime > 500)){
-                //if(me.lastKeyUpTime == null) createEndTypingInterval(200);
-                //me.lastKeyUpTime = new Date().getTime();
-
-                //console.log("send request");
-                //sendRequest();
-            //}
         });
     }
 
@@ -234,6 +225,20 @@ omnibox = function(){
         }
     }
 
+    function sendMRURequest(){
+        var me = this;
+        chrome.extension.sendMessage({requestHandler: "getOptions",option:"disableMRU"}, function(response) {
+             if(response.responseHandler === 'options' && response.option === "disableMRU"){
+                if(!response.value){
+                   keydownConnect.postMessage({
+                        requestHandler: "requestSuggestions",
+                        suggestionMode: "mru"
+                    });
+                }
+            }
+        }); 
+    }
+
     function sendRequest(){
         var mode = this.tag.attr("data-mode");
         keydownConnect.postMessage({
@@ -241,19 +246,6 @@ omnibox = function(){
             suggestionMode: mode,
             value:this.input.val()
         });
-    }
-
-    function createEndTypingInterval(ms){
-        var me = this;
-        var id = setInterval(function(){
-           //console.log("show");
-           if(me.lastEveryKeyUpTime &&  new Date().getTime() - me.lastEveryKeyUpTime > ms){
-               //console.log("end");
-               sendRequest();
-               me.lastKeyUpTime = null;
-               clearInterval(id);
-           }
-        },ms);
     }
 
     function navigate(openInNewTab,uri){

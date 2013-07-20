@@ -13,7 +13,8 @@ closedTabProvider = function(){
             if(tabInfos[tabId]){
                 var tab = tabInfos[tabId];
                 console.log("tab closed:"+tab.title+tab.url);
-                closedTabs.push({title:tab.title,url:tab.url,sourceType:"ClosedTab",relevancy:0}); 
+                closedTabs.push({title:tab.title,url:tab.url,sourceType:"ClosedTab",relevancy:0,closedDate:new Date().getTime()}); 
+                closedTabs.sort(function(x,y){return x.closedDate > y.closedDate ? -1:1;});
                 delete tabInfos[tabId];
             }
         }); 
@@ -21,7 +22,9 @@ closedTabProvider = function(){
 
     return {
         query:function(txt) {
-            if(txt === "") return closedTabs.reverse();
+            if(txt === ""){
+                return closedTabs;
+            }
 
             return closedTabs.find(txt);
         },

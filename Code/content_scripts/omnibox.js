@@ -197,7 +197,7 @@ omnibox = function(){
 
             switch(e.keyCode){
                 case 8:  //back
-                    if(me.input.val() === "") 
+                    if(me.input.val() === "" && me.tag.attr("data-mode") === "normal") 
                     {
                        sendMRURequest();
                        return;

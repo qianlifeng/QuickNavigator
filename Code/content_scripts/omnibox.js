@@ -20,7 +20,7 @@ omnibox = function(){
         this.textbox= $("#quickNavigator-omnibox-textbox-id");
         this.input = $("#quickNavigator-omnibox-input");
         this.tag = $("#quickNavigator-omnibox-tag-id");
-        this.tag.attr("data-mode",suggestionMode.Normal);
+        this.tag.attr("data-mode",config.suggestionMode.normal.key);
         this.ul = $("#quickNavigator-omnibox .quickNavigator-omnibox-Result-ul");
     }
 
@@ -52,23 +52,23 @@ omnibox = function(){
             var topContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-top omniboxReset");
             var sourceTypeElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourcetype omniboxReset").html(value.sourceType);
             
-            //var iconElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-icon omniboxReset");
+            var iconElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-icon omniboxReset");
             var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
             var urlArrary = reg.exec(value.url);
             var iconUrl = "";
             if(urlArrary && urlArrary.length >= 2){
-                if(urlArrary[1].indexOf("http:") !== 0){
+                if(urlArrary[1].indexOf("http") !== 0){
                     iconUrl = "http://";
                 }
                 iconUrl += urlArrary[1] + "/favicon.ico";
             }
-            //var iconImg = $("<img src='"+iconUrl+"'/>");
+            var iconImg = $("<img src='"+iconUrl+"'/>");
             var titleElement = $("<a></a>").addClass("quickNavigator-omnibox-suggestions-title omniboxReset").html(title).attr("href",value.url);
             titleElement.click(function(){
                 navigate(false,value.url);
             });
-            //iconImg.appendTo(iconElement);
-            //iconElement.appendTo(topContainer);
+            iconImg.appendTo(iconElement);
+            iconElement.appendTo(topContainer);
             sourceTypeElement.appendTo(topContainer);
             titleElement.appendTo(topContainer);
 
@@ -210,8 +210,8 @@ omnibox = function(){
 
     //triggered by tab button
     function switchToAdvancedMode(){
-        for(var i in suggestionMode){
-            var mode = suggestionMode[i];
+        for(var i in config.suggestionMode){
+            var mode = config.suggestionMode[i];
             if(mode.hotkey === "none") continue;
             if(mode.hotkey === this.input.val()){
                 this.tag.html(mode.text);
@@ -240,12 +240,16 @@ omnibox = function(){
     }
 
     function sendRequest(){
-        var mode = this.tag.attr("data-mode");
-        keydownConnect.postMessage({
-            requestHandler: "requestSuggestions",
-            suggestionMode: mode,
-            value:this.input.val()
-        });
+        var me = this;
+        if(typeof this.requestTimer !== "undefined") clearTimeout(this.requestTimer);
+        this.requestTimer = setTimeout(function(){
+            var mode = me.tag.attr("data-mode");
+            keydownConnect.postMessage({
+                requestHandler: "requestSuggestions",
+                suggestionMode: mode,
+                value:me.input.val()
+            });
+        },200);
     }
 
     function navigate(openInNewTab,uri){

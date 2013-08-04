@@ -1,20 +1,18 @@
 suggestions = function(){
-
-    function query(txt,dataProvider,applyRelevancy){
+    function query(txt,dataProvider,applyRelevancy,maxResult){
         dataProvider = dataProvider.split(',');
         var res = [];
         dataProvider.forEach(function(element,index,arrary){
-             res = res.merge(window[element].query(txt));
+            res = res.merge(window[element].query(txt));
         });
 
         if(applyRelevancy) {
             addRelevancy(res);
             res.sort(function(a,b){
-               return a.relevancy >= b.relevancy ? -1:1;
+                return a.relevancy >= b.relevancy ? -1:1;
             });
         }
-        var suggestionsCount = options.getSuggestionsCount();
-        return res.slice(0,suggestionsCount);
+        return res.slice(0,maxResult);
     }
 
     //relevancy is a integer, larger integer represent larger relevancy
@@ -43,14 +41,14 @@ suggestions = function(){
 
     return {
         init:function(){
-            dataProvider.forEach(function(element,n,arrary){
+            config.dataProvider.forEach(function(element,n,arrary){
                 console.log("init dataProvider "+element);
                 window[element].init();
             });
         },
 
-        getSuggestion : function(txt,dataProvider,applyRelevancy){
-            return query(txt,dataProvider,applyRelevancy); 
+        getSuggestion : function(txt,dataProvider,applyRelevancy,maxResult){
+            return query(txt,dataProvider,applyRelevancy,maxResult); 
         }
     }; 
 }();

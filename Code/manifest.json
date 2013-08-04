@@ -3,6 +3,7 @@
   "version": "0.1",
   "manifest_version": 2,
   "description": "",
+  "default_locale": "en",
   "browser_action": {
     "default_icon": "images/icon.png"
   },

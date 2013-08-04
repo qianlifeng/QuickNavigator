@@ -6,8 +6,12 @@
             //console.log("get connect message ==> " + msg);
             if(msg.requestHandler === "requestSuggestions"){
                 var text = msg.value;
-                var mode = suggestionMode[msg.suggestionMode];
-                var res = suggestions.getSuggestion(text,mode.dataProvider,mode.applyRelevancy);
+                var mode = config.suggestionMode[msg.suggestionMode];
+                var maxResult = config.getSuggestionsCount();
+                if(mode.key === "mru"){
+                    maxResult = config.getMRUCount();
+                }
+                var res = suggestions.getSuggestion(text,mode.dataProvider,mode.applyRelevancy,maxResult);
                 port.postMessage({
                     requestHandler: "responseSuggestions",
                     value: res
@@ -25,7 +29,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.requestHandler == "getOptions"){
         switch(request.option){
             case "disableMRU":
-                    var disabled = options.getMRUDisabled();
+                    var disabled = config.getMRUDisabled();
                     sendResponse({responseHandler:"options",option:"disableMRU",value:disabled});
                 break;
         }

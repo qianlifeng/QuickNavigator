@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Setting</title>
+  <title>QuickNavigator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
@@ -10,11 +10,10 @@
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
-        <span class="brand" style="margin-left:20px;">Quick Navigator</span>
+        <span class="brand" style="margin-left:20px;">QuickNavigator</span>
         <ul class="nav">
-          <li class="active"><a href="#">Setting</a></li>
-          <li><a href="http://www.weibo.com/qianlifeng2011">About Me</a></li>
-          <li><a href="https://github.com/qianlifeng/QuickNavigator" target="_blank">Source Code</a></li>
+          <li class="active"><a href="#">{{Setting}}</a></li>
+          <li><a href="https://github.com/qianlifeng/QuickNavigator" target="_blank">{{SourceCode}}</a></li>
         </ul>
       </div>
     </div>
@@ -26,69 +25,81 @@
         <div class="row">
           <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav affix">
-              <li class="active"><a href="#Hotkey"><i class="icon-chevron-right"></i>Hotkey</a></li>
-              <li><a href="#Disable"><i class="icon-chevron-right"></i>Disable</a></li>
-              <li><a href="#Suggestions"><i class="icon-chevron-right"></i>Suggestions</a></li>
+              <!--<li class="active"><a href="#Hotkey"><i class="icon-chevron-right"></i>{{Hotkey}}</a></li>-->
+              <!--<li><a href="#Disable"><i class="icon-chevron-right"></i>{{Disable}}</a></li>-->
               <li><a href="#MRU"><i class="icon-chevron-right"></i>MRU</a></li>
-              <li><a href="#Language"><i class="icon-chevron-right"></i>Language</a></li>
+              <li><a href="#Suggestions"><i class="icon-chevron-right"></i>{{Suggestion}}</a></li>
+              <!--<li><a href="#Language"><i class="icon-chevron-right"></i>{{Language}}</a></li>-->
             </ul>
           </div>
           <div class="span9">
             <!-- Hotkey --> 
-            <section id="Hotkey">
-              <div class="page-header">
-                <h1>Hotkey</h1>
-              </div>
-            </section>
+            <!--<section id="Hotkey">-->
+              <!--<div class="page-header">-->
+                  <!--<h1>{{Hotkey}}</h1>-->
+              <!--</div>-->
+            <!--</section>-->
 
-            <!-- Disable --> 
-            <section id="Disable">
-              <div class="page-header">
-                <h1>Disable</h1>
-                <p>You can disable QuickNavigator</p>
-              </div>
-            </section>
+            <!--[> Disable <] -->
+            <!--<section id="Disable">-->
+              <!--<div class="page-header">-->
+                  <!--<h1>{{Disable}}</h1>-->
+                <!--<p>You can disable QuickNavigator</p>-->
+              <!--</div>-->
+            <!--</section>-->
 
             <!-- MRU --> 
             <section id="MRU">
                 <div class="page-header">
-                    <h1>MRU</h1>
-                    <p>You can disable MRU on the start of omnibox</p>
+                    <h1>{{MRU}}</h1>
+                    <p class="header-description">{{MRUDescription}}</p>
                 </div>
-                <div class="page-body">
+                <div class="page-body well page-end">
                     <fieldset>
                         <label class="checkbox">
-                          <input type="checkbox" id="disableMRU">Disable MRU
+                            {{DisableMRU}}: <input type="checkbox" id="disableMRU">
                         </label>
-                        MRU Dispaly Count:<input type="text" id="MRUCount" />
+                            {{MRUDisplayCount}}: <input type="text" id="MRUCount" />
                     </fieldset>
                 </div>
             </section>
 
             <section id="suggestions">
                 <div class="page-header">
-                    <h1>Suggestions</h1>
+                    <h1>{{Suggestion}}</h1>
+                    <p class="header-description">{{SuggestionDescription}}</p>
                 </div>
-                <div class="page-body">
+                <div class="page-body well page-end">
                     <fieldset>
-                        Suggestions List Count:<input type="text" id="suggestionsCount" />
+                        {{SuggestionCount}}: <input type="text" id="suggestionsCount" />
                     </fieldset>
                 </div>
             </section>
 
             <!-- Language --> 
-            <section id="Disable">
-              <div class="page-header">
-                <h1>Language</h1>
-                <p>Currently, we support two kinds of languages: English and Chinese</p>
-              </div>
-            </section>
+            <!--<section id="Disable">-->
+              <!--<div class="page-header">-->
+                  <!--<h1>{{Language}}</h1>-->
+                  <!--<p class="header-description">{{LanguageDescription}}</p>-->
+              <!--</div>-->
+                <!--<div class="page-body well page-end">-->
+                    <!--<fieldset>-->
+                        <!--{{DisplayLanguage}}:  -->
+                        <!--<select id="language">-->
+                            <!--<option>{{English}}</option>-->
+                            <!--<option>{{Chinese}}</option>-->
+                        <!--</select>-->
+                    <!--</fieldset>-->
+                <!--</div>-->
+            <!--</section>-->
           </div>
       </div>
 
   </div>
   <script src="util/jquery-1.7.2.min.js"></script>
   <script src="util/bootstrap.min.js"></script>
+  <script src="util/config.js"></script>
   <script src="util/options.js"></script>
+  <script src="util/mustache.js"></script>
   </body>
 </html>

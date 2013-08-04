@@ -1,0 +1,18 @@
+{
+    "Language" : { "message" : "语言" },
+    "LanguageDescription" : { "message" : "目前，我们支持两种语言：英文和中文" },
+    "DisplayLanguage" : { "message" : "显示语言" },
+    "English" : { "message" : "英语" },
+    "Chinese" : { "message" : "中文" },
+    "Setting" : { "message" : "设置" },
+    "Hotkey" : { "message" : "快捷键" },
+    "Suggestion" : { "message" : "搜索建议" },
+    "SuggestionDescription" : { "message" : "搜索建议是指你每次在搜索框里面进行搜索时，系统返回给您的网址建议" },
+    "SuggestionCount" : { "message" : "搜索建议显示个数" },
+    "MRU" : { "message" : "最常使用（MRU）" },
+    "DisableMRU" : { "message" : "禁用MRU" },
+    "MRUDisplayCount" : { "message" : "MRU显示个数" },
+    "MRUDescription" : { "message" : "MRU是指那些你最常访问的链接。如果启用了MRU，那么在每次打开搜索框的时候都会显示出这些链接。" },
+    "Disable" : { "message" : "禁止" },
+    "SourceCode" : { "message" : "源代码@Github" }
+}

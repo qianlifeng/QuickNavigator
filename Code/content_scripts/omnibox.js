@@ -47,23 +47,35 @@ omnibox = function(){
         $.each(suggestionList,function(n,value) {
             var title = highlightSearchWords(value.title,currentSearch);
             var url = highlightSearchWords(value.url,currentSearch);
+            var sourceType = value.sourceType;
+            if(sourceType === "Command") url = "";
             var li = $("<li></li>").addClass("omniboxReset");
 
             var topContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-top omniboxReset");
-            var sourceTypeElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourcetype omniboxReset").html(value.sourceType);
+            var sourceTypeElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourcetype omniboxReset").html(sourceType);
             
             var iconElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-icon omniboxReset");
-            var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
-            var urlArrary = reg.exec(value.url);
+
             var iconUrl = "";
-            if(urlArrary && urlArrary.length >= 2){
-                if(urlArrary[1].indexOf("http") !== 0){
-                    iconUrl = "http://";
+            if(sourceType !== "Command"){
+                //匹配形如www.baidu.com的网址
+                var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
+                var urlArrary = reg.exec(value.url);
+                if(urlArrary && urlArrary.length >= 2){
+                    if(urlArrary[1].indexOf("http") !== 0){
+                        iconUrl = "http://";
+                    }
+                    iconUrl += urlArrary[1] + "/favicon.ico";
                 }
-                iconUrl += urlArrary[1] + "/favicon.ico";
             }
             var iconImg = $("<img src='"+iconUrl+"'/>");
-            var titleElement = $("<a></a>").addClass("quickNavigator-omnibox-suggestions-title omniboxReset").html(title).attr("href",value.url);
+            var titleElement = $("<a></a>").addClass("quickNavigator-omnibox-suggestions-title omniboxReset").html(title);
+            if(sourceType === "Command"){
+                titleElement.attr("href","javascript:"+value.url);
+            }
+            else{
+                titleElement.attr("href",value.url);
+            }
             titleElement.click(function(){
                 navigate(false,value.url);
             });

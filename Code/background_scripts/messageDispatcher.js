@@ -29,10 +29,17 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.requestHandler == "getOptions"){
         switch(request.option){
             case "disableMRU":
-                    var disabled = config.getMRUDisabled();
-                    sendResponse({responseHandler:"options",option:"disableMRU",value:disabled});
-                break;
+                var disabled = config.getMRUDisabled();
+            sendResponse({responseHandler:"options",option:"disableMRU",value:disabled});
+            break;
         }
+    }
+    else if (request.requestHandler == "loadTemplate"){
+        $.ajax({
+            url: chrome.extension.getURL("template.html"),
+            dataType: "html",
+            success: sendResponse
+        });
     }
 
     //这里要返回true表明了要等待异步发送给sender

@@ -329,6 +329,7 @@ omnibox = function(){
         this.box.css("display","block"); 
         this.input.val("");
         this.input.focus();
+        calculateInputWidth();
     }
 
     function closeOmnibox(){

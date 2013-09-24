@@ -64,6 +64,8 @@ window.db = (function(){
           return max;           
         },
         getVisitedURLs:function(){
+            if(typeof localStorage['QuickNavigator_VisitedURL'] === "undefined") return [];
+
             var urls = JSON.parse(localStorage['QuickNavigator_VisitedURL']);
             var urlList = [];
             for(var i = 0; i < urls.length; i++){

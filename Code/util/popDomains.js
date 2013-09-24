@@ -16,6 +16,7 @@ popDomains = [{title:"百度知道 ",url:"zhidao.baidu.com",sourceType:"popdomai
 {title:"搜搜",url:"www.soso.com",sourceType:"popdomain",relevancy:0},
 {title:"豆瓣",url:"www.douban.com",sourceType:"popdomain",relevancy:0},
 {title:"新浪博客",url:"blog.sina.com.cn",sourceType:"popdomain",relevancy:0},
+{title:"新浪微博",url:"www.weibo.com",sourceType:"popdomain",relevancy:0},
 {title:"土豆网",url:"www.tudou.com",sourceType:"popdomain",relevancy:0},
 {title:"酷6网",url:"www.ku6.com",sourceType:"popdomain",relevancy:0},
 {title:"太平洋电脑网",url:"www.pconline.com.cn",sourceType:"popdomain",relevancy:0},

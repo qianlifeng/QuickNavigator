@@ -15,7 +15,7 @@ var config = (function(){
             disabled:false,
             applyRelevancy:true,
             maxResult:8,
-            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider"
+            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,mostRecentUseProvider"
         },
         closedTab:{
             key:"closedTab",

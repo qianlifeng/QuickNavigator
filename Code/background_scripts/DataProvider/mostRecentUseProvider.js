@@ -11,7 +11,9 @@ var mostRecentUseProvider = function(){
                urls.forEach(function(element,n,arrary){
                    mruLists.push({title:element.title,url:element.url,sourceType:"MRU",relevancy:element.visitedCount}); 
                });
-               return mruLists; 
+               
+               if(typeof txt === "undefined" || txt === "") return mruLists;
+               return mruLists.find(txt); 
         },
         init:function(){ }
     };

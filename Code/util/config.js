@@ -5,7 +5,8 @@ var config = (function(){
         "popDomainProvider",
         "closedTabProvider",
         "yesOrNoProvider",
-        "mostRecentUseProvider"
+        "mostRecentUseProvider",
+        "baiduSuggestionProvider",
     ];
 
     var suggestionMode = {
@@ -25,7 +26,7 @@ var config = (function(){
             //最大的建议数量【如果本地存储件中存在相同的配置项目，则优先读取用户设置的本地存储值】
             maxResult:8,
             //数据源
-            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider"
+            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,baiduSuggestionProvider"
         },
         closedTab:{
             key:"closedTab",

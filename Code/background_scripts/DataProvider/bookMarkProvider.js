@@ -27,7 +27,7 @@ bookMarkProvider = function(){
                 toVisit.push.apply(toVisit, bookmark.children.reverse());
             }
             else{
-                results.push({title:bookmark.title,url:bookmark.url,sourceType:"bookmark",relevancy:0});
+                results.push({title:bookmark.title,url:bookmark.url,providerName:"bookMarkProvider"});
             }
         }
         return results;

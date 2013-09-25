@@ -13,7 +13,7 @@ historyProvider = function(){
             var _i, _len, _ref;
             history.sort(_compareHistoryByUrl);
             history.forEach(function(element,n,arrary){
-               me.historyCache.push({title:element.title,url:element.url,sourceType:"history",relevancy:0}); 
+               me.historyCache.push({title:element.title,url:element.url,providerName:"historyProvider"}); 
             });
             //chrome.history.onVisited.addListener(_this.onPageVisited.bind(_this));
             //chrome.history.onVisitRemoved.addListener(_this.onVisitRemoved.bind(_this));

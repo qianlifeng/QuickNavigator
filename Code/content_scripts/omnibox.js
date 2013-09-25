@@ -51,12 +51,21 @@ omnibox = function(){
         $.each(suggestionList,function(n,value) {
             var title = highlightSearchWords(value.title,currentSearch);
             var url = highlightSearchWords(value.url,currentSearch);
-            var sourceType = value.sourceType;
-            if(sourceType === "Command") url = "";
+            var sourceType = "";
+            config.dataProvider.forEach(function(provider,index,arrary){
+                if(provider.name === value.providerName){
+                    sourceType = provider.text;
+                }
+            });
+
+            if(value.providerName === "commandProvider"){
+                url = "进入高级选择模式";
+            }
+
             var li = $("<li></li>").addClass("omniboxReset");
 
             var topContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-top omniboxReset");
-            var sourceTypeElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourcetype omniboxReset").html(sourceType);
+            var sourceTypeElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourcetype omniboxReset").html(sourceType+" "+value.relevancy);
             
             var iconElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-icon omniboxReset");
 
@@ -85,25 +94,30 @@ omnibox = function(){
             });
             iconImg.appendTo(iconElement);
             iconElement.appendTo(topContainer);
-            sourceTypeElement.appendTo(topContainer);
             titleElement.appendTo(topContainer);
 
             var bottomContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-bottom omniboxReset");
-            var urlElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url omniboxReset").html(url+" "+value.relevancy);
+            var urlElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url omniboxReset").html(url);
             var urlHiddenElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url-hidden omniboxReset").html(value.url);
+            sourceTypeElement.appendTo(bottomContainer);
             urlElement.appendTo(bottomContainer);
             urlHiddenElement.appendTo(bottomContainer);
 
             topContainer.appendTo(li);
             bottomContainer.appendTo(li);
-            li.appendTo(me.ul);
             if(async){
-                li.addClass("slideHide");
-                li.animate({
-                    top: "0"
-                },500,function(){
-                    li.removeClass("slideHide");
-                });
+                if(value && value.searchItem === currentSearch){
+                    li.addClass("slideHide");
+                    li.appendTo(me.ul)
+                    li.animate({
+                        top: "0"
+                    },300,function(){
+                        li.removeClass("slideHide");
+                    });
+                }
+            }
+            else{
+                li.appendTo(me.ul)
             }
         });
 
@@ -154,8 +168,8 @@ omnibox = function(){
                     e.preventDefault(); 
                     break;   
 
-                case 79: //o
-                    if(!isEditable(document.activeElement) ){
+                case 70: //f
+                    if(!isEditable(document.activeElement) && !window.tempDisableNavigator){
                         showOmnibox(); 
                         sendMRURequest(); 
 
@@ -171,14 +185,22 @@ omnibox = function(){
             switch(e.keyCode){
                 //tab is not trigger in keyup event 
                 case 9: //tab
+                    moveNextSelected();
                     e.stopPropagation();
                     e.preventDefault(); 
-                    switchToAdvancedMode();
                     break;
 
                 case 13: //enter
                     var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
                     if(me.lastSuggestions && url){
+
+                        if(url.indexOf("javascript:") == 0){
+                            js =  url.substring(11);
+                            eval(js);
+                            break;
+                        }
+
+
                         $.each(me.lastSuggestions,function(n,value) {
                             if(value.url === url){
                                 keydownConnect.postMessage({
@@ -247,6 +269,11 @@ omnibox = function(){
                 break;
             }
         }
+    }
+
+    function tempDisableNavigator(){
+        window.tempDisableNavigator = true;
+        closeOmnibox();
     }
 
     function sendMRURequest(){

@@ -13,7 +13,7 @@ closedTabProvider = function(){
             if(tabInfos[tabId]){
                 var tab = tabInfos[tabId];
                 console.log("tab closed:"+tab.title+tab.url);
-                closedTabs.push({title:tab.title,url:tab.url,sourceType:"ClosedTab",relevancy:0,closedDate:new Date().getTime()}); 
+                closedTabs.push({title:tab.title,url:tab.url,providerName:"closedTabProvider",closedDate:new Date().getTime()}); 
                 closedTabs.sort(function(x,y){return x.closedDate > y.closedDate ? -1:1;});
                 delete tabInfos[tabId];
             }

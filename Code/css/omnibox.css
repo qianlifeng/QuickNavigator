@@ -154,7 +154,10 @@ tr.omniboxReset {
 #quickNavigator-omnibox .quickNavigator-omnibox-suggestions-sourcetype
 {
     color:#999;
-    float:left;
+    float:right;
+    font-size: 13px;
+    padding-top: 5px;
+    padding-right: 15px;
 }
 #quickNavigator-omnibox .quickNavigator-omnibox-suggestions-icon
 {
@@ -174,6 +177,8 @@ tr.omniboxReset {
     cursor: pointer;
     margin-left:5px;
     float:left;
+    width: 80%;
+    white-space: nowrap;
     color:black;
 }
 #quickNavigator-omnibox .quickNavigator-omnibox-suggestions-title:hover
@@ -184,6 +189,7 @@ tr.omniboxReset {
 #quickNavigator-omnibox .quickNavigator-omnibox-suggestions-url
 {
     white-space: nowrap;
+    width:80%;
     color: rgb(34, 70, 132);
     overflow:hidden;
     padding-top:5px;

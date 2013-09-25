@@ -7,7 +7,7 @@ var baiduSuggestionProvider = function(){
             .always(function(d){
                    var urlArrary = reg.exec(d.responseText);
                    var firstMatch = urlArrary[1].split(",")[0];
-                   suggestion.push({title:firstMatch,url:"http://www.baidu.com/s?wd="+firstMatch,sourceType:"百度",relevancy:1000}); 
+                   suggestion.push({title:firstMatch,url:"http://www.baidu.com/s?wd="+firstMatch,providerName:"baiduSuggestionProvider",searchItem:txt}); 
                    asyncFunc(suggestion);
             });
 

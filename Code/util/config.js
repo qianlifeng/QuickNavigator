@@ -1,12 +1,13 @@
 var config = (function(){
     var dataProvider = [
-        "bookMarkProvider",
-        "historyProvider",
-        "popDomainProvider",
-        "closedTabProvider",
-        "yesOrNoProvider",
-        "mostRecentUseProvider",
-        "baiduSuggestionProvider",
+        {name:"bookMarkProvider",relevancy:10,text:"书签"},
+        {name:"historyProvider",relevancy:7,text:"历史记录"},
+        {name:"popDomainProvider",relevancy:1,text:"流行网站"},
+        {name:"closedTabProvider",relevancy:1,text:"最近关闭标签"},
+        {name:"yesOrNoProvider",relevancy:1000,text:"yesOrNo"},
+        {name:"mostRecentUseProvider",relevancy:15,text:"经常使用"},
+        {name:"baiduSuggestionProvider",relevancy:1,text:"百度"},
+        {name:"commandProvider",relevancy:1000,text:"命令"}
     ];
 
     var suggestionMode = {
@@ -26,16 +27,18 @@ var config = (function(){
             //最大的建议数量【如果本地存储件中存在相同的配置项目，则优先读取用户设置的本地存储值】
             maxResult:8,
             //数据源
-            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,mostRecentUseProvider,baiduSuggestionProvider"
+            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,mostRecentUseProvider,baiduSuggestionProvider,commandProvider"
         },
         closedTab:{
             key:"closedTab",
             text:"最近关闭标签",
+            description:"显示最近关闭的标签页",
             hotkey:"u",
             disabled:false,
             applyRelevancy:false,
             maxResult:8,
             applyMRU:true,
+            clientCommand:"javascript:switchToAdvancedMode();",
             dataProvider:"closedTabProvider"
         }, 
         closeNavigator:{
@@ -46,16 +49,18 @@ var config = (function(){
             applyRelevancy:false,
             applyMRU:false,
             maxResult:2,
-            dataProvider:"yesOrNoProvider"
+            clientCommand:"javascript:tempDisableNavigator();",
+            dataProvider:""
         },
         mru:{
             key:"mru",
-            text:"most recent use",
-            hotkey:"none",
+            text:"最常访问网站",
+            hotkey:"m",
             disabled:false,
             applyRelevancy:false,
             applyMRU:true,
             maxResult:5,
+            clientCommand:"javascript:switchToAdvancedMode();",
             dataProvider:"mostRecentUseProvider"
         }
     };

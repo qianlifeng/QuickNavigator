@@ -21,9 +21,11 @@ suggestions = function(){
             //fist, we must reset relevancy to 0, or it will increase repeatly when every words typed
             element.relevancy = 0;
 
-            if(element.sourceType === "bookmark") element.relevancy += 10;
-            if(element.sourceType === "history") element.relevancy += 7;
-            if(element.sourceType === "popdomain") element.relevancy += 5;
+            config.dataProvider.forEach(function(provider,index,arrary){
+                if(provider.name === element.providerName){
+                    element.relevancy += provider.relevancy;
+                }
+            });
 
             //check if this url has beed visited
             var visitedCount =  window.db.getUrlVisitedCount(element.url);
@@ -42,8 +44,8 @@ suggestions = function(){
     return {
         init:function(){
             config.dataProvider.forEach(function(element,n,arrary){
-                console.log("init dataProvider "+element);
-                window[element].init();
+                console.log("init dataProvider "+element.name);
+                window[element.name].init();
             });
         },
 

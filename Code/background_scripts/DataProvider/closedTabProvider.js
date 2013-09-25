@@ -21,13 +21,14 @@ closedTabProvider = function(){
     }
 
     return {
-        query:function(txt) {
+        query:function(txt,asyncFunc) {
             if(txt === ""){
                 return closedTabs;
             }
 
             return closedTabs.find(txt);
         },
+        async:false,
         init:function(){
             if(!hasBindEvents) RegisteEvents();
         }

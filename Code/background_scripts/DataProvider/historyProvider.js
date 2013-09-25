@@ -37,9 +37,10 @@ historyProvider = function(){
     }
 
     return{
-        query:function(txt){
+        query:function(txt,asyncFunc){
                   return queryInternal(txt);          
         },
+        async:false,
         init:function(){
                   refreshInternal(); 
         }

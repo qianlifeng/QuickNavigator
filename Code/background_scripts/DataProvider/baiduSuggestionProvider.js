@@ -1,19 +1,19 @@
 var baiduSuggestionProvider = function(){
     return {
-        query:function(txt){
+        query:function(txt,asyncFunc){
             var suggestion = [];
             var reg = /s:\[(.*)?\]\}/gi;
-            var s = $.ajax({
-                type: "GET",
-                url:"http://suggestion.baidu.com/su?cb=&wd="+txt,
-                async:false
-            }).responseText;
+            $.get("http://suggestion.baidu.com/su?cb=&wd="+txt)
+            .always(function(d){
+                   var urlArrary = reg.exec(d.responseText);
+                   var firstMatch = urlArrary[1].split(",")[0];
+                   suggestion.push({title:firstMatch,url:"http://www.baidu.com/s?wd="+firstMatch,sourceType:"百度",relevancy:1000}); 
+                   asyncFunc(suggestion);
+            });
 
-           var urlArrary = reg.exec(s);
-           var firstMatch = urlArrary[1].split(",")[0];
-           suggestion.push({title:firstMatch,url:"http://www.baidu.com/s?wd="+txt,sourceType:"百度",relevancy:1000}); 
            return suggestion; 
         },
+        async:true,
         init:function(){ }
     };
 }();

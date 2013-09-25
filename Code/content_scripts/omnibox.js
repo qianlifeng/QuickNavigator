@@ -30,14 +30,18 @@ omnibox = function(){
         keydownConnect.onMessage.addListener(function(msg) {
             //console.log("get connect message from bg ==> " + msg);
             if(msg.requestHandler === "responseSuggestions"){
-                showSuggestions(msg.value); 
+                this.ul.html("");
+                showSuggestions(msg.value,false); 
+                me.lastSuggestions = msg.value; 
+            }
+            else if(msg.requestHandler === "responseSuggestionsAsync"){
+                showSuggestions(msg.value,true); 
                 me.lastSuggestions = msg.value; 
             }
         });
     }
 
-    function showSuggestions(suggestionList){
-        this.ul.html("");
+    function showSuggestions(suggestionList,async){
         if(!suggestionList || suggestionList.length === 0){
             return;
         }
@@ -93,6 +97,14 @@ omnibox = function(){
             topContainer.appendTo(li);
             bottomContainer.appendTo(li);
             li.appendTo(me.ul);
+            if(async){
+                li.addClass("slideHide");
+                li.animate({
+                    top: "0"
+                },500,function(){
+                    li.removeClass("slideHide");
+                });
+            }
         });
 
         this.ul.children("li").eq(0).addClass("quickNavigator-omnibox-Result-li-selected");

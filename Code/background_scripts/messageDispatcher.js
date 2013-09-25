@@ -11,7 +11,12 @@
                 if(mode.key === "mru"){
                     maxResult = config.getMRUCount();
                 }
-                var res = suggestions.getSuggestion(text,mode.dataProvider,mode.applyRelevancy,maxResult);
+                var res = suggestions.getSuggestion(text,mode.dataProvider,mode.applyRelevancy,maxResult,function(d){
+                    port.postMessage({
+                        requestHandler: "responseSuggestionsAsync",
+                        value: d
+                    });
+                });
                 port.postMessage({
                     requestHandler: "responseSuggestions",
                     value: res

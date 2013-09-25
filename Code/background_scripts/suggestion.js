@@ -1,9 +1,9 @@
 suggestions = function(){
-    function query(txt,dataProvider,applyRelevancy,maxResult){
+    function query(txt,dataProvider,applyRelevancy,maxResult,asyncFunc){
         dataProvider = dataProvider.split(',');
         var res = [];
         dataProvider.forEach(function(element,index,arrary){
-            res = res.merge(window[element].query(txt));
+            res = res.merge(window[element].query(txt,asyncFunc));
         });
 
         if(applyRelevancy) {
@@ -47,8 +47,8 @@ suggestions = function(){
             });
         },
 
-        getSuggestion : function(txt,dataProvider,applyRelevancy,maxResult){
-            return query(txt,dataProvider,applyRelevancy,maxResult); 
+        getSuggestion : function(txt,dataProvider,applyRelevancy,maxResult,asyncFunc){
+            return query(txt,dataProvider,applyRelevancy,maxResult,asyncFunc); 
         }
     }; 
 }();

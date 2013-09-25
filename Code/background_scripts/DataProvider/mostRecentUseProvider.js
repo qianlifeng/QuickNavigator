@@ -1,6 +1,6 @@
 var mostRecentUseProvider = function(){
     return {
-        query:function(txt){
+        query:function(txt,asyncFunc){
                var urls = db.getVisitedURLs();
                urls.sort(function(a,b){
                     return b.visitedCount - a.visitedCount; 
@@ -15,6 +15,7 @@ var mostRecentUseProvider = function(){
                if(typeof txt === "undefined" || txt === "") return mruLists;
                return mruLists.find(txt); 
         },
+        async:false,
         init:function(){ }
     };
 }();

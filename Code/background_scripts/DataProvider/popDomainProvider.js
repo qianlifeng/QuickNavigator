@@ -2,7 +2,7 @@
 // 1. query     query suggestions in it's datasource
 // 2. init      init datasource
 popDomainProvider = function(){
-    function queryInternal(txt){
+    function queryInternal(txt,asyncFunc){
         if(window.popDomains && window.popDomains.length > 0){
             return window.popDomains.find(txt);
         }
@@ -12,6 +12,7 @@ popDomainProvider = function(){
         query:function(txt){
               return queryInternal(txt);          
         },
+        async:false,
         init:function(){ }
     };
 }();

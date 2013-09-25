@@ -73,6 +73,7 @@ tr.omniboxReset {
 {
     display: block;
     padding: 10px;
+    z-index: 9999;
     height:34px;
 }
 #quickNavigator-omnibox .quickNavigator-omnibox-SearchArea div{
@@ -200,4 +201,10 @@ tr.omniboxReset {
 {
     font-weight:bold;
     color:black;
+}
+#quickNavigator-omnibox .slideHide
+{
+    position:relative;
+    top:-70px;
+    z-index:-100;
 }

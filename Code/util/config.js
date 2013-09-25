@@ -25,12 +25,8 @@ var config = (function(){
             applyMRU:true,
             //最大的建议数量【如果本地存储件中存在相同的配置项目，则优先读取用户设置的本地存储值】
             maxResult:8,
-<<<<<<< HEAD
             //数据源
-            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,baiduSuggestionProvider"
-=======
-            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,mostRecentUseProvider"
->>>>>>> 9727fc8ff342545464e72b5db621d966c0e81058
+            dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,mostRecentUseProvider,baiduSuggestionProvider"
         },
         closedTab:{
             key:"closedTab",

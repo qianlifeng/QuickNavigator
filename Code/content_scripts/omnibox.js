@@ -1,6 +1,6 @@
 omnibox = function(){
 
-    var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime,lastSuggestions;
+    var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime;
     //keycodes that omnibox accept
     var whiteList = [
             8 //back
@@ -32,11 +32,9 @@ omnibox = function(){
             if(msg.requestHandler === "responseSuggestions"){
                 this.ul.html("");
                 showSuggestions(msg.value,false); 
-                me.lastSuggestions = msg.value; 
             }
             else if(msg.requestHandler === "responseSuggestionsAsync"){
                 showSuggestions(msg.value,true); 
-                me.lastSuggestions = msg.value; 
             }
         });
     }
@@ -83,6 +81,11 @@ omnibox = function(){
             }
             var iconImg = $("<img src='"+iconUrl+"'/>");
             var titleElement = $("<a></a>").addClass("quickNavigator-omnibox-suggestions-title omniboxReset").html(title);
+
+            var titleHiddenElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-title-hidden hidden omniboxReset").html(value.title);
+            var sourceTypeHiddenElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-sourceType-hidden hidden omniboxReset").html(sourceType);
+            var urlHiddenElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url-hidden hidden omniboxReset").html(value.url);
+
             if(sourceType === "Command"){
                 titleElement.attr("href","javascript:"+value.url);
             }
@@ -95,13 +98,14 @@ omnibox = function(){
             iconImg.appendTo(iconElement);
             iconElement.appendTo(topContainer);
             titleElement.appendTo(topContainer);
+            titleHiddenElement.appendTo(topContainer);
+            sourceTypeHiddenElement.appendTo(topContainer);
+            urlHiddenElement.appendTo(topContainer);
 
             var bottomContainer = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-bottom omniboxReset");
             var urlElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url omniboxReset").html(url);
-            var urlHiddenElement = $("<div></div>").addClass("quickNavigator-omnibox-suggestions-url-hidden omniboxReset").html(value.url);
             sourceTypeElement.appendTo(bottomContainer);
             urlElement.appendTo(bottomContainer);
-            urlHiddenElement.appendTo(bottomContainer);
 
             topContainer.appendTo(li);
             bottomContainer.appendTo(li);
@@ -192,7 +196,9 @@ omnibox = function(){
 
                 case 13: //enter
                     var url = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-url-hidden").text();
-                    if(me.lastSuggestions && url){
+                    var title = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-title-hidden").text();
+                    var sourceType = me.ul.find(".quickNavigator-omnibox-Result-li-selected .quickNavigator-omnibox-suggestions-sourceType-hidden").text();
+                    if(url){
 
                         if(url.indexOf("javascript:") == 0){
                             js =  url.substring(11);
@@ -200,16 +206,11 @@ omnibox = function(){
                             break;
                         }
 
-
-                        $.each(me.lastSuggestions,function(n,value) {
-                            if(value.url === url){
-                                keydownConnect.postMessage({
-                                    requestHandler: "requestNavigate",
-                                    url:url,
-                                    title:value.title,
-                                    sourceType:value.sourceType
-                                });
-                            }
+                        keydownConnect.postMessage({
+                            requestHandler: "requestNavigate",
+                            url:url,
+                            title:title,
+                            sourceType:sourceType
                         });
                     }
                     if(e.shiftKey){

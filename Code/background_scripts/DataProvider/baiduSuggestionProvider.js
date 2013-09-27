@@ -6,9 +6,11 @@ var baiduSuggestionProvider = function(){
             $.get("http://suggestion.baidu.com/su?cb=&wd="+txt)
             .always(function(d){
                    var urlArrary = reg.exec(d.responseText);
-                   var firstMatch = urlArrary[1].split(",")[0];
-                   suggestion.push({title:firstMatch,url:"http://www.baidu.com/s?wd="+firstMatch,providerName:"baiduSuggestionProvider",searchItem:txt}); 
-                   asyncFunc(suggestion);
+                   if(typeof urlArrary !== "undefined"){
+                       var firstMatch = urlArrary[1].split(",")[0];
+                       suggestion.push({title:firstMatch,url:"http://www.baidu.com/s?wd="+firstMatch,providerName:"baiduSuggestionProvider",searchItem:txt}); 
+                       asyncFunc(suggestion);
+                   }
             });
 
            return suggestion; 

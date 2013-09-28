@@ -1,6 +1,7 @@
 omnibox = function(){
 
-    var box,input,lastActiveElement,keydownConnect,lastKeyUpTime,lastEveryKeyUpTime;
+    var box,input,lastActiveElement,keydownConnect;
+
     //keycodes that omnibox accept
     var whiteList = [
             8 //back
@@ -111,13 +112,13 @@ omnibox = function(){
             bottomContainer.appendTo(li);
             if(async){
                 if(value && value.searchItem === currentSearch){
-                    li.addClass("slideHide");
+                    //li.addClass("slideHide");
                     li.appendTo(me.ul)
-                    li.animate({
-                        top: "0"
-                    },300,function(){
-                        li.removeClass("slideHide");
-                    });
+                    //li.animate({
+                        //top: "0"
+                    //},300,function(){
+                        //li.removeClass("slideHide");
+                    //});
                 }
             }
             else{
@@ -165,15 +166,18 @@ omnibox = function(){
         });
 
         $(document).bind("keyup",function(e){
-              switch(e.keyCode){
+            switch(e.keyCode){
                 case 27: //esc
                     closeOmnibox();
-                    e.stopPropagation();
-                    e.preventDefault(); 
-                    break;   
+                e.stopPropagation();
+                e.preventDefault(); 
+                break;   
 
                 case 70: //f
-                    if(!isEditable(document.activeElement) && !window.tempDisableNavigator){
+                    if(!isEditable(document.activeElement) 
+                        && !window.tempDisableNavigator
+                        && (typeof me.lastKeyUpTime === "undefined" || new Date().getTime() - me.lastKeyUpTime >= 150))
+                    {
                         showOmnibox(); 
                         sendMRURequest(); 
 
@@ -181,8 +185,9 @@ omnibox = function(){
                         e.stopPropagation();
                         return false; // preventDefault event
                     }
-                    break;
-              }
+                break;
+            }
+            me.lastKeyUpTime = new Date().getTime();
         });
 
         this.input.bind("keydown",function(e){
@@ -314,7 +319,17 @@ omnibox = function(){
            url = uri; 
         }
 
-        if(url.indexOf("http:") !== 0 && url.indexOf("https:") !== 0){
+        if(url === ""){
+            if(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/.test(this.input.val())) 
+            {
+               url = this.input.val(); 
+            }
+            else{
+                url =  "http://www.baidu.com/s?wd="+ this.input.val();
+            }
+        }
+
+        if(url !== "" && url.indexOf("http:") !== 0 && url.indexOf("https:") !== 0){
             url = "http://" + url;
         }
 

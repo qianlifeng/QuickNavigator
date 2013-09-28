@@ -1,0 +1,33 @@
+<div id="quickNavigator-omnibox" class="quickNavigator-omnibox-Container omniboxReset" 
+    ng-csp ng-controller="omnibox" ng-show="showOmnibox" ng-init="init()">
+    <div class="quickNavigator-omnibox-SearchArea omniboxReset">
+        <table class='quickNavigator-omnibox-textbox omniboxReset' id='quickNavigator-omnibox-textbox-id'>
+            <tr class="omniboxReset">
+                <td class='quickNavigator-omnibox-tag omniboxReset' id='quickNavigator-omnibox-tag-id' ng-show="tag!=''" data-mode='{{mode}}'>{{tag}}</td>
+                <td class='quickNavigator-omnibox-inputDiv omniboxReset'>
+                    <input id="quickNavigator-omnibox-input" type="text" ng-keyup="onKeyUp($event)" ng-model="input" ng-Focusme="focus"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="clear:both;"></div>
+    <ul class="quickNavigator-omnibox-Result-ul omniboxReset">
+        <li class="omniboxReset" ng-repeat="item in suggestions" ng-class="item.selected ? 'quickNavigator-omnibox-Result-li-selected':''">
+        <!-- hidden field -->
+        <span class="quickNavigator-omnibox-suggestions-title-hidden hidden omniboxReset">{{item.title}}</span>
+        <span class="quickNavigator-omnibox-suggestions-sourceType-hidden hidden omniboxReset">{{item.providerName}}</span>
+        <span class="quickNavigator-omnibox-suggestions-url-hidden hidden omniboxReset">{{item.url}}</span>
+
+        <div class="quickNavigator-omnibox-suggestions-top omniboxReset">
+            <div class="quickNavigator-omnibox-suggestions-icon omniboxReset">
+                <!--<img src="http://www.iplaysoft.com/favicon.ico">-->
+            </div>
+            <a class="quickNavigator-omnibox-suggestions-title omniboxReset" ng-click="navigate(false,item.url,item.title,item.providerName)" href="{{item.url}}">{{item.title}}</a>
+        </div>
+        <div class="quickNavigator-omnibox-suggestions-bottom omniboxReset">
+            <div class="quickNavigator-omnibox-suggestions-sourcetype omniboxReset">{{item.providerName}} {{item.relevancy}}</div>
+            <div class="quickNavigator-omnibox-suggestions-url omniboxReset">{{item.url}}</div>
+        </div>
+        </li>
+    </ul>
+</div>

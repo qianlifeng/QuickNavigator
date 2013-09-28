@@ -38,7 +38,7 @@ var config = (function(){
             applyRelevancy:false,
             maxResult:8,
             applyMRU:true,
-            clientCommand:"javascript:switchToAdvancedMode();",
+            clientCommand:"javascript:$scope.switchToAdvancedMode();",
             dataProvider:"closedTabProvider"
         }, 
         closeNavigator:{
@@ -49,7 +49,7 @@ var config = (function(){
             applyRelevancy:false,
             applyMRU:false,
             maxResult:2,
-            clientCommand:"javascript:tempDisableNavigator();",
+            clientCommand:"javascript:$scope.disabled = true;$scope.showOmnibox = false;",
             dataProvider:""
         },
         mru:{
@@ -60,7 +60,7 @@ var config = (function(){
             applyRelevancy:false,
             applyMRU:true,
             maxResult:5,
-            clientCommand:"javascript:switchToAdvancedMode();",
+            clientCommand:"javascript:$scope.switchToAdvancedMode();",
             dataProvider:"mostRecentUseProvider"
         }
     };

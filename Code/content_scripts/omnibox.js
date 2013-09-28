@@ -27,14 +27,14 @@ omnibox = function(){
 
     function initConnectTunnel(){
         var me = this;
-        keydownConnect = chrome.extension.connect({name: "keydown"});
+        keydownConnect = chrome.extension.connect({name: "connect"});
         keydownConnect.onMessage.addListener(function(msg) {
             //console.log("get connect message from bg ==> " + msg);
-            if(msg.requestHandler === "responseSuggestions"){
+            if(msg.name === "responseSuggestions"){
                 this.ul.html("");
                 showSuggestions(msg.value,false); 
             }
-            else if(msg.requestHandler === "responseSuggestionsAsync"){
+            else if(msg.name === "responseSuggestionsAsync"){
                 showSuggestions(msg.value,true); 
             }
         });
@@ -212,7 +212,7 @@ omnibox = function(){
                         }
 
                         keydownConnect.postMessage({
-                            requestHandler: "requestNavigate",
+                            name: "requestNavigate",
                             url:url,
                             title:title,
                             sourceType:sourceType
@@ -284,11 +284,11 @@ omnibox = function(){
 
     function sendMRURequest(){
         var me = this;
-        chrome.extension.sendMessage({requestHandler: "getOptions",option:"disableMRU"}, function(response) {
+        chrome.extension.sendMessage({name: "getOptions",option:"disableMRU"}, function(response) {
              if(response.responseHandler === 'options' && response.option === "disableMRU"){
                 if(!response.value){
                    keydownConnect.postMessage({
-                        requestHandler: "requestSuggestions",
+                        name: "requestSuggestions",
                         suggestionMode: "mru"
                     });
                 }
@@ -302,7 +302,7 @@ omnibox = function(){
         this.requestTimer = setTimeout(function(){
             var mode = me.tag.attr("data-mode");
             keydownConnect.postMessage({
-                requestHandler: "requestSuggestions",
+                name: "requestSuggestions",
                 suggestionMode: mode,
                 value:me.input.val()
             });
@@ -401,13 +401,12 @@ omnibox = function(){
 
     return{
         init:function(){
-                 initDom();     
-                 initConnectTunnel();
-                 bindEvents();
-             } 
+             initDom();     
+             initConnectTunnel();
+             bindEvents();
+        },
+        loadDom:function(){
+             initDom();     
+        }
     };
 }();
-
-$(function(){
-    omnibox.init();
-});

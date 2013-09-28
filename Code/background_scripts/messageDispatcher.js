@@ -1,10 +1,10 @@
 ﻿chrome.extension.onConnect.addListener(function(port) {
     console.log("init connect ==> " + port.name);
 
-    if(port.name == "keydown"){
+    if(port.name == "connect"){
         port.onMessage.addListener(function(msg) {
             //console.log("get connect message ==> " + msg);
-            if(msg.requestHandler === "requestSuggestions"){
+            if(msg.name === "requestSuggestions"){
                 var text = msg.value;
                 var mode = config.suggestionMode[msg.suggestionMode];
                 var maxResult = config.getSuggestionsCount();
@@ -13,16 +13,16 @@
                 }
                 var res = suggestions.getSuggestion(text,mode.dataProvider,mode.applyRelevancy,maxResult,function(d){
                     port.postMessage({
-                        requestHandler: "responseSuggestionsAsync",
+                        name: "responseSuggestionsAsync",
                         value: d
                     });
                 });
                 port.postMessage({
-                    requestHandler: "responseSuggestions",
+                    name: "responseSuggestions",
                     value: res
                 });
             }
-            else if(msg.requestHandler === "requestNavigate"){
+            else if(msg.name === "requestNavigate"){
                 window.db.saveVisitedUrl(msg.url,msg.title,msg.sourceType);
             }
         });
@@ -30,8 +30,8 @@
 });
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {   
-    console.log("short message ==> get "+request.requestHandler+" request");
-    if (request.requestHandler == "getOptions"){
+    console.log("short message ==> get "+request.name+" request");
+    if (request.name == "getOptions"){
         switch(request.option){
             case "disableMRU":
                 var disabled = config.getMRUDisabled();
@@ -39,7 +39,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
             break;
         }
     }
-    else if (request.requestHandler == "loadTemplate"){
+    else if (request.name == "loadTemplate"){
         $.ajax({
             url: chrome.extension.getURL("template.html"),
             dataType: "html",

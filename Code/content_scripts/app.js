@@ -1,4 +1,4 @@
-angular.module("app",  ["app.services","app.directives"])
+angular.module("app",  ["ngSanitize","app.services","app.directives","app.filters"])
     .controller("omnibox", function($scope,$chrome,$dom,$url) {
         $scope.init = function(){ 
             $scope.showOmnibox = false;

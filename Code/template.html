@@ -22,10 +22,10 @@
             <div class="quickNavigator-omnibox-suggestions-icon omniboxReset">
                 <!--<img src="http://www.iplaysoft.com/favicon.ico">-->
             </div>
-            <a class="quickNavigator-omnibox-suggestions-title omniboxReset" ng-click="navigate(false,item.url,item.title,item.providerName)" href="{{item.url}}">{{item.title}}</a>
+            <a class="quickNavigator-omnibox-suggestions-title omniboxReset" ng-click="navigate(false,item.url,item.title,item.providerName)" href="{{item.url}}" ng-bind-html="item.title | hightlightSearch:input"></a>
         </div>
         <div class="quickNavigator-omnibox-suggestions-bottom omniboxReset">
-            <div class="quickNavigator-omnibox-suggestions-sourcetype omniboxReset">{{item.providerName}} {{item.relevancy}}</div>
+            <div class="quickNavigator-omnibox-suggestions-sourcetype omniboxReset">{{item.providerName | providerName}} {{item.relevancy}}</div>
             <div class="quickNavigator-omnibox-suggestions-url omniboxReset">{{item.url}}</div>
         </div>
         </li>

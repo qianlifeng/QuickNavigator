@@ -5,7 +5,7 @@ angular.module('app.services', []).
         };
 
         this.isUrl = function(url){
-            return /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/.test(rul);
+            return /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/.test(url);
         };
 
         this.addProtocal = function(url){
@@ -13,6 +13,21 @@ angular.module('app.services', []).
                 url = "http://" + url;
             }
             return url;
+        }
+
+        this.getDomainUrl = function(url){
+            //give https://www.baidu.com/test/df
+            //return http://www.baidu.com
+            var newUrl = "";
+            var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
+            var urlArrary = reg.exec(url);
+            if(urlArrary && urlArrary.length >= 2){
+                if(urlArrary[1].indexOf("http") !== 0){
+                    newUrl = "http://";
+                }
+                newUrl += urlArrary[1];
+            }
+            return newUrl;
         }
     })
     .service("$dom",function($rootScope){

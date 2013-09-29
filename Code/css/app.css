@@ -1,20 +1,14 @@
 .omniboxReset,
-div.omniboxReset,
-span.omniboxReset,
-table.omniboxReset,
-a.omniboxReset,
-a:visited.omniboxReset,
-a:link.omniboxReset,
-a:hover.omniboxReset,
-td.omniboxReset,
-tr.omniboxReset {
+.omniboxReset a,
+.omniboxReset span,
+.omniboxReset div,
+{
   background: none;
   border: none;
   bottom: auto;
   box-shadow: none;
   color: black;
   cursor: auto;
-  /*display: inline;*/
   float: none;
   font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-size: inherit;
@@ -32,7 +26,6 @@ tr.omniboxReset {
   min-width: 0;
   opacity: 1;
   padding: 0;
-  /*position: static;*/
   right: auto;
   text-align: left;
   text-decoration: none;
@@ -65,35 +58,33 @@ tr.omniboxReset {
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.8) 0px 2px 10px;
     border: 1px solid rgb(170, 170, 170);
-    border-image-source: initial;
-    border-image-slice: initial;
-    border-image-width: initial;
-    border-image-outset: initial;
-    border-image-repeat: initial;
     z-index: 99999999;
 }
 
-#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea
+#quickNavigator-omnibox .omnibox-SearchArea
 {
     display: block;
     padding: 10px;
     z-index: 9999;
-    height:34px;
+    height:34px; 
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea div{
-    float: left;
-}
-#quickNavigator-omnibox .quickNavigator-omnibox-tag{
+
+#quickNavigator-omnibox .omnibox-tag{
     line-height:34px;
     font-size: 16px;
-    width: 10px;
-    white-space: nowrap;
     background-color: rgb(187, 206, 233);
     padding-left: 5px;
     padding-right: 5px;
-    
+    float:left;
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-textbox{
+
+#quickNavigator-omnibox .omnibox-input
+{
+    /*make a Blocking Formatting Contexts (BFC)*/
+    overflow:hidden;
+}
+
+#quickNavigator-omnibox .omnibox-textbox{
     width:100%;
     border-radius: 3px;
     background-color: white;
@@ -105,9 +96,8 @@ tr.omniboxReset {
     border-image-repeat: initial;
 }
 
-#quickNavigator-omnibox .quickNavigator-omnibox-inputDiv{
-}
-#quickNavigator-omnibox .quickNavigator-omnibox-SearchArea input
+
+#quickNavigator-omnibox .omnibox-SearchArea input
 {
     border:none;
     margin:0;
@@ -141,21 +131,21 @@ tr.omniboxReset {
 {
     display:inline;
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-top
+#quickNavigator-omnibox .omnibox-suggestions-top
 {
     display: block;
     overflow: hidden;
     padding-bottom:2px;
 }
 
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-bottom
+#quickNavigator-omnibox .omnibox-suggestions-bottom
 {
     font-size: 15px;
     margin-top: 3px;
     padding: 2px 0px;
 }
 
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-sourcetype
+#quickNavigator-omnibox .omnibox-suggestions-sourcetype
 {
     color:#999;
     float:right;
@@ -163,19 +153,19 @@ tr.omniboxReset {
     padding-top: 5px;
     padding-right: 15px;
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-icon
+#quickNavigator-omnibox .omnibox-suggestions-icon
 {
     float:left;
     margin-right:10px;
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-icon img
+#quickNavigator-omnibox .omnibox-suggestions-icon img
 {
     width:16px;
     height:16px;
     border:0 solid gray;
 }
 
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-title
+#quickNavigator-omnibox .omnibox-suggestions-title
 {
     overflow:hidden;
     cursor: pointer;
@@ -184,26 +174,29 @@ tr.omniboxReset {
     width: 80%;
     white-space: nowrap;
     color:black;
+    font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    text-decoration:none;
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-title:hover
+#quickNavigator-omnibox .omnibox-suggestions-title:hover
 {
     text-decoration:underline;
 }
 
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-url
+#quickNavigator-omnibox .omnibox-suggestions-url
 {
     white-space: nowrap;
     width:80%;
     color: rgb(34, 70, 132);
     overflow:hidden;
     padding-top:5px;
+    font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-Result-li-selected
+#quickNavigator-omnibox .omnibox-Result-li-selected
 {
     background-color: rgb(187, 206, 233) !important;
     font-weight: normal;
 }
-#quickNavigator-omnibox .quickNavigator-omnibox-suggestions-highlight
+#quickNavigator-omnibox .omnibox-suggestions-highlight
 {
     font-weight:bold;
     color:black;

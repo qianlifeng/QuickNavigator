@@ -10,7 +10,13 @@ angular.module('app.filters', [])
             return providerName;
         };
     })
-    .filter("hightlightSearch",function($sce){
+    .filter("domainIconUrl",function($url){
+        return function(url) {
+            var domainUrl =  $url.getDomainUrl(url);
+            return domainUrl + "/favicon.ico";
+        };
+    })
+    .filter("hightlightSearch",function(){
         return function(source,words) {
             if(words === "")return source;
 
@@ -18,7 +24,7 @@ angular.module('app.filters', [])
 
             //exact match
             var r = new RegExp(words,"gi");
-            matched = source.replace(r, "<span class=\"quickNavigator-omnibox-suggestions-highlight\">"+words+"</span>"); 
+            matched = source.replace(r, "<span class=\"omnibox-suggestions-highlight\">"+words+"</span>"); 
             if(source !== matched) return matched; 
 
             //pinyin match 
@@ -26,10 +32,10 @@ angular.module('app.filters', [])
             if(matchResult && matchResult.length > 0){
                 var startIndex = matchResult[0];
                 var endIndex = matchResult[matchResult.length-1];
-                matched = source.substr(0,startIndex)+ "<span class=\"quickNavigator-omnibox-suggestions-highlight\">"+source.substr(startIndex,endIndex-startIndex+1)+"</span>"+source.substr(endIndex+1);
+                matched = source.substr(0,startIndex)+ "<span class=\"omnibox-suggestions-highlight\">"+source.substr(startIndex,endIndex-startIndex+1)+"</span>"+source.substr(endIndex+1);
                 if(source !== matched) return matched;
             }
 
-            return $sce.trustAsHtml(source);
+            return source;
         };
     });

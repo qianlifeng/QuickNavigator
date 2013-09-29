@@ -45,6 +45,8 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             ];
 
             if((e.keyCode < 48 || e.keyCode > 90) && whiteList.indexOf(e.keyCode) === -1) return true;
+            //block all ctrl+key
+            if(e.ctrlKey) return false;
 
             switch(e.keyCode){
                 case 8:  //back
@@ -56,9 +58,14 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                     break;
 
                 case 13:  //enter
-                    var url = $scope.suggestions[$scope.currentIndex].url;
-                    var title = $scope.suggestions[$scope.currentIndex].title;
-                    var providerName = $scope.suggestions[$scope.currentIndex].providerName;
+                    var url  = "";
+                    var title  = $scope.input;
+                    var providerName  = "";
+                    if($scope.suggestions.length !== 0){
+                        url = $scope.suggestions[$scope.currentIndex].url;
+                        title = $scope.suggestions[$scope.currentIndex].title;
+                        providerName = $scope.suggestions[$scope.currentIndex].providerName;
+                    }
                    
                     if(e.shiftKey){
                         $scope.navigate(true,url,title,providerName);
@@ -96,13 +103,6 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                  return;
              }
 
-             $chrome.postMsg({
-                 name: "requestNavigate",
-                 url:url,
-                 title:title,
-                 sourceTypep:providerName
-             });
-
              //there is no suggestions
              if(url === ""){
                  if($url.isUrl($scope.input)) 
@@ -110,19 +110,26 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                          url = $scope.input;
                      }
                      else{
-                         url =  "http://www.baidu.com/s?wd="+ this.input.val();
+                         url =  "http://www.baidu.com/s?wd="+ $scope.input;
                      }
              }
              url = $url.addProtocal(url); 
+             $chrome.postMsg({
+                 name: "requestNavigate",
+                 url:url,
+                 title:title,
+                 sourceTypep:providerName
+             });
 
-             if(openInNewTab){
-                 window.open(url, '_blank');
-             }
-             else{
-                 window.location.href = url;
-             }
-
-             closeOmnibox();
+             $scope.closeOmnibox();
+             setTimeout(function(){
+                 if(openInNewTab){
+                     window.open(url, '_blank');
+                 }
+                 else{
+                     window.location.href = url;
+                 }
+             },10);
         }
 
         $scope.sendMRURequest = function(){
@@ -201,6 +208,10 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                 }
                 else if(msg.name === "responseSuggestionsAsync"){
                     $scope.suggestions = $.merge($scope.suggestions,msg.value);
+                    if($scope.suggestions.length == 1){
+                        $scope.currentIndex = 0;
+                        $scope.suggestions[0].selected = true;
+                    }
                 } 
             });
         });

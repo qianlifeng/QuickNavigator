@@ -96,7 +96,10 @@
     border-image-repeat: initial;
 }
 
-
+#quickNavigator-omnibox .omnibox-SearchArea input::-webkit-input-placeholder
+{
+    text-align:right;
+}
 #quickNavigator-omnibox .omnibox-SearchArea input
 {
     border:none;

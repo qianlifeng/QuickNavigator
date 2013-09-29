@@ -13,6 +13,13 @@ angular.module("app.directives", [])
             });
         };
     })
+    .directive('ngImgonerror', function ($parse) {
+        return function (scope, element, attrs) {
+            element[0].onerror = function() {
+                element[0].src = chrome.extension.getURL(attrs.ngImgonerror);
+            };
+        };
+    })
     .directive("ngFocusme", function($timeout, $parse) {
         return function(scope, element, attrs) {
             scope.$watch(attrs.ngFocusme, function(value) {

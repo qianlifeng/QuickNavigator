@@ -1,0 +1,11 @@
+{
+    "name": "QuickNavigator",
+    "version": "0.2.0",
+    "devDependencies": {
+        "grunt": "*",
+        "grunt-contrib-jshint": "*",
+        "grunt-contrib-concat": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-watch": "*"
+    }
+}

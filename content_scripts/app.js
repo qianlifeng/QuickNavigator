@@ -17,8 +17,8 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                     value:$scope.input
                 });
             },200);
-        }
-
+        };
+		
         $scope.switchToAdvancedMode = function(){
             for(var i in config.suggestionMode){
                 var mode = config.suggestionMode[i];
@@ -32,7 +32,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                     break;
                 }
             }
-        }
+        };
 
         $scope.onKeyUp = function(e){
             //keycodes that omnibox accept
@@ -93,11 +93,10 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             $scope.sendRequest(); 
             e.stopPropagation();
             e.preventDefault();
-        }
-
+        };
 
         $scope.navigate = function(openInNewTab,url,title,providerName){
-             if(url.indexOf("javascript:") == 0){
+             if(url.indexOf("javascript:") === 0){
                  js =  url.substring(11);
                  eval(js);
                  return;
@@ -130,7 +129,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                      window.location.href = url;
                  }
              },10);
-        }
+        };
 
         $scope.sendMRURequest = function(){
             chrome.extension.sendMessage({name: "getOptions",option:"disableMRU"}, function(response) {
@@ -143,7 +142,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                     }
                 }
             }); 
-        }
+        };
 
         function moveNextSelected(){
             $scope.suggestions[$scope.currentIndex].selected = false;
@@ -161,7 +160,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         function movePreSelected(){
             $scope.suggestions[$scope.currentIndex].selected = false;
 
-            if($scope.currentIndex == 0){
+            if($scope.currentIndex === 0){
                 $scope.currentIndex = $scope.suggestions.length - 1;
             }
             else{
@@ -171,14 +170,13 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             $scope.suggestions[$scope.currentIndex].selected = true;
         }
 
-        // I first add ng-controller to body tag
+        // I first  add ng-controller to body tag
         // but found it maybe conflict with current exsited ng-controllers in default page
         // so I put keyup event registered in service and then broadcast it.
          $scope.$on("keyUpOnPage",function(event,e){
              $scope.$apply(function () {
                  if(e.keyCode === 70){
-                     if(!$dom.isActiveElementInEdit() && !$scope.disabled
-                        && (typeof this.lastKeyUpTime === "undefined" || new Date().getTime() - this.lastKeyUpTime >= 150))
+                     if(!$dom.isActiveElementInEdit() && !$scope.disabled && (typeof this.lastKeyUpTime === "undefined" || new Date().getTime() - this.lastKeyUpTime >= 150))
                     {
                         $scope.openOmnibox();
                         $scope.sendMRURequest();

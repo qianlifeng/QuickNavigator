@@ -32,7 +32,10 @@ historyProvider = function(){
 
     function queryInternal(txt){
         if(this.historyCache && this.historyCache.length > 0){
-            return this.historyCache.find(txt);
+            var now =  new Date().getTime();
+            var items = this.historyCache.find(txt);
+            console.log("histroyProvider time:"+ (new Date().getTime() - now).toString());
+            return items;
         }
     }
 

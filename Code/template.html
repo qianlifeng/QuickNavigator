@@ -2,6 +2,7 @@
     <div class="omnibox-SearchArea">
         <div class="omnibox-textbox">
             <div class="omnibox-tag" ng-show="tag!=''" data-mode="{{mode}}">{{tag}}</div>
+            <div class="omnibox-searchEngine" ng-show="suggestions.length == 0">使用百度搜索</div>
             <div class="omnibox-input">
                 <input type="text" ng-keyup="onKeyUp($event)" ng-model="input" ng-Focusme="focus"/>
             </div>

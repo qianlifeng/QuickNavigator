@@ -207,10 +207,12 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                     }
                 }
                 else if(msg.name === "responseSuggestionsAsync"){
-                    $scope.suggestions = $.merge($scope.suggestions,msg.value);
-                    if($scope.suggestions.length == 1){
-                        $scope.currentIndex = 0;
-                        $scope.suggestions[0].selected = true;
+                    if(msg.value && msg.value.length > 0 && msg.value[0].searchItem === $scope.input){
+                        $scope.suggestions = $.merge($scope.suggestions,msg.value);
+                        if($scope.suggestions.length == 1){
+                            $scope.currentIndex = 0;
+                            $scope.suggestions[0].selected = true;
+                        }
                     }
                 } 
             });

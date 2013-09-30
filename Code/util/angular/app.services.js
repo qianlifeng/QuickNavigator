@@ -1,5 +1,7 @@
 angular.module('app.services', []).
     service("$url", function () {
+        var a = document.createElement('a');
+
         this.getParameter = function (name) {
             return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]);
         };
@@ -18,16 +20,19 @@ angular.module('app.services', []).
         this.getDomainUrl = function(url){
             //give https://www.baidu.com/test/df
             //return http://www.baidu.com
-            var newUrl = "";
-            var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
-            var urlArrary = reg.exec(url);
-            if(urlArrary && urlArrary.length >= 2){
-                if(urlArrary[1].indexOf("http") !== 0){
-                    newUrl = "http://";
-                }
-                newUrl += urlArrary[1];
-            }
-            return newUrl;
+            a.href = url;
+            return a.protocol+"//"+a.hostname+ (a.port ? ":"+a.port:"");
+            
+            //var newUrl = "";
+            //var reg = /^(.*?\.[a-z]{1,3})(\/.*)?$/gi;
+            //var urlArrary = reg.exec(url);
+            //if(urlArrary && urlArrary.length >= 2){
+                //if(urlArrary[1].indexOf("http") !== 0){
+                    //newUrl = "http://";
+                //}
+                //newUrl += urlArrary[1];
+            //}
+            //return newUrl;
         }
     })
     .service("$dom",function($rootScope){

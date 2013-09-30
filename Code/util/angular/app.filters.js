@@ -12,6 +12,8 @@ angular.module('app.filters', [])
     })
     .filter("domainIconUrl",function($url){
         return function(url) {
+            if(url === "") return chrome.extension.getURL("images/file.ico");
+
             var domainUrl =  $url.getDomainUrl(url);
             return domainUrl + "/favicon.ico";
         };

@@ -3,11 +3,19 @@
   <head>
   <title>QuickNavigator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-    <link href="css/common.css" rel="stylesheet" media="screen">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <link href="/css/common.css" rel="stylesheet" media="screen">
+
+    <script src="/scripts/jquery-1.7.2.min.js"></script>
+    <script src="/scripts/angular/angular.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/options.js"></script>
+    <script src="/scripts/mustache.js"></script>
+
+    <script src="/app/app.options.js"></script>
   </head>
-  <body>
+  <body ng-app="app.options" ng-controller="options" ng-init="init()" ng-csp>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <span class="brand" style="margin-left:20px;">QuickNavigator</span>
@@ -96,10 +104,5 @@
       </div>
 
   </div>
-  <script src="util/jquery-1.7.2.min.js"></script>
-  <script src="util/bootstrap.min.js"></script>
-  <script src="util/config.js"></script>
-  <script src="util/options.js"></script>
-  <script src="util/mustache.js"></script>
   </body>
 </html>

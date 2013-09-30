@@ -1,24 +1,30 @@
 angular.module("app",  ["ngSanitize","app.services","app.directives","app.filters"])
-    .controller("omnibox", function($scope,$chrome,$dom,$url) {
+    .controller("omnibox", function($scope,$dom,$url) {
+
+        var msgConnect;
+
         $scope.init = function(){ 
             $scope.showOmnibox = false;
             $scope.disabled = false;
             $scope.input = "";
             $scope.mode = "normal";
+
+            msgConnect = chrome.extension.connect({name: "connect"});
+            msgConnect.onMessage.addListener(getMsgFromBg);
         };
 
         $scope.sendRequest = function(){
             var me = this;
             if(typeof this.requestTimer !== "undefined") clearTimeout(this.requestTimer);
             this.requestTimer = setTimeout(function(){
-                $chrome.postMsg({
+                msgConnect.postMessage({
                     name: "requestSuggestions",
                     suggestionMode: $scope.mode,
                     value:$scope.input
                 });
             },200);
         };
-		
+
         $scope.switchToAdvancedMode = function(){
             for(var i in config.suggestionMode){
                 var mode = config.suggestionMode[i];
@@ -66,7 +72,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                         title = $scope.suggestions[$scope.currentIndex].title;
                         providerName = $scope.suggestions[$scope.currentIndex].providerName;
                     }
-                   
+
                     if(e.shiftKey){
                         $scope.navigate(true,url,title,providerName);
                     }
@@ -113,7 +119,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                      }
              }
              url = $url.addProtocal(url); 
-             $chrome.postMsg({
+             msgConnect.postMessage({
                  name: "requestNavigate",
                  url:url,
                  title:title,
@@ -133,9 +139,9 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
 
         $scope.sendMRURequest = function(){
             chrome.extension.sendMessage({name: "getOptions",option:"disableMRU"}, function(response) {
-                if(response.responseHandler === 'options' && response.option === "disableMRU"){
+                if(response.name === 'options' && response.option === "disableMRU"){
                     if(!response.value){
-                        $chrome.postMsg({
+                        msgConnect.postMessage({
                             name: "requestSuggestions",
                             suggestionMode: "mru"
                         });
@@ -192,7 +198,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
          });
 
 
-        $scope.$on("chromeMsg", function (event,msg) {
+        function getMsgFromBg(msg) {
             $scope.$apply(function () {
                 msg.value.forEach(function(suggest,index,arrary){
                     suggest.selected = false;
@@ -214,7 +220,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                     }
                 } 
             });
-        });
+        }
 
         $scope.openOmnibox = function () {
             $scope.showOmnibox = true; 
@@ -236,7 +242,6 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             }
         };
     });
-
 
 $(function(){
     chrome.extension.sendMessage({name: "loadTemplate"}, function(html){

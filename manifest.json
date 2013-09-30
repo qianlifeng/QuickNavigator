@@ -8,9 +8,9 @@
     "default_icon": "images/icon.png"
   },
   "background":{
-	"page":"bg.html"
+	"page":"app/view/bg.html"
   },
-   "options_page": "options.html",
+   "options_page": "app/view/options.html",
    "icons": {
       "128": "images/icon.png",
       "16": "images/icon.png",
@@ -18,7 +18,7 @@
    },  
   "content_scripts":[
   {
-    "js":["util/jquery-1.7.2.min.js","util/angular/angular.js","util/angular/angular-sanitize.min.js","util/angular/app.services.js","util/angular/app.filters.js","util/angular/app.directives.js","util/options.js","util/config.js","util/pinyin-dict-combo.js","util/pinyin.js","content_scripts/omnibox.js","content_scripts/app.js"],
+    "js":["scripts/jquery-1.7.2.min.js","scripts/angular/angular.js","scripts/angular/angular-sanitize.min.js","app/app.services.js","app/app.filters.js","app/app.directives.js","scripts/options.js","scripts/config.js","scripts/pinyin-dict-combo.js","scripts/pinyin.js","app/app.js"],
     "css":["css/app.css" ],
     "matches":["http://*/*","https://*/*"],
     "run_at":"document_start"

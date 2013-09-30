@@ -1,4 +1,13 @@
 var mostRecentUseProvider = function(){
+    var injector = angular.injector(['ng', 'TheModule']);
+
+    injector.invoke(['theService', function(theService){
+        theService.setCurrent([
+            {text:'learn angular', done:true},
+            {text:'build an angular app', done:false}
+        ]);
+    }]);
+
     return {
         query:function(txt,asyncFunc){
                var urls = db.getVisitedURLs();

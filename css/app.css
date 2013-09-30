@@ -1,42 +1,12 @@
-.omniboxReset,
-.omniboxReset a,
-.omniboxReset span,
-.omniboxReset div,
+#quickNavigator-omnibox .omniboxReset
 {
-  background: none;
-  border: none;
-  bottom: auto;
-  box-shadow: none;
-  color: black;
-  cursor: auto;
-  float: none;
+  padding:0;
+  margin:0;
+  font-weight:normal;
   font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  font-size: inherit;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: normal;
-  height: auto;
-  left: auto;
-  letter-spacing: 0;
-  line-height: 100%;
-  margin: 0;
-  max-height: none;
-  max-width: none;
-  min-height: 0;
-  min-width: 0;
-  opacity: 1;
-  padding: 0;
-  right: auto;
-  text-align: left;
-  text-decoration: none;
-  text-indent: 0;
-  text-shadow: none;
-  text-transform: none;
-  top: auto;
-  vertical-align: baseline;
-  white-space: normal;
-  width: auto;
-  z-index: 99999999;
+  box-sizing:content-box;
+  list-style:initial;
+  text-shadow:initial;
 }
 
 .ng-hide
@@ -118,13 +88,13 @@
     box-sizing: border-box;
 }
 
-#quickNavigator-omnibox ul
+#quickNavigator-omnibox ul.omnibox-ul
 {
     border-radius: 0px 0px 4px 4px;
     list-style: none;
 }
 
-#quickNavigator-omnibox li
+#quickNavigator-omnibox li.omnibox-li
 {
     background-color: white;
     border-bottom: 1px solid rgb(221, 221, 221);

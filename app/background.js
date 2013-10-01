@@ -1,5 +1,5 @@
-﻿angular.module("app.background",  ["app.services","app.directives","app.filters"])
-.controller("background", function($scope,$dom,$url,$cfg) {
+﻿angular.module("app.background",  ["app.services","app.services.dataProviders","app.directives","app.filters"])
+.controller("background", function($scope,$dom,$url,$cfg,$injector) {
     var tunnel;
 
     $scope.init = function(){
@@ -39,8 +39,9 @@
 
     function initDataProviders(){
         $cfg.dataProvider.forEach(function(element){
+            var dataProviderService = $injector.get(element.name)
+            dataProviderService.init();
             console.log("init dataProvider "+element.name);
-            window[element.name].init();
         }); 
     }
 

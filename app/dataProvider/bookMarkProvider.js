@@ -1,8 +1,10 @@
-bookMarkProvider = function(){
+dataProviderModule.service("bookMarkProvider", function ($cfg) {
 
     var bookMarksCache;
 
-    function refreshInternal(){
+    this.async = false;
+
+    this.init = function(){
         var me = this;
         this.bookMarksCache =  null; 
         chrome.bookmarks.getTree(function(bookMarkNodes){
@@ -10,7 +12,7 @@ bookMarkProvider = function(){
         });
     }
 
-    function queryInternal(txt){
+    this.query =  function(txt,asyncFunc){
         if(this.bookMarksCache){
             return this.bookMarksCache.find(txt);
         }
@@ -32,14 +34,4 @@ bookMarkProvider = function(){
         }
         return results;
     }
-
-    return{
-        query:function(txt,asyncFunc){
-                  return queryInternal(txt);          
-        },
-        async:false,
-        init:function(){
-                  refreshInternal(); 
-        }
-    };
-}();
+});

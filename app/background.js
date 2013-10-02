@@ -67,8 +67,9 @@
     function query(txt,dataProvider,applyRelevancy,maxResult,asyncFunc){
         dataProvider = dataProvider.split(',');
         var res = [];
-        dataProvider.forEach(function(element,index,arrary){
-            res = res.merge(window[element].query(txt,asyncFunc));
+        dataProvider.forEach(function(element){
+			var dataProviderService = $injector.get(element)
+            res = res.merge(dataProviderService.query(txt,asyncFunc));
         });
 
         if(applyRelevancy) {

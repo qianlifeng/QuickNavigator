@@ -1,7 +1,7 @@
 angular.module('app.filters', [])
-    .filter("providerName",function(){
+    .filter("providerName",function($cfg){
         return function(providerName) {
-            config.dataProvider.forEach(function(item){ 
+            $cfg.dataProvider.forEach(function(item){ 
                 if(item.name === providerName){
                     providerName = item.text;
                 }

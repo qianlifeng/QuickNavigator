@@ -1,8 +1,11 @@
-historyProvider = function(){
+dataProviderModule.service("historyProvider", function ($cfg) {
+
     var historyCache = [];
     var size = 10000;
-
-     function refreshInternal(){
+    
+	this.async = false;
+	
+    this.init = function(){
         var me = this;
         this.historyCache =  []; 
         chrome.history.search({
@@ -30,7 +33,7 @@ historyProvider = function(){
       return -1;
     }
 
-    function queryInternal(txt){
+    this.query = function(txt,asyncFunc){
         if(this.historyCache && this.historyCache.length > 0){
             var now =  new Date().getTime();
             var items = this.historyCache.find(txt);
@@ -39,13 +42,4 @@ historyProvider = function(){
         }
     }
 
-    return{
-        query:function(txt,asyncFunc){
-                  return queryInternal(txt);          
-        },
-        async:false,
-        init:function(){
-                  refreshInternal(); 
-        }
-    };
-}();
+});

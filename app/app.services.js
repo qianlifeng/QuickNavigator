@@ -50,7 +50,6 @@ angular.module('app.services', []).
             {name:"historyProvider",relevancy:7,text:"历史记录"},
             {name:"popDomainProvider",relevancy:1,text:"流行网站"},
             {name:"closedTabProvider",relevancy:1,text:"最近关闭标签"},
-            {name:"yesOrNoProvider",relevancy:1000,text:"yesOrNo"},
             {name:"mostRecentUseProvider",relevancy:15,text:"经常使用"},
             {name:"baiduSuggestionProvider",relevancy:1,text:"百度"},
             {name:"commandProvider",relevancy:1000,text:"命令"}

@@ -1,7 +1,9 @@
-closedTabProvider = function(){
+dataProviderModule.service("closedTabProvider", function ($cfg) {
     var hasBindEvents = false;
     var tabInfos = {};
     var closedTabs = [];
+	
+	this.async = false;	
 
     function RegisteEvents(){
         hasBindEvents = true;
@@ -19,18 +21,16 @@ closedTabProvider = function(){
             }
         }); 
     }
-
-    return {
-        query:function(txt,asyncFunc) {
-            if(txt === ""){
-                return closedTabs;
-            }
-
-            return closedTabs.find(txt);
-        },
-        async:false,
-        init:function(){
-            if(!hasBindEvents) RegisteEvents();
+	
+	this.query = function(txt,asyncFunc) {
+        if(txt === ""){
+            return closedTabs;
         }
+
+        return closedTabs.find(txt);
     };
-}();
+	
+	this.init = function(){
+        if(!hasBindEvents) RegisteEvents();
+    };
+});

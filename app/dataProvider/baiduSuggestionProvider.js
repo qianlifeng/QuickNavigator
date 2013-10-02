@@ -1,6 +1,5 @@
-var baiduSuggestionProvider = function(){
-    return {
-        query:function(txt,asyncFunc){
+dataProviderModule.service("baiduSuggestionProvider", function ($cfg) {
+        this.query = function(txt,asyncFunc){
             var suggestion = [];
             var reg = /s:\[(.*)?\]\}/gi;
             $.get("http://suggestion.baidu.com/su?cb=&wd="+txt)
@@ -14,8 +13,7 @@ var baiduSuggestionProvider = function(){
             });
 
            return suggestion; 
-        },
-        async:true,
-        init:function(){ }
-    };
-}();
+        };
+        this.async = true;
+        this.init = function(){ };
+});

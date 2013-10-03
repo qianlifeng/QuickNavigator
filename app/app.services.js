@@ -1,6 +1,5 @@
 angular.module('app.services', []).
     service("$url", function () {
-        var a = document.createElement('a');
 
         this.getParameter = function (name) {
             return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]);
@@ -20,6 +19,10 @@ angular.module('app.services', []).
         this.getDomainUrl = function(url){
             //give https://www.baidu.com/test/df
             //return http://www.baidu.com
+            if(url !== "" && url.indexOf("http:") !== 0 && url.indexOf("https:") !== 0){
+                url = "http://" + url;
+            }
+            var a = document.createElement('a');
             a.href = url;
             return a.protocol+"//"+a.hostname+ (a.port ? ":"+a.port:"");
         }

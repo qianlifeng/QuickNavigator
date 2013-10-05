@@ -1,5 +1,5 @@
 angular.module("app",  ["ngSanitize","app.services","app.directives","app.filters"])
-    .controller("omnibox", function($scope,$dom,$url) {
+    .controller("omnibox", function($scope,$dom,$url,$cfg) {
 
         var msgConnect;
 
@@ -11,6 +11,8 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
 
             msgConnect = chrome.extension.connect({name: "connect"});
             msgConnect.onMessage.addListener(getMsgFromBg);
+			
+			console.log("init quick navigator");
         };
 
         $scope.sendRequest = function(){
@@ -26,8 +28,8 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         };
 
         $scope.switchToAdvancedMode = function(){
-            for(var i in config.suggestionMode){
-                var mode = config.suggestionMode[i];
+            for(var i in $cfg.suggestionMode){
+                var mode = $cfg.suggestionMode[i];
                 if(mode.hotkey === "none") continue;
                 if(mode.hotkey === $scope.input){
                     $scope.tag = mode.text;

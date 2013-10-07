@@ -16,5 +16,7 @@ When user type some key words in omnibox, it will give you all relevant urls inc
 ###ScreenShot
 ![ScreenShot](http://ww4.sinaimg.cn/large/5d7c1fa4jw1e9cw9ct34pj20y60ik429.jpg)
 
+![ScreenShot](http://ww4.sinaimg.cn/large/5d7c1fa4jw1e9cwaopw58j20s20gywfz.jpg)
+
 ###How to use
 After install this extension, type "F" to trigger the omnibox.

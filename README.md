@@ -11,6 +11,7 @@ When user type some key words in omnibox, it will give you all relevant urls inc
 4. Support more functions, more than urls. 
     * Recently Closed Tab. Type "u" in the omnibox.
     * Close Quick Navigator in current page. Type "c" in the omnibox.
+    * Every search will give baidu(google) suggestions in the end of the suggestions list.
 
 ###ScreenShot
 ![ScreenShot](http://images.cnblogs.com/cnblogs_com/qianlifeng/337012/o_%e6%97%a0%e6%a0%87%e9%a2%98.png)

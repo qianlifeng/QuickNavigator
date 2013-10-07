@@ -1,8 +1,8 @@
 QuickNavigator
 ==============
 
-a chrome extension for quick navigate. This is inspired by [Vimum](http://vimium.github.io/), and I did some enhancements.
-When user type some key words in omnibox, it will give you all relevant urls including your history,bookmarks,popdomains and so on.
+a chrome extension for quick navigate. This is inspired by [Vimum](http://vimium.github.io/).
+When user type some key words in search box, it will give you all relevant urls including your history,bookmarks,popdomains and so on.
 
 ###Features
 1. Support multiple suggestion source, including bookmarks,history,popdomain

@@ -13,10 +13,10 @@ When user type some key words in omnibox, it will give you all relevant urls inc
     * Close Quick Navigator in current page. Type "c" in the omnibox.
     * Every search will give baidu(google) suggestions in the end of the suggestions list.
 
+###How to use
+After install this extension, type "F" to trigger the omnibox.
+
 ###ScreenShot
 ![ScreenShot](http://ww4.sinaimg.cn/large/5d7c1fa4jw1e9cw9ct34pj20y60ik429.jpg)
 
 ![ScreenShot](http://ww4.sinaimg.cn/large/5d7c1fa4jw1e9cwaopw58j20s20gywfz.jpg)
-
-###How to use
-After install this extension, type "F" to trigger the omnibox.

@@ -1,5 +1,5 @@
 angular.module("app",  ["ngSanitize","app.services","app.directives","app.filters"])
-    .controller("omnibox", function($scope,$dom,$url,$cfg) {
+    .controller("omnibox", function($scope,$dom,$url,$cfg,$log) {
 
         var msgConnect;
 
@@ -12,7 +12,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             msgConnect = chrome.extension.connect({name: "connect"});
             msgConnect.onMessage.addListener(getMsgFromBg);
 			
-			console.log("init quick navigator");
+			$log.log("init quick navigator");
         };
 
         $scope.sendRequest = function(){
@@ -199,8 +199,8 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
              });
          });
 
-
         function getMsgFromBg(msg) {
+            $log.log("get message from background: "+msg.name);
             $scope.$apply(function () {
                 msg.value.forEach(function(suggest,index,arrary){
                     suggest.selected = false;

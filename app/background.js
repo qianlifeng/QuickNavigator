@@ -1,15 +1,13 @@
 ﻿angular.module("app.background",  ["app.services","app.services.dataProviders","app.directives","app.filters"])
 .controller("background", function($scope,$dom,$url,$cfg,$injector) {
-    var tunnel;
 
     $scope.init = function(){
-        chrome.extension.onConnect.addListener(function(port) {
-            tunnel = port;
+        chrome.extension.onConnect.addListener(function(tunnel) {
             if(tunnel.name === "connect"){
                 tunnel.onMessage.addListener(function(msg){
                     switch(msg.name){
                         case "requestSuggestions":
-                            getSuggestions(msg);
+                            getSuggestions(tunnel,msg);
                         break;
 
                         case "requestNavigate":
@@ -45,7 +43,7 @@
         }); 
     }
 
-    function getSuggestions(msg){
+    function getSuggestions(tunnel,msg){
         var text = msg.value;
         var mode = $cfg.suggestionMode[msg.suggestionMode];
         var maxResult = $cfg.getSuggestionsCount();

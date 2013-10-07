@@ -146,12 +146,15 @@
 #quickNavigator-omnibox .omnibox-suggestions-title
 {
     overflow:hidden;
+    font-size:16px;
     cursor: pointer;
     margin-left:5px;
     float:left;
     width: 80%;
     white-space: nowrap;
     color:black;
+    height:17px;
+    line-height:17px;
     font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     text-decoration:none;
 }
@@ -164,6 +167,9 @@
 {
     white-space: nowrap;
     width:80%;
+    font-size:15px;
+    height:22px;
+    line-height:22px;
     color: rgb(34, 70, 132);
     overflow:hidden;
     padding-top:5px;

@@ -4,7 +4,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         var msgConnect;
 
         $scope.init = function(){ 
-            $scope.showOmnibox = false;
+            $scope.showOmnibox = "hidden";
             $scope.disabled = false;
             $scope.input = "";
             $scope.mode = "normal";
@@ -183,7 +183,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         // so I put keyup event registered in service and then broadcast it.
          $scope.$on("keyUpOnPage",function(event,e){
              $scope.$apply(function () {
-                 if(e.keyCode === 70){
+                 if(e.keyCode === 70 || (e.keyCode === 76 && e.ctrlKey === true)){
                      if(!$dom.isActiveElementInEdit() && !$scope.disabled && (typeof this.lastKeyUpTime === "undefined" || new Date().getTime() - this.lastKeyUpTime >= 150))
                     {
                         $scope.openOmnibox();
@@ -225,7 +225,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         }
 
         $scope.openOmnibox = function () {
-            $scope.showOmnibox = true; 
+            $scope.showOmnibox = "quickNavigator-omnibox-show";
             this.lastActiveElement = document.activeElement;
             $scope.input = "";
             $scope.tag = "";
@@ -235,7 +235,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         $scope.closeOmnibox = function () {
             $scope.input = "";
             $scope.tag = "";
-            $scope.showOmnibox = false; 
+            $scope.showOmnibox = "quickNavigator-omnibox-hide"; 
             $scope.mode = "normal";
             $scope.focus = false;
             $scope.suggestions = [];

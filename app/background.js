@@ -32,8 +32,35 @@
             return true;
         });
 
+        chrome.omnibox.onInputStarted.addListener(function(){
+            chrome.omnibox.setDefaultSuggestion({
+                description: '直接在森亮航海见识寻找: %s'
+            });
+        });
+
+        chrome.omnibox.onInputChanged.addListener(function(text, suggest){
+            var s = getSuggestionsFromOmnibox(text); 
+            var suggestions= [];
+            s.forEach(function(element){
+                suggestions.push({content:element.url,description:element.title});
+            });
+            // Set first suggestion as the default suggestion
+            chrome.omnibox.setDefaultSuggestion({description:suggestions[0].description});
+            // Remove the first suggestion from the array since we just suggested it
+            suggestions.shift();
+            // Suggest the remaining suggestions
+            suggest(suggestions);
+        });
+
         initDataProviders();
     };
+
+    function getSuggestionsFromOmnibox(text){
+         text = text.replace(" ", "");
+         var mode = $cfg.suggestionMode["normal"];
+         var maxResult = $cfg.getSuggestionsCount();
+         return query(text,mode.dataProvider,mode.applyRelevancy,maxResult); 
+    }
 
     function initDataProviders(){
         $cfg.dataProvider.forEach(function(element){

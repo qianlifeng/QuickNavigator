@@ -11,6 +11,7 @@
 	"page":"app/view/bg.html"
   },
    "options_page": "app/view/options.html",
+   "omnibox": { "keyword" : "q" },
    "icons": {
       "128": "images/icon.png",
       "16": "images/icon.png",

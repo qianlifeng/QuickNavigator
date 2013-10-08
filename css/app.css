@@ -196,3 +196,26 @@
 {
     display:none !important;
 }
+
+
+.quickNavigator-omnibox-show
+{
+	-webkit-animation:fadeInDown 100ms;
+    display:block;
+}
+.quickNavigator-omnibox-hide
+{
+	-webkit-animation:fadeOutUp 100ms forwards;
+    height:0;
+}
+/* 定义要调用的动画 */
+@-webkit-keyframes fadeInDown
+{
+    0%{opacity:0;-webkit-transform:translateY(-20px);}
+    100%{opacity:1;-webkit-transform:translateY(0);}
+}
+@-webkit-keyframes fadeOutUp
+{
+    0%{opacity:1;-webkit-transform:translateY(0);}
+    100%{opacity:0;-webkit-transform:translateY(-20px);}
+}

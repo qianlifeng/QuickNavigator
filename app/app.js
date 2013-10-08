@@ -178,25 +178,26 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             $scope.suggestions[$scope.currentIndex].selected = true;
         }
 
-        // I first  add ng-controller to body tag
-        // but found it maybe conflict with current exsited ng-controllers in default page
-        // so I put keyup event registered in service and then broadcast it.
-         $scope.$on("keyUpOnPage",function(event,e){
-             $scope.$apply(function () {
-                 if(e.keyCode === 70 || (e.keyCode === 76 && e.ctrlKey === true)){
-                     if(!$dom.isActiveElementInEdit() && !$scope.disabled && (typeof this.lastKeyUpTime === "undefined" || new Date().getTime() - this.lastKeyUpTime >= 150))
-                    {
-                        $scope.openOmnibox();
-                        $scope.sendMRURequest();
-                    }
+         $scope.$on("keyDownOnPage",function(event,e){
+             // I first  add ng-controller to body tag
+             // but found it maybe conflict with current exsited ng-controllers in default page
+             // so I put keyup event registered in service and then broadcast it.
+             if(e.keyCode === 70 || (e.keyCode === 76 && e.ctrlKey === true)){
+                 if(!$dom.isActiveElementInEdit() && !$scope.disabled && (typeof this.lastKeyUpTime === "undefined" || new Date().getTime() - this.lastKeyUpTime >= 150))
+                 {
+                     $scope.openOmnibox();
+                     $scope.sendMRURequest();
+                     e.stopPropagation();
+                     e.preventDefault();
                  }
-                 else if(e.keyCode === 27){  
-                     //esc
-                     $scope.closeOmnibox();
-                 }
+             }
+             else if(e.keyCode === 27){  
+                 //esc
+                 $scope.closeOmnibox();
+             }
 
-                 this.lastKeyUpTime = new Date().getTime();
-             });
+             //didn't count ctrl key down time, otherwise, ctrl+l time will be too short 
+             if(e.ctrlKey !== true) this.lastKeyUpTime = new Date().getTime();
          });
 
         function getMsgFromBg(msg) {
@@ -235,7 +236,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         $scope.closeOmnibox = function () {
             $scope.input = "";
             $scope.tag = "";
-            $scope.showOmnibox = "quickNavigator-omnibox-hide"; 
+            $scope.showOmnibox = "hidden"; 
             $scope.mode = "normal";
             $scope.focus = false;
             $scope.suggestions = [];

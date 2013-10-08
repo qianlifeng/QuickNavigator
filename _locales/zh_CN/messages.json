@@ -11,6 +11,7 @@
     "SuggestionCount" : { "message" : "搜索建议显示个数" },
     "MRU" : { "message" : "最常使用（MRU）" },
     "DisableMRU" : { "message" : "禁用MRU" },
+    "OverrideDefaultOmniboxHotkey" : { "message" : "替换 Ctrl+L 快捷键为Quick Navigator搜索" },
     "MRUDisplayCount" : { "message" : "MRU显示个数" },
     "MRUDescription" : { "message" : "MRU是指那些你最常访问的链接。如果启用了MRU，那么在每次打开搜索框的时候都会显示出这些链接。" },
     "Disable" : { "message" : "禁止" },

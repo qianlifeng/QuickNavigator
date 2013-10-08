@@ -46,6 +46,9 @@ angular.module('app.services', []).
         $(document).bind("keyup",function(e){
             $rootScope.$broadcast("keyUpOnPage",e);
         });
+        $(document).bind("keydown",function(e){
+            $rootScope.$broadcast("keyDownOnPage",e);
+        });
     })
     .service("$cfg",function(){
         this.dataProvider = [

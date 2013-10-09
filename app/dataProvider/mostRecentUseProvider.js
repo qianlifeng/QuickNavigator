@@ -1,4 +1,4 @@
-dataProviderModule.service("mostRecentUseProvider", function ($cfg) {
+dataProviderModule.service("mostRecentUseProvider", function () {
     this.async = false;
 
     this.init = function(){ }
@@ -10,8 +10,6 @@ dataProviderModule.service("mostRecentUseProvider", function ($cfg) {
         });
         var mruLists = [];
 
-        var maxMRUCount = $cfg.getMRUCount();
-        urls = urls.slice(0,maxMRUCount);
         urls.forEach(function(element,n,arrary){
             mruLists.push({title:element.title,url:element.url,providerName:"mostRecentUseProvider",relevancy:element.visitedCount}); 
         });

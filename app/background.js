@@ -21,7 +21,7 @@
         chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {   
             switch(msg.name){
                 case "getOptions":
-                    getOptions(msg,sendResponse); 
+                    sendResponse({name:"options",value:$cfg.getCfg()});
                 break;
 
                 case "loadTemplate":
@@ -56,14 +56,14 @@
     };
 
     function getSuggestionsFromOmnibox(text){
+         //request from default omnibox (usually triggered by Ctrl + L)
          text = text.replace(" ", "");
-         var mode = $cfg.suggestionMode["normal"];
-         var maxResult = $cfg.getSuggestionsCount();
-         return query(text,mode.dataProvider,mode.applyRelevancy,maxResult); 
+         var command = $cfg.getCfg().commands.normal;
+         return query(text,command.dataProvider,command.applyRelevancy,command.maxResult); 
     }
 
     function initDataProviders(){
-        $cfg.dataProvider.forEach(function(element){
+        $cfg.getCfg().dataProvider.forEach(function(element){
             var dataProviderService = $injector.get(element.name)
             dataProviderService.init();
             console.log("init dataProvider "+element.name);
@@ -72,12 +72,8 @@
 
     function getSuggestions(tunnel,msg){
         var text = msg.value;
-        var mode = $cfg.suggestionMode[msg.suggestionMode];
-        var maxResult = $cfg.getSuggestionsCount();
-        if(mode.key === "mru"){
-            maxResult = $cfg.getMRUCount();
-        }
-        var res = query(text,mode.dataProvider,mode.applyRelevancy,maxResult,function(d){
+        var command = $cfg.getCfg().commands[msg.suggestionMode];
+        var res = query(text,command.dataProvider,command.applyRelevancy,command.maxResult,function(d){
             tunnel.postMessage({
                 name: "responseSuggestionsAsync",
                 value: d
@@ -107,12 +103,13 @@
     }
 
     function addRelevancy(mergedList){
+        var dataProviders = $cfg.getCfg().dataProvider;
         //relevancy is a integer, larger integer represent larger relevancy
         mergedList.forEach(function(element){
             //fist, we must reset relevancy to 0, or it will increase repeatly when every words typed
             element.relevancy = 0;
 
-            $cfg.dataProvider.forEach(function(provider){
+            dataProviders.forEach(function(provider){
                 if(provider.name === element.providerName){
                     element.relevancy += provider.relevancy;
                 }
@@ -130,15 +127,6 @@
             //top domain should have larger relevancy
             if(/^(.*)?\.[a-z]{1,3}\/?$/.test(element.url)) element.relevancy += 2;
         });
-    }
-
-    function getOptions(msg,sendResponse){
-        switch(msg.option){
-            case "disableMRU":
-                var disabled = $cfg.getMRUDisabled();
-                sendResponse({name:"options",option:"disableMRU",value:disabled});
-            break;
-        }
     }
 
     function logNavigateInfo(msg){

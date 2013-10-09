@@ -1,11 +1,15 @@
 dataProviderModule.service("commandProvider", function ($cfg) {
         this.query = function(txt,asyncFunc){
+            if(txt === "") return [];
+
             var suggestion = [];
-            for(var i in $cfg.suggestionMode){
-                var mode = $cfg.suggestionMode[i];
-                if(mode.hotkey === "none") continue;
-                if(mode.hotkey === txt){
-                    suggestion.push({title:mode.text,url:mode.clientCommand,providerName:"commandProvider"});  
+
+            var commands = $cfg.getCfg().commands;
+            for(var index in commands){
+                var command = commands[index];
+                if(command.hotkey === txt){
+                    suggestion.push({title:command.text,url:command.clientCommand,providerName:"commandProvider"});  
+                    break;
                 }
             }
             return suggestion;

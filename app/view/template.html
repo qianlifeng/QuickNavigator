@@ -4,7 +4,7 @@
             <div class="omniboxReset omnibox-tag" ng-show="tag!=''" data-mode="{{mode}}">{{tag}}</div>
             <div class="omniboxReset omnibox-searchEngine" ng-show="suggestions.length == 0">使用百度搜索</div>
             <div class="omniboxReset omnibox-input">
-                <input class="omniboxReset" type="text" ng-keyup="onKeyUp($event)" ng-model="input" ng-Focusme="focus"/>
+                <input class="omniboxReset" type="text" ng-keydown="onKeyDown($event)" ng-model="input" ng-Focusme="focus"/>
             </div>
         </div>
     </div>

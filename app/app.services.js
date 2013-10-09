@@ -51,7 +51,7 @@ angular.module('app.services', []).
         });
     })
     .service("$cfg",function(){
-        this.dataProvider = [
+        var dataProviders = [
             {name:"bookMarkProvider",relevancy:10,text:"书签"},
             {name:"historyProvider",relevancy:7,text:"历史记录"},
             {name:"popDomainProvider",relevancy:1,text:"流行网站"},
@@ -61,20 +61,23 @@ angular.module('app.services', []).
             {name:"commandProvider",relevancy:1000,text:"命令"}
         ];
 
-        this.suggestionMode = {
+        var commands= {
             normal:{
                 //每个模式的唯一标识符
                 key:"normal",
                 //显示输入框前面的文字
                 text:"",
-                //触发的热键，这里的触发条件是指输hotkey之后按tab键，none表示没有
-                hotkey:"none",
+                //触发的热键，这里的触发条件是指输hotkey之后按tab键
+                hotkey:"",
                 //是否禁用
                 disabled:false,
                 //是否根据相关性排序后显示建议
                 applyRelevancy:true,
                 //选择建议项之后，是否将选中的项目记入MRU
                 applyMRU:true,
+                //如果clientCommand不为空，则优先执行JS
+                clientCommand:"",
+                displayTemplate:"",
                 //最大的建议数量【如果本地存储件中存在相同的配置项目，则优先读取用户设置的本地存储值】
                 maxResult:8,
                 //数据源
@@ -100,7 +103,7 @@ angular.module('app.services', []).
                 applyRelevancy:false,
                 applyMRU:false,
                 maxResult:2,
-                clientCommand:"javascript:$scope.disabled = true;$scope.showOmnibox = false;",
+                clientCommand:"javascript:$scope.disabled = true;$scope.showOmnibox = 'hidden';",
                 dataProvider:""
             },
             mru:{
@@ -116,33 +119,24 @@ angular.module('app.services', []).
             }
         }; 
 
-        this.disableMRU = function(val){
-            localStorage.QuickNavigator_DisableMRU = val.toString();
+        this.defaultCfg = {
+            dataProvider:dataProviders,
+            commands:commands,
+            MRUDisabled:false,
+            MRUCount:5,
+            suggestionsCount:5,
+            overrideDefaultOmniboxHotkey:false
         };
 
-        this.getMRUDisabled = function(){
-            var disabled = localStorage.QuickNavigator_DisableMRU;
-            if(disabled){
-                return disabled == "true"?true:false;
+        this.getCfg = function(){
+            var cfg = localStorage.QuickNavigatorUserCfg;
+            if(cfg){
+                return JSON.parse(cfg);
             }
-            return this.suggestionMode.mru.disabled;
+            return this.defaultCfg;
         };
 
-        this.setMRUCount = function(val){
-            localStorage.QuickNavigator_MRUCount = val.toString();
-        };
-
-        this.getMRUCount = function(){
-            if(typeof localStorage.QuickNavigator_MRUCount === "undefined") return this.suggestionMode.mru.maxResult;
-            return parseInt(localStorage.QuickNavigator_MRUCount,10);
-        };
-
-        this.setSuggestionsCount = function(val){
-            localStorage.QuickNavigator_SuggestionsCount = val.toString();
-        };
-
-        this.getSuggestionsCount = function(){
-            if(typeof localStorage.QuickNavigator_SuggestionsCount === "undefined") return this.suggestionMode.normal.maxResult;
-            return parseInt(localStorage.QuickNavigator_SuggestionsCount,10);
+        this.saveCfg = function(userCfg){
+            localStorage.QuickNavigatorUserCfg = JSON.stringify(userCfg);
         };
     });

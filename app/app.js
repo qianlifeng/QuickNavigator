@@ -1,7 +1,8 @@
 angular.module("app",  ["ngSanitize","app.services","app.directives","app.filters"])
-    .controller("omnibox", function($scope,$dom,$url,$cfg,$log) {
+    .controller("omnibox", function($scope,$dom,$url,$log) {
 
         var msgConnect;
+        var cfg;
 
         $scope.init = function(){ 
             $scope.showOmnibox = "hidden";
@@ -13,7 +14,16 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             msgConnect.onMessage.addListener(getMsgFromBg);
 			
 			$log.log("init quick navigator");
+            $scope.loadCfg();
         };
+
+        $scope.loadCfg = function(){
+            chrome.extension.sendMessage({name: "getOptions"}, function(response) {
+                if(response.name === 'options'){
+                    cfg = response.value;
+                }
+            });
+        }
 
         $scope.sendRequest = function(){
             var me = this;
@@ -28,21 +38,20 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         };
 
         $scope.switchToAdvancedMode = function(){
-            for(var i in $cfg.suggestionMode){
-                var mode = $cfg.suggestionMode[i];
-                if(mode.hotkey === "none") continue;
-                if(mode.hotkey === $scope.input){
-                    $scope.tag = mode.text;
-                    $scope.mode = mode.key;
+            for(var i in cfg.commands){
+                var command = cfg.commands[i];
+                if(command.hotkey === "") continue;
+                if(command.hotkey === $scope.input){
+                    $scope.tag = command.text;
+                    $scope.mode = command.key;
                     $scope.input = "";
-                    //calculateInputWidth();
                     $scope.sendRequest();
                     break;
                 }
             }
         };
 
-        $scope.onKeyUp = function(e){
+        $scope.onKeyDown = function(e){
             //keycodes that omnibox accept
             //only accept a-z 0-9 and whitelist to trigger sendrequest()
             var whiteList = [
@@ -99,8 +108,6 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             }
 
             $scope.sendRequest(); 
-            e.stopPropagation();
-            e.preventDefault();
         };
 
         $scope.navigate = function(openInNewTab,url,title,providerName){
@@ -140,16 +147,12 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         };
 
         $scope.sendMRURequest = function(){
-            chrome.extension.sendMessage({name: "getOptions",option:"disableMRU"}, function(response) {
-                if(response.name === 'options' && response.option === "disableMRU"){
-                    if(!response.value){
-                        msgConnect.postMessage({
-                            name: "requestSuggestions",
-                            suggestionMode: "mru"
-                        });
-                    }
-                }
-            }); 
+            if(!cfg.commands.mru.disabled){
+                msgConnect.postMessage({
+                    name: "requestSuggestions",
+                    suggestionMode: "mru"
+                });
+            }
         };
 
         function moveNextSelected(){
@@ -182,7 +185,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
              // I first  add ng-controller to body tag
              // but found it maybe conflict with current exsited ng-controllers in default page
              // so I put keyup event registered in service and then broadcast it.
-             if(e.keyCode === 70 || (e.keyCode === 76 && e.ctrlKey === true)){
+             if((e.keyCode === 70 && e.ctrlKey === false) || (e.keyCode === 76 && e.ctrlKey === true)){
                  if(!$dom.isActiveElementInEdit() && !$scope.disabled && (typeof this.lastKeyUpTime === "undefined" || new Date().getTime() - this.lastKeyUpTime >= 150))
                  {
                      $scope.openOmnibox();
@@ -226,23 +229,27 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         }
 
         $scope.openOmnibox = function () {
-            $scope.showOmnibox = "quickNavigator-omnibox-show";
-            this.lastActiveElement = document.activeElement;
-            $scope.input = "";
-            $scope.tag = "";
-            $scope.focus = true;
+            $scope.$apply(function () {
+                $scope.showOmnibox = "quickNavigator-omnibox-show";
+                this.lastActiveElement = document.activeElement;
+                $scope.input = "";
+                $scope.tag = "";
+                $scope.focus = true;
+            });
         };
 
         $scope.closeOmnibox = function () {
-            $scope.input = "";
-            $scope.tag = "";
-            $scope.showOmnibox = "hidden"; 
-            $scope.mode = "normal";
-            $scope.focus = false;
-            $scope.suggestions = [];
-            if(this.lastActiveElement){
-                this.lastActiveElement.focus();
-            }
+            $scope.$apply(function () {
+                $scope.input = "";
+                $scope.tag = "";
+                $scope.showOmnibox = "hidden"; 
+                $scope.mode = "normal";
+                $scope.focus = false;
+                $scope.suggestions = [];
+                if(this.lastActiveElement){
+                    this.lastActiveElement.focus();
+                }
+            });
         };
     });
 

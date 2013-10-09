@@ -264,7 +264,7 @@ omnibox = function(){
     function switchToAdvancedMode(){
         for(var i in config.suggestionMode){
             var mode = config.suggestionMode[i];
-            if(mode.hotkey === "none") continue;
+            if(mode.hotkey === "") continue;
             if(mode.hotkey === this.input.val()){
                 this.tag.html(mode.text);
                 this.tag.attr("data-mode",mode.key);

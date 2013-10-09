@@ -1,4 +1,16 @@
 angular.module("app",  ["ngSanitize","app.services","app.directives","app.filters"])
+    .run(function($rootScope) {
+        $rootScope.safeApply = function(fn) {
+            var phase = this.$root.$$phase;
+            if(phase == '$apply' || phase == '$digest') {
+                if(fn && (typeof(fn) === 'function')) {
+                    fn();
+                }
+            } else {
+                this.$apply(fn);
+            }
+        };
+    })
     .controller("omnibox", function($scope,$dom,$url,$log) {
 
         var msgConnect;
@@ -185,7 +197,8 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
              // I first  add ng-controller to body tag
              // but found it maybe conflict with current exsited ng-controllers in default page
              // so I put keyup event registered in service and then broadcast it.
-             if((e.keyCode === 70 && e.ctrlKey === false) || (e.keyCode === 76 && e.ctrlKey === true)){
+             if((String.fromCharCode(e.keyCode) === cfg.hotkey.toUpperCase() && e.ctrlKey === false) 
+                 || (e.keyCode === 76 && e.ctrlKey === true && cfg.overrideDefaultOmniboxHotkey)){
                  if(!$dom.isActiveElementInEdit() && !$scope.disabled && (typeof this.lastKeyUpTime === "undefined" || new Date().getTime() - this.lastKeyUpTime >= 150))
                  {
                      $scope.openOmnibox();
@@ -205,7 +218,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
 
         function getMsgFromBg(msg) {
             $log.log("get message from background: "+msg.name);
-            $scope.$apply(function () {
+            $scope.safeApply(function () {
                 msg.value.forEach(function(suggest,index,arrary){
                     suggest.selected = false;
                 });
@@ -229,7 +242,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         }
 
         $scope.openOmnibox = function () {
-            $scope.$apply(function () {
+            $scope.safeApply(function () {
                 $scope.showOmnibox = "quickNavigator-omnibox-show";
                 this.lastActiveElement = document.activeElement;
                 $scope.input = "";
@@ -239,7 +252,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         };
 
         $scope.closeOmnibox = function () {
-            $scope.$apply(function () {
+            $scope.safeApply(function () {
                 $scope.input = "";
                 $scope.tag = "";
                 $scope.showOmnibox = "hidden"; 

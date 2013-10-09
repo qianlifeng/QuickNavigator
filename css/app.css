@@ -161,6 +161,7 @@
 #quickNavigator-omnibox .omnibox-suggestions-title:hover
 {
     text-decoration:underline;
+    background-color:initial;
 }
 
 #quickNavigator-omnibox .omnibox-suggestions-url

@@ -18,11 +18,14 @@
   </head>
   <body ng-app="app.options" ng-controller="options" ng-init="init()" ng-csp>
     <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <span class="brand" style="margin-left:20px;">QuickNavigator</span>
+      <div class="navbar-inner" style="padding:0 20px;">
+        <span class="brand">QuickNavigator</span>
         <ul class="nav">
-          <li class="active"><a href="#">{{Setting}}</a></li>
-          <li><a href="https://github.com/qianlifeng/QuickNavigator" target="_blank">{{SourceCode}}</a></li>
+            <li class="active"><a href="#">{{Setting}}</a></li>
+            <li><a href="https://github.com/qianlifeng/QuickNavigator" target="_blank">{{SourceCode}}</a></li>
+        </ul>
+        <ul class="nav pull-right">
+            <input type="button" class="btn btn-primary" ng-click="save()" value="{{Save}}" />
         </ul>
       </div>
     </div>
@@ -49,8 +52,9 @@
               </div>
                 <div class="page-body well page-end">
                     <fieldset>
+                        {{openHotkey}}: <select ng-model="cfg.hotkey" ng-options="c for c in availableHotkey" ></select>
                         <label class="checkbox">
-                            {{OverrideDefaultOmniboxHotkey}}: <input type="checkbox"  ng-model="overrideDefaultOmniboxHotkey" id="overrideDefaultOmniboxHotkey">
+                            {{OverrideDefaultOmniboxHotkey}} <input type="checkbox" ng-model="cfg.overrideDefaultOmniboxHotkey" id="overrideDefaultOmniboxHotkey">
                         </label>
                     </fieldset>
                 </div>
@@ -73,9 +77,9 @@
                 <div class="page-body well page-end">
                     <fieldset>
                         <label class="checkbox">
-                            {{DisableMRU}}: <input type="checkbox" id="disableMRU">
+                            {{DisableMRU}}: <input type="checkbox" id="disableMRU" ng-model="cfg.commands.mru.disabled">
                         </label>
-                            {{MRUDisplayCount}}: <input type="text" id="MRUCount" />
+                            {{MRUDisplayCount}}: <input type="text" id="MRUCount" ng-model="cfg.commands.mru.maxResult"/>
                     </fieldset>
                 </div>
             </section>
@@ -87,7 +91,7 @@
                 </div>
                 <div class="page-body well page-end">
                     <fieldset>
-                        {{SuggestionCount}}: <input type="text" id="suggestionsCount" />
+                        {{SuggestionCount}}: <input type="text" id="suggestionsCount" ng-model="cfg.commands.normal.maxResult"/>
                     </fieldset>
                 </div>
             </section>
@@ -108,6 +112,9 @@
                     <!--</fieldset>-->
                 <!--</div>-->
             <!--</section>-->
+          </div>
+
+          <div>
           </div>
       </div>
 

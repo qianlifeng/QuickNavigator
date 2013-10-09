@@ -7,7 +7,7 @@ dataProviderModule.service("commandProvider", function ($cfg) {
             var commands = $cfg.getCfg().commands;
             for(var index in commands){
                 var command = commands[index];
-                if(command.hotkey === txt){
+                if(command.hotkey === txt && command.disabled === false){
                     suggestion.push({title:command.text,url:command.clientCommand,providerName:"commandProvider"});  
                     break;
                 }

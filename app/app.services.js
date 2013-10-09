@@ -50,7 +50,8 @@ angular.module('app.services', []).
             $rootScope.$broadcast("keyDownOnPage",e);
         });
     })
-    .service("$cfg",function(){
+    .service("$cfg",function($log){
+        var cfgCache = null;
         var dataProviders = [
             {name:"bookMarkProvider",relevancy:10,text:"书签"},
             {name:"historyProvider",relevancy:7,text:"历史记录"},
@@ -120,23 +121,48 @@ angular.module('app.services', []).
         }; 
 
         this.defaultCfg = {
+            version:5,
             dataProvider:dataProviders,
             commands:commands,
-            MRUDisabled:false,
-            MRUCount:5,
-            suggestionsCount:5,
+            hotkey:"F",
             overrideDefaultOmniboxHotkey:false
         };
 
         this.getCfg = function(){
+            if(localStorage.QuickNavigatorUserCfgDirty && localStorage.QuickNavigatorUserCfgDirty === "true"){
+                cfgCache = null;
+                localStorage.QuickNavigatorUserCfgDirty === "false";
+            }
+
+            if(cfgCache!=null) return cfgCache;
+
             var cfg = localStorage.QuickNavigatorUserCfg;
             if(cfg){
-                return JSON.parse(cfg);
+                try{
+                    var tempCache = JSON.parse(cfg);
+                    if(tempCache.version && tempCache.version >= this.defaultCfg.version){
+                        cfgCache = tempCache;
+                    }
+                    else{
+                        cfgCache = this.defaultCfg;
+                        this.saveCfg(cfgCache);
+                    }
+                }
+                catch(e){
+                    $log.log("parse config error, loading default config");
+                    cfgCache = this.defaultCfg;
+                    this.saveCfg(this.defaultCfg);
+                }
             }
-            return this.defaultCfg;
+            else{
+                cfgCache = this.defaultCfg;
+                this.saveCfg(cfgCache);
+            }
+            return cfgCache;
         };
 
         this.saveCfg = function(userCfg){
             localStorage.QuickNavigatorUserCfg = JSON.stringify(userCfg);
+            $log.log("config saved");
         };
     });

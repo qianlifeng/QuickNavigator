@@ -115,6 +115,7 @@ angular.module('app.services', []).
                 applyRelevancy:false,
                 applyMRU:true,
                 maxResult:5,
+                displayTemplate:"",
                 clientCommand:"javascript:$scope.switchToAdvancedMode();",
                 dataProvider:"mostRecentUseProvider"
             }

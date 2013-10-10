@@ -52,14 +52,20 @@ angular.module('app.services', []).
     })
     .service("$cfg",function($log){
         var cfgCache = null;
+
+        var templates = [
+            {name:"normal", value:"<div class='omniboxReset omnibox-suggestions-top'> <div class='omniboxReset omnibox-suggestions-icon'> <img class='omniboxReset' ng-src='{{item.url | domainIconUrl}}' ng-imgonerror='images/file.ico'> </div> <a class='omniboxReset omnibox-suggestions-title' ng-click='navigate(false,item.url,item.title,item.providerName)' href='{{item.url}}' ng-bind-html-unsafe='item.title | hightlightSearch:input'></a> </div> <div class='omniboxReset omnibox-suggestions-bottom'> <div class='omniboxReset omnibox-suggestions-sourcetype'>{{item.providerName | providerName}} {{item.relevancy}}</div> <div class='omniboxReset omnibox-suggestions-url' ng-bind-html-unsafe='item.url | hightlightSearch:input'></div> </div>"},
+            {name:"weather",value:""}
+        ];
+
         var dataProviders = [
-            {name:"bookMarkProvider",relevancy:10,text:"书签"},
-            {name:"historyProvider",relevancy:7,text:"历史记录"},
-            {name:"popDomainProvider",relevancy:1,text:"流行网站"},
-            {name:"closedTabProvider",relevancy:1,text:"最近关闭标签"},
-            {name:"mostRecentUseProvider",relevancy:15,text:"经常使用"},
-            {name:"baiduSuggestionProvider",relevancy:1,text:"百度"},
-            {name:"commandProvider",relevancy:1000,text:"命令"}
+            {name:"bookMarkProvider",relevancy:10,text:"书签",template:"normal"},
+            {name:"historyProvider",relevancy:7,text:"历史记录",template:"normal"},
+            {name:"popDomainProvider",relevancy:1,text:"流行网站",template:"normal"},
+            {name:"closedTabProvider",relevancy:1,text:"最近关闭标签",template:"normal"},
+            {name:"mostRecentUseProvider",relevancy:15,text:"经常使用",template:"normal"},
+            {name:"baiduSuggestionProvider",relevancy:1,text:"百度",template:"normal"},
+            {name:"commandProvider",relevancy:1000,text:"命令",template:"normal"}
         ];
 
         var commands= {
@@ -78,7 +84,6 @@ angular.module('app.services', []).
                 applyMRU:true,
                 //如果clientCommand不为空，则优先执行JS
                 clientCommand:"",
-                displayTemplate:"",
                 //最大的建议数量【如果本地存储件中存在相同的配置项目，则优先读取用户设置的本地存储值】
                 maxResult:8,
                 //数据源
@@ -115,7 +120,6 @@ angular.module('app.services', []).
                 applyRelevancy:false,
                 applyMRU:true,
                 maxResult:5,
-                displayTemplate:"",
                 clientCommand:"javascript:$scope.switchToAdvancedMode();",
                 dataProvider:"mostRecentUseProvider"
             }
@@ -123,10 +127,27 @@ angular.module('app.services', []).
 
         this.defaultCfg = {
             version:5,
+            template:templates,
             dataProvider:dataProviders,
             commands:commands,
             hotkey:"F",
             overrideDefaultOmniboxHotkey:false
+        };
+
+
+        this.getTemplateByDataProvider = function(dataProvider){
+            var temp = "";
+            dataProviders.forEach(function(provider){
+                if(provider.name === dataProvider){
+                    templates.forEach(function(template){
+                        if(provider.template === template.name){
+                            temp = template.value;
+                        }
+                    });
+                }
+            });
+
+            return temp;
         };
 
         this.getCfg = function(){

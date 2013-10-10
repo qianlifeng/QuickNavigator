@@ -42,3 +42,4 @@ angular.module('app.filters', [])
             return source;
         };
     });
+  

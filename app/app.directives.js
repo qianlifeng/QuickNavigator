@@ -36,4 +36,20 @@ angular.module("app.directives", [])
                 }
             });
         };
+    })
+    .directive('ngCompileTemplate', function ($compile) {
+
+        var linker = function(scope, element, attrs) {
+            element.html(scope.item.template).show();
+            $compile(element.contents())(scope);
+        }
+
+        return {
+            restrict: "E",
+            rep1ace: true,
+            link: linker,
+            scope: {
+                item:"="
+            }
+        };
     });

@@ -1,3 +1,22 @@
 {
-    "Language" : { "message" : "Language" }
+    "Language" : { "message" : "Language" },
+    "LanguageDescription" : { "message" : "Currently, we support two kinds of languages: English and Chinese." },
+    "DisplayLanguage" : { "message" : "DisplayLanguage" },
+    "English" : { "message" : "English" },
+    "Save" : { "message" : "Save Settings" },
+    "openHotkey" : { "message" : "Hotkey for opening search box" },
+    "Reset" : { "message" : "Reset" },
+    "Chinese" : { "message" : "Chinese" },
+    "Setting" : { "message" : "Setting" },
+    "Hotkey" : { "message" : "Hotkey" },
+    "Suggestion" : { "message" : "Suggestion" },
+    "SuggestionDescription" : { "message" : "Suggestions means the items displayed in searchbox when you start to input." },
+    "SuggestionCount" : { "message" : "Suggestions count displayed in the list" },
+    "MRU" : { "message" : "Most Recently Used" },
+    "DisableMRU" : { "message" : "Disable MRU" },
+    "OverrideDefaultOmniboxHotkey" : { "message" : "replace Ctrl+L hotkey for opening searchbox instead of focus address bar" },
+    "MRUDisplayCount" : { "message" : "MRU count displayed in the list" },
+    "MRUDescription" : { "message" : "MRU means those items that you visited most frequantly" },
+    "Disable" : { "message" : "Disable" },
+    "SourceCode" : { "message" : "SourceCode@Github" }
 }

@@ -99,7 +99,16 @@
                 return a.relevancy >= b.relevancy ? -1:1;
             });
         }
-        return res.slice(0,maxResult);
+        res = res.slice(0,maxResult);
+
+        //add template info
+        res.forEach(function(item){
+            if(typeof item.template === "undefined"){
+                item.template = $cfg.getTemplateByDataProvider(item.providerName);
+            }
+        });
+
+        return res;
     }
 
     function addRelevancy(mergedList){

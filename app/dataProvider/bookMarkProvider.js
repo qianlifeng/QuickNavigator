@@ -3,7 +3,6 @@ dataProviderModule.service("bookMarkProvider", function ($cfg) {
     var bookMarksCache;
 
     this.async = false;
-
     this.init = function(){
         var me = this;
         this.bookMarksCache =  null; 

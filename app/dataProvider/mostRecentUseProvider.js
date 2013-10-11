@@ -1,6 +1,5 @@
 dataProviderModule.service("mostRecentUseProvider", function ($cfg) {
     this.async = false;
-
     this.init = function(){ }
 
     this.query = function(txt,asyncFunc){

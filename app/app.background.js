@@ -1,5 +1,5 @@
 ﻿angular.module("app.background",  ["app.services","app.services.dataProviders","app.directives","app.filters"])
-.controller("background", function($scope,$dom,$url,$cfg,$injector) {
+.controller("background", function($scope,$dom,$url,$cfg,$injector,defaultTemplate) {
 
     $scope.init = function(){
         chrome.extension.onConnect.addListener(function(tunnel) {
@@ -89,8 +89,17 @@
         dataProvider = dataProvider.split(',');
         var res = [];
         dataProvider.forEach(function(element){
-			var dataProviderService = $injector.get(element)
-            res = res.merge(dataProviderService.query(txt,asyncFunc));
+			var dataProviderService = $injector.get(element);
+            var tempResult = dataProviderService.query(txt,asyncFunc);
+            tempResult.forEach(function(item){
+                if(typeof dataProviderService.template != "undefined" && dataProviderService.template !== ""){
+                    item.template = dataProviderService.template;
+                }
+                else{
+                    item.template = defaultTemplate;
+                }
+            });
+            res = res.merge(tempResult);
         });
 
         if(applyRelevancy) {
@@ -100,13 +109,6 @@
             });
         }
         res = res.slice(0,maxResult);
-
-        //add template info
-        res.forEach(function(item){
-            if(typeof item.template === "undefined"){
-                item.template = $cfg.getTemplateByDataProvider(item.providerName);
-            }
-        });
 
         return res;
     }

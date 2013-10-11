@@ -10,7 +10,7 @@
     </div>
     <ul class="omniboxReset omnibox-ul">
         <li class="omniboxReset omnibox-li" ng-repeat="item in suggestions" ng-class="{'omnibox-Result-li-selected':item.selected == true}">
-            <ng-compile-template item="item" />
+            <ng-compile-template item="item" input="input" />
         </li>
     </ul>
 </div>

@@ -4,7 +4,6 @@ dataProviderModule.service("historyProvider", function ($cfg) {
     var size = 10000;
     
 	this.async = false;
-	
     this.init = function(){
         var me = this;
         this.historyCache =  []; 

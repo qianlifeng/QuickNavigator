@@ -49,7 +49,8 @@ angular.module("app.directives", [])
             rep1ace: true,
             link: linker,
             scope: {
-                item:"="
+                item:"=",
+                input:"="
             }
         };
     });

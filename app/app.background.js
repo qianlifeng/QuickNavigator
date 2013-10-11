@@ -76,7 +76,7 @@
         var res = query(text,command.dataProvider,command.applyRelevancy,command.maxResult,function(d){
             tunnel.postMessage({
                 name: "responseSuggestionsAsync",
-                value: d
+                value: addTemplate(d)
             });
         });
         tunnel.postMessage({
@@ -85,20 +85,26 @@
         }); 
     }
 
+    function addTemplate(items){
+        items.forEach(function(item){
+            var dataProviderService = $injector.get(item.providerName);
+            if(typeof dataProviderService.template != "undefined" && dataProviderService.template !== ""){
+                item.template = dataProviderService.template;
+            }
+            else{
+                item.template = defaultTemplate;
+            }
+        }); 
+        return items;
+    }
+
     function query(txt,dataProvider,applyRelevancy,maxResult,asyncFunc){
         dataProvider = dataProvider.split(',');
         var res = [];
         dataProvider.forEach(function(element){
 			var dataProviderService = $injector.get(element);
             var tempResult = dataProviderService.query(txt,asyncFunc);
-            tempResult.forEach(function(item){
-                if(typeof dataProviderService.template != "undefined" && dataProviderService.template !== ""){
-                    item.template = dataProviderService.template;
-                }
-                else{
-                    item.template = defaultTemplate;
-                }
-            });
+            tempResult =  addTemplate(tempResult); 
             res = res.merge(tempResult);
         });
 

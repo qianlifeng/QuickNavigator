@@ -60,6 +60,7 @@ angular.module('app.services', []).
             {name:"closedTabProvider",relevancy:1,text:"最近关闭标签"},
             {name:"mostRecentUseProvider",relevancy:15,text:"经常使用"},
             {name:"baiduSuggestionProvider",relevancy:1,text:"百度"},
+            {name:"iFeelLuckyProvider",relevancy:1,text:"我猜猜"},
             {name:"commandProvider",relevancy:1000,text:"命令"}
         ];
 
@@ -82,7 +83,7 @@ angular.module('app.services', []).
                 //最大的建议数量【如果本地存储件中存在相同的配置项目，则优先读取用户设置的本地存储值】
                 maxResult:8,
                 //数据源
-                dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,mostRecentUseProvider,baiduSuggestionProvider,commandProvider"
+                dataProvider:"bookMarkProvider,historyProvider,popDomainProvider,mostRecentUseProvider,baiduSuggestionProvider,iFeelLuckyProvider,commandProvider"
             },
             closedTab:{
                 key:"closedTab",
@@ -121,7 +122,7 @@ angular.module('app.services', []).
         }; 
 
         this.defaultCfg = {
-            version:5,
+            version:9,
             dataProvider:dataProviders,
             commands:commands,
             hotkey:"F",

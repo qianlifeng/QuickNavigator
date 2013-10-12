@@ -1,14 +1,8 @@
 angular.module('app.filters', [])
-    .filter("providerName",function($cfg){
-        var dataProviders = $cfg.getCfg().dataProvider;
+    .filter("providerNameWithDescription",function($cfg,$injector){
         return function(providerName) {
-            dataProviders.forEach(function(item){ 
-                if(item.name === providerName){
-                    providerName = item.text;
-                }
-            });
-
-            return providerName;
+            var dataProviderService = $injector.get(providerName);
+            return dataProviderService.name + "(" + dataProviderService.description + ")";
         };
     })
     .filter("domainIconUrl",function($url){

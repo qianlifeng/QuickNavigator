@@ -18,5 +18,7 @@
     "MRUDisplayCount" : { "message" : "MRU显示个数" },
     "MRUDescription" : { "message" : "MRU是指那些你最常访问的链接。如果启用了MRU，那么在每次打开搜索框的时候都会显示出这些链接。" },
     "Disable" : { "message" : "禁止" },
-    "SourceCode" : { "message" : "源代码@Github" }
+    "SourceCode" : { "message" : "源代码@Github" },
+
+    "DataSource" : { "message" : "数据源" }
 }

@@ -58,22 +58,28 @@
     function getSuggestionsFromOmnibox(text){
          //request from default omnibox (usually triggered by Ctrl + L)
          text = text.replace(" ", "");
-         var command = $cfg.getCfg().commands.normal;
-         return query(text,command.dataProvider,command.applyRelevancy,command.maxResult); 
+         return query(text,""); 
     }
 
     function initDataProviders(){
-        $cfg.getCfg().dataProvider.forEach(function(element){
-            var dataProviderService = $injector.get(element.name)
+        $cfg.dataProviders.forEach(function(element){
+            var dataProviderService = $injector.get(element)
             dataProviderService.init();
-            console.log("init dataProvider "+element.name);
+            console.log("init available dataProvider "+element);
         }); 
     }
 
     function getSuggestions(tunnel,msg){
         var text = msg.value;
-        var command = $cfg.getCfg().commands[msg.suggestionMode];
-        var res = query(text,command.dataProvider,command.applyRelevancy,command.maxResult,function(d){
+        var dataProvider = msg.dataProvider;
+        if(dataProvider === "" || typeof dataProvider === "undefined"){
+            //get all active data provider
+            dataProvider = $cfg.getCfg().activeProviders;
+        }
+        else{
+            dataProvider = dataProvider.split(',');
+        }
+        var res = query(text,dataProvider,function(d){
             tunnel.postMessage({
                 name: "responseSuggestionsAsync",
                 value: addTemplate(d)
@@ -88,6 +94,7 @@
     function addTemplate(items){
         items.forEach(function(item){
             var dataProviderService = $injector.get(item.providerName);
+            item.provider = dataProviderService.name;
             if(typeof dataProviderService.template != "undefined" && dataProviderService.template !== ""){
                 item.template = dataProviderService.template;
             }
@@ -98,8 +105,12 @@
         return items;
     }
 
-    function query(txt,dataProvider,applyRelevancy,maxResult,asyncFunc){
-        dataProvider = dataProvider.split(',');
+    function query(txt,dataProvider,asyncFunc){
+        var applyRelevancy = true;
+        if(dataProvider.length === 1) {
+            applyRelevancy = $injector.get(dataProvider[0]).applyRelevancy;  
+        }
+
         var res = [];
         dataProvider.forEach(function(element){
 			var dataProviderService = $injector.get(element);
@@ -114,23 +125,19 @@
                 return a.relevancy >= b.relevancy ? -1:1;
             });
         }
-        res = res.slice(0,maxResult);
+        res = res.slice(0, $cfg.getCfg().maxResult);
 
         return res;
     }
 
     function addRelevancy(mergedList){
-        var dataProviders = $cfg.getCfg().dataProvider;
         //relevancy is a integer, larger integer represent larger relevancy
         mergedList.forEach(function(element){
+            var dataProviderService = $injector.get(element.providerName);
+
             //fist, we must reset relevancy to 0, or it will increase repeatly when every words typed
             element.relevancy = 0;
-
-            dataProviders.forEach(function(provider){
-                if(provider.name === element.providerName){
-                    element.relevancy += provider.relevancy;
-                }
-            });
+            element.relevancy += dataProviderService.relevancy;
 
             //check if this url has beed visited
             var visitedCount =  window.db.getUrlVisitedCount(element.url);
@@ -141,8 +148,7 @@
                 element.relevancy += visitedCount;
             }
 
-            //top domain should have larger relevancy
-            if(/^(.*)?\.[a-z]{1,3}\/?$/.test(element.url)) element.relevancy += 2;
+            if($url.isDomainUrl(element.url)) element.relevancy += 2;
         });
     }
 

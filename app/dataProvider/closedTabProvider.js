@@ -4,6 +4,10 @@ dataProviderModule.service("closedTabProvider", function ($cfg) {
     var closedTabs = [];
 	
 	this.async = false;	
+    this.applyRelevancy = true;
+    this.relevancy = 1;
+    this.name = "最近关闭标签";
+    this.description = "最近关闭标签";
 
     function RegisteEvents(){
         hasBindEvents = true;

@@ -3,6 +3,10 @@ dataProviderModule.service("bookMarkProvider", function ($cfg) {
     var bookMarksCache;
 
     this.async = false;
+    this.applyRelevancy = true;
+    this.relevancy = 10;
+    this.name = "书签";
+    this.description = "书签";
     this.init = function(){
         var me = this;
         this.bookMarksCache =  null; 

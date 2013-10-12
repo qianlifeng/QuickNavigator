@@ -1,4 +1,12 @@
 dataProviderModule.service("baiduSuggestionProvider", function ($cfg) {
+        this.async = true;
+        this.applyRelevancy = true;
+        this.relevancy = 1;
+        this.name = "百度";
+        this.description = "百度搜索";
+
+        this.init = function(){ };
+
         this.query = function(txt,asyncFunc){
             var suggestion = [];
             var reg = /s:\[(.*)?\]\}/gi;
@@ -14,6 +22,4 @@ dataProviderModule.service("baiduSuggestionProvider", function ($cfg) {
 
            return suggestion; 
         };
-        this.async = true;
-        this.init = function(){ };
 });

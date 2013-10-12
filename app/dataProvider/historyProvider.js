@@ -2,7 +2,11 @@ dataProviderModule.service("historyProvider", function ($cfg) {
 
     var historyCache = [];
     var size = 10000;
-    
+
+    this.applyRelevancy = true;
+    this.relevancy = 10;
+    this.name = "历史记录";
+    this.description = "历史记录";
 	this.async = false;
     this.init = function(){
         var me = this;

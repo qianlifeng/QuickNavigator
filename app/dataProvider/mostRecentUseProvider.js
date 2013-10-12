@@ -1,9 +1,13 @@
-dataProviderModule.service("mostRecentUseProvider", function ($cfg) {
+dataProviderModule.service("mostRecentUseProvider", function () {
     this.async = false;
     this.init = function(){ }
+    this.applyRelevancy = true;
+    this.relevancy = 15;
+    this.dataProvider = "mostRecentUseProvider";
+    this.name = "经常使用";
+    this.description = "经常使用";
 
     this.query = function(txt,asyncFunc){
-        if($cfg.getCfg().commands.mru.disabled) return [];
 
         var urls = db.getVisitedURLs();
         urls.sort(function(a,b){

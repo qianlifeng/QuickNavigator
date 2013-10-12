@@ -9,6 +9,9 @@ dataProviderModule.service("popDomainProvider", function ($cfg) {
             return window.popDomains.find(txt);
         }
     };
-
+    this.applyRelevancy = true;
+    this.relevancy = 3;
+    this.name = "流行网站";
+    this.description = "流行网站";
     this.init = function(){ };
 });

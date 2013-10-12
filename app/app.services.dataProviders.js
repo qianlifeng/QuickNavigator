@@ -8,7 +8,7 @@ var dataProviderModule = angular.module('app.services.dataProviders', ['app.serv
                 "<a class='omniboxReset omnibox-suggestions-title' ng-click='navigate(false,item.url,item.title,item.providerName)' href='{{item.url}}' ng-bind-html-unsafe='item.title | hightlightSearch:input'></a>"+ 
             "</div>"+ 
             "<div class='omniboxReset omnibox-suggestions-bottom'>"+ 
-                "<div class='omniboxReset omnibox-suggestions-sourcetype'>{{item.providerName | providerName}} {{item.relevancy}}</div>"+ 
+                "<div class='omniboxReset omnibox-suggestions-sourcetype'>{{item.provider}} {{item.relevancy}}</div>"+ 
                 "<div class='omniboxReset omnibox-suggestions-url' ng-bind-html-unsafe='item.url | hightlightSearch:input'></div>"+ 
             "</div>";
 

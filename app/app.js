@@ -15,13 +15,12 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
 
         var msgConnect;
         var cfg;
+        $scope.showOmnibox = "hidden";
+        $scope.disabled = false;
+        $scope.input = "";
+        $scope.dataProvider = "";
 
         $scope.init = function(){ 
-            $scope.showOmnibox = "hidden";
-            $scope.disabled = false;
-            $scope.input = "";
-            $scope.mode = "normal";
-
             msgConnect = chrome.extension.connect({name: "connect"});
             msgConnect.onMessage.addListener(getMsgFromBg);
 			
@@ -43,7 +42,10 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             this.requestTimer = setTimeout(function(){
                 msgConnect.postMessage({
                     name: "requestSuggestions",
-                    suggestionMode: $scope.mode,
+                    dataProvider: $scope.dataProvider,
+                    context: {
+                        title: document.title
+                    } ,
                     value:$scope.input
                 });
             },200);
@@ -55,7 +57,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                 if(command.hotkey === "") continue;
                 if(command.hotkey === $scope.input){
                     $scope.tag = command.text;
-                    $scope.mode = command.key;
+                    $scope.dataProvider = command.key;
                     $scope.input = "";
                     $scope.sendRequest();
                     break;
@@ -64,22 +66,12 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         };
 
         $scope.onKeyDown = function(e){
-            //keycodes that omnibox accept
-            //only accept a-z 0-9 and whitelist to trigger sendrequest()
-            var whiteList = [
-                8, //back
-                13, //enter
-                38, //up
-                40 //down
-            ];
-
-            if((e.keyCode < 48 || e.keyCode > 90) && whiteList.indexOf(e.keyCode) === -1) return true;
             //block all ctrl+key
             if(e.ctrlKey) return false;
 
             switch(e.keyCode){
                 case 8:  //back
-                    if($scope.input === "" && $scope.mode === "normal") 
+                    if($scope.input === "" && $scope.dataProvider === "") 
                     {
                         $scope.sendMRURequest();
                         return;
@@ -159,12 +151,14 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
         };
 
         $scope.sendMRURequest = function(){
-            if(!cfg.commands.mru.disabled){
-                msgConnect.postMessage({
-                    name: "requestSuggestions",
-                    suggestionMode: "mru"
-                });
-            }
+            msgConnect.postMessage({
+                name: "requestSuggestions",
+                dataProvider: "mostRecentUseProvider",
+                context: {
+                    title: document.title
+                } ,
+                value:$scope.input
+            });
         };
 
         function moveNextSelected(){
@@ -256,7 +250,7 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
                 $scope.input = "";
                 $scope.tag = "";
                 $scope.showOmnibox = "hidden"; 
-                $scope.mode = "normal";
+                $scope.dataProvider = "";
                 $scope.focus = false;
                 $scope.suggestions = [];
                 if(this.lastActiveElement){

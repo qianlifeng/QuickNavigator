@@ -5,15 +5,34 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/css/options.css" rel="stylesheet" media="screen">
 
-    <script src="/scripts/jquery-1.7.2.min.js"></script>
-    <script src="/scripts/angular/angular.js"></script>
+    <script type="text/javascript" src="/scripts/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="/scripts/angular/angular.js"></script>
     <script src="/scripts/bootstrap.min.js"></script>
 
     <script src="/scripts/mustache.js"></script>
+	<script type="text/javascript" src="/scripts/pinyin-dict-combo.js"></script>
+	<script type="text/javascript" src="/scripts/pinyin.js"></script>
 
-    <script src="/app/app.services.js"></script>
-    <script src="/app/app.filters.js"></script>
-    <script src="/app/app.directives.js"></script>
+	<script type="text/javascript" src="/scripts/arrayExtends.js"></script>
+	<script type="text/javascript" src="/scripts/popDomains.js"></script>
+
+	<script type="text/javascript" src="/app/app.directives.js"></script>
+	<script type="text/javascript" src="/app/app.services.js"></script>
+    <script type="text/javascript" src="/app/app.services.dataProviders.js"></script>
+
+	<script type="text/javascript" src="../DataProvider/bookMarkProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/closedTabProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/historyProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/mostRecentUseProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/popDomainProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/IPProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/baiduSuggestionProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/iFeelLuckyProvider.js"></script>
+	<script type="text/javascript" src="../DataProvider/commandProvider.js"></script>
+
+	<script type="text/javascript" src="/app/app.filters.js"></script>
+	<script type="text/javascript" src="../dbUtil.js"></script>
+
     <script src="/app/app.options.js"></script>
   </head>
   <body ng-app="app.options" ng-controller="options" ng-init="init()" ng-csp>
@@ -39,8 +58,8 @@
             <ul class="nav nav-list bs-docs-sidenav affix">
               <li class="active"><a href="#Hotkey"><i class="icon-chevron-right"></i>{{Hotkey}}</a></li>
               <!--<li><a href="#Disable"><i class="icon-chevron-right"></i>{{Disable}}</a></li>-->
-              <li><a href="#MRU"><i class="icon-chevron-right"></i>MRU</a></li>
               <li><a href="#Suggestions"><i class="icon-chevron-right"></i>{{Suggestion}}</a></li>
+              <li><a href="#DataSource"><i class="icon-chevron-right"></i>{{DataSource}}</a></li>
               <!--<li><a href="#Language"><i class="icon-chevron-right"></i>{{Language}}</a></li>-->
             </ul>
           </div>
@@ -68,22 +87,6 @@
               <!--</div>-->
             <!--</section>-->
 
-            <!-- MRU --> 
-            <section id="MRU">
-                <div class="page-header">
-                    <h1>{{MRU}}</h1>
-                    <p class="header-description">{{MRUDescription}}</p>
-                </div>
-                <div class="page-body well page-end">
-                    <fieldset>
-                        <label class="checkbox">
-                            {{DisableMRU}}: <input type="checkbox" id="disableMRU" ng-model="cfg.commands.mru.disabled">
-                        </label>
-                            {{MRUDisplayCount}}: <input type="text" id="MRUCount" ng-model="cfg.commands.mru.maxResult"/>
-                    </fieldset>
-                </div>
-            </section>
-
             <section id="suggestions">
                 <div class="page-header">
                     <h1>{{Suggestion}}</h1>
@@ -91,7 +94,20 @@
                 </div>
                 <div class="page-body well page-end">
                     <fieldset>
-                        {{SuggestionCount}}: <input type="text" id="suggestionsCount" ng-model="cfg.commands.normal.maxResult"/>
+                        {{SuggestionCount}}: <input type="text" id="suggestionsCount" ng-model="cfg.maxResult"/>
+                    </fieldset>
+                </div>
+            </section>
+
+            <section id="DataSource">
+              <div class="page-header">
+                  <h1>{{DataSource}}</h1>
+              </div>
+                <div class="page-body well page-end">
+                    <fieldset>
+                        <div ng-repeat="provider in dataProviders">
+                            <input type="checkbox" >[[provider | providerNameWithDescription]]</input>
+                        </div>
                     </fieldset>
                 </div>
             </section>

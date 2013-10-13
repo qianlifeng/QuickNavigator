@@ -5,6 +5,7 @@ dataProviderModule.service("mostRecentUseProvider", function () {
     this.relevancy = 15;
     this.dataProvider = "mostRecentUseProvider";
     this.name = "经常使用";
+    this.hotkey = "m";
     this.description = "经常使用";
 
     this.query = function(txt,asyncFunc){

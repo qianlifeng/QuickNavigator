@@ -62,6 +62,7 @@ angular.module('app.services', []).
             "historyProvider",
             "popDomainProvider",
             "closedTabProvider",
+            "closeNavigatorProvider",
             "mostRecentUseProvider",
             "baiduSuggestionProvider",
             "iFeelLuckyProvider",

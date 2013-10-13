@@ -1,7 +1,7 @@
 dataProviderModule.service("mostRecentUseProvider", function () {
     this.async = false;
     this.init = function(){ }
-    this.applyRelevancy = true;
+    this.applyRelevancy = false;
     this.relevancy = 15;
     this.dataProvider = "mostRecentUseProvider";
     this.name = "经常使用";

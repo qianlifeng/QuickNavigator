@@ -6,7 +6,7 @@
     <link href="/css/options.css" rel="stylesheet" media="screen">
 
     <script type="text/javascript" src="/scripts/jquery-1.7.2.min.js"></script>
-	<script type="text/javascript" src="/scripts/angular/angular.js"></script>
+	<script type="text/javascript" src="/scripts/angular.js"></script>
     <script src="/scripts/bootstrap.min.js"></script>
 
     <script src="/scripts/mustache.js"></script>
@@ -15,23 +15,23 @@
 
 	<script type="text/javascript" src="/scripts/arrayExtends.js"></script>
 	<script type="text/javascript" src="/scripts/popDomains.js"></script>
+	<script type="text/javascript" src="/app/dbUtil.js"></script>
 
 	<script type="text/javascript" src="/app/app.directives.js"></script>
 	<script type="text/javascript" src="/app/app.services.js"></script>
     <script type="text/javascript" src="/app/app.services.dataProviders.js"></script>
 
-	<script type="text/javascript" src="../DataProvider/bookMarkProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/closedTabProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/historyProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/mostRecentUseProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/popDomainProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/IPProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/baiduSuggestionProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/iFeelLuckyProvider.js"></script>
-	<script type="text/javascript" src="../DataProvider/commandProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/bookMarkProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/closedTabProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/historyProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/mostRecentUseProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/popDomainProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/IPProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/baiduSuggestionProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/iFeelLuckyProvider.js"></script>
+	<script type="text/javascript" src="/app/DataProvider/commandProvider.js"></script>
 
 	<script type="text/javascript" src="/app/app.filters.js"></script>
-	<script type="text/javascript" src="../dbUtil.js"></script>
 
     <script src="/app/app.options.js"></script>
   </head>
@@ -49,7 +49,18 @@
       </div>
     </div>
     <div style="height:40px;"></div>
-
+    <div class="modal hide fade" id="savedModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>{{Tip}}</h3>
+        </div>
+        <div class="modal-body">
+            <p>{{SaveSucceed}}</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">{{Close}}</a>
+        </div>
+    </div> 
     <div class="container" style="width:1170px;">
     <!-- Docs nav
     ================================================== -->
@@ -95,6 +106,21 @@
                 <div class="page-body well page-end">
                     <fieldset>
                         {{SuggestionCount}}: <input type="text" id="suggestionsCount" ng-model="cfg.maxResult"/>
+                        <div>
+                            {{ExcludeSuggestions}}
+                            <div  class="form-inline excludeSuggestions">
+                                <input type="text" ng-model="newExcludeSuggestions">
+                                <input type="button" class="btn btn-primary" ng-click="addExcludeSuggestions()" value="{{AddNewExcludeSuggestions}}" />
+                            </div>
+                            <table class="table table-hover table-bordered" >
+                                <tr ng-repeat="item in cfg.excludeSuggestions">
+                                    <td>[[item]]</td>
+                                    <td class="removeBtnTd">
+                                       <i class="icon-remove" ng-click="removeExcludeSuggestions(item)"></i> 
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </fieldset>
                 </div>
             </section>
@@ -103,10 +129,11 @@
               <div class="page-header">
                   <h1>{{DataSource}}</h1>
               </div>
-                <div class="page-body well page-end">
+                <div class="page-body well page-end datasource">
                     <fieldset>
-                        <div ng-repeat="provider in dataProviders">
-                            <input type="checkbox" >[[provider | providerNameWithDescription]]</input>
+                        <div ng-repeat="provider in availableProviders">
+                            <input type="checkbox" id="[[provider.name]]" ng-model="provider.checked" />
+                            <label for="[[provider.name]]">[[provider.name | providerNameWithDescription]]<label>
                         </div>
                     </fieldset>
                 </div>

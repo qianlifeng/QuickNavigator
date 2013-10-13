@@ -70,11 +70,17 @@ angular.module('app.services', []).
         ];
 
         this.defaultCfg = {
-            version:10,
+            version:11,
             activeProviders:this.dataProviders,
             hotkey:"F",
+            excludeSuggestions:[],
             maxResult:5,
             overrideDefaultOmniboxHotkey:false
+        };
+
+
+        this.isProviderEnabled = function(p){
+            return this.getCfg().activeProviders.indexOf(p) >= 0;   
         };
 
         this.getCfg = function(){

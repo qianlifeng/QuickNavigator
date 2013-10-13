@@ -1,4 +1,4 @@
-angular.module('app.filters', [])
+angular.module('app.filters', ["app.services.dataProviders"])
     .filter("providerNameWithDescription",function($cfg,$injector){
         return function(providerName) {
             var dataProviderService = $injector.get(providerName);

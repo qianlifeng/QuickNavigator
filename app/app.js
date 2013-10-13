@@ -1,4 +1,4 @@
-angular.module("app",  ["ngSanitize","app.services","app.directives","app.filters"])
+angular.module("app",  ["app.services","app.directives","app.filters"])
     .run(function($rootScope) {
         $rootScope.safeApply = function(fn) {
             var phase = this.$root.$$phase;
@@ -51,18 +51,11 @@ angular.module("app",  ["ngSanitize","app.services","app.directives","app.filter
             },200);
         };
 
-        $scope.switchToAdvancedMode = function(){
-            for(var i in cfg.commands){
-                var command = cfg.commands[i];
-                if(command.hotkey === "") continue;
-                if(command.hotkey === $scope.input){
-                    $scope.tag = command.text;
-                    $scope.dataProvider = command.key;
-                    $scope.input = "";
-                    $scope.sendRequest();
-                    break;
-                }
-            }
+        $scope.switchToAdvancedMode = function(dataProviderName,dataProviders){
+            $scope.tag = dataProviderName;
+            $scope.dataProvider = dataProviders;
+            $scope.input = "";
+            $scope.sendRequest();
         };
 
         $scope.onKeyDown = function(e){

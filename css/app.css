@@ -5,7 +5,7 @@
   font-weight:normal;
   font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   box-sizing:content-box;
-  list-style:initial;
+  list-style-type:none;
   text-shadow:initial;
 }
 
@@ -91,7 +91,7 @@
 #quickNavigator-omnibox ul.omnibox-ul
 {
     border-radius: 0px 0px 4px 4px;
-    list-style: none;
+    list-style-type: none;
 }
 
 #quickNavigator-omnibox li.omnibox-li

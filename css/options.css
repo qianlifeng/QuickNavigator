@@ -79,3 +79,21 @@
 {
     margin-bottom:60px;
 }
+.datasource label,.datasource input[type="checkbox"]{
+    display:inline-block;
+    margin:0 0 0 3px;
+    padding:0;
+}
+.excludeSuggestions
+{
+    margin:10px 0;
+}
+td.removeBtnTd
+{
+    width:18px;
+    text-align:right;
+}
+i
+{
+    cursor:pointer;
+}

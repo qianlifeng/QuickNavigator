@@ -14,7 +14,7 @@ dataProviderModule.service("IPProvider", function ($cfg,$log) {
         };
         this.async = true;
         this.applyRelevancy = true;
-        this.relevancy = 10;
+        this.relevancy = 300;
         this.name = "IP";
         this.description = "IP";
         this.init = function(){ };

@@ -77,12 +77,18 @@
             dataProvider = $cfg.getCfg().activeProviders;
         }
         else{
-            dataProvider = dataProvider.split(',');
+            var allProviders = dataProvider.split(',');
+            dataProvider = [];
+            allProviders.forEach(function(e){
+                if($cfg.isProviderEnabled(e)) dataProvider.push(e);
+            });
+
         }
+
         var res = query(text,dataProvider,function(d){
             tunnel.postMessage({
                 name: "responseSuggestionsAsync",
-                value: addTemplate(d)
+                value: excludeSuggestions(addTemplate(d))
             });
         });
         tunnel.postMessage({
@@ -125,9 +131,30 @@
                 return a.relevancy >= b.relevancy ? -1:1;
             });
         }
-        res = res.slice(0, $cfg.getCfg().maxResult);
 
+        res = res.slice(0, $cfg.getCfg().maxResult * 2);
+        res = excludeSuggestions(res);
+        res = res.slice(0, $cfg.getCfg().maxResult);
         return res;
+    }
+
+    function excludeSuggestions(items){
+        if($cfg.getCfg().excludeSuggestions.length ===0) return items;
+
+        var newSuggestions = [];
+        items.forEach(function(item){
+            $cfg.getCfg().excludeSuggestions.forEach(function(excludeItem){
+                if((typeof item.url !== "undefined" && item.url.indexOf(excludeItem) > -1) || 
+                   (typeof item.title !== "undefined" && item.title.indexOf(excludeItem) > -1))
+                {
+                    
+                }
+                else{
+                    newSuggestions.push(item);
+                }
+            });
+        });
+        return newSuggestions;
     }
 
     function addRelevancy(mergedList){

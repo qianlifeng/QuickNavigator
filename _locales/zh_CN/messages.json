@@ -20,5 +20,10 @@
     "Disable" : { "message" : "禁止" },
     "SourceCode" : { "message" : "源代码@Github" },
 
-    "DataSource" : { "message" : "数据源" }
+    "DataSource" : { "message" : "数据源" },
+    "Tip" : { "message" : "提示" },
+    "SaveSucceed" : { "message" : "保存成功" },
+    "Close" : { "message" : "关闭" },
+    "ExcludeSuggestions" : { "message" : "搜索结果排除列表：（所有包含下列关键字的搜索链接将不显示）" },
+    "AddNewExcludeSuggestions" : { "message" : "添加" }
 }

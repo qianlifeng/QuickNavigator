@@ -19,7 +19,15 @@
    },
   "content_scripts":[
   {
-    "js":["scripts/jquery-1.7.2.min.js","scripts/angular/angular.js","scripts/angular/angular-sanitize.min.js","app/app.services.js","app/app.filters.js","app/app.directives.js","scripts/pinyin-dict-combo.js","scripts/pinyin.js","app/app.js"],
+    "js":["scripts/jquery-1.7.2.min.js",
+          "scripts/angular.js",
+          "app/app.services.js",
+          "app/app.services.dataProviders.js",
+          "app/app.filters.js",
+          "app/app.directives.js",
+          "scripts/pinyin-dict-combo.js",
+          "scripts/pinyin.js",
+          "app/app.js"],
     "css":["css/app.css" ],
     "matches":["http://*/*","https://*/*"],
     "run_at":"document_start"

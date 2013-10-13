@@ -6,6 +6,7 @@ dataProviderModule.service("closedTabProvider", function ($cfg) {
 	this.async = false;	
     this.applyRelevancy = true;
     this.relevancy = 1;
+    this.hotkey = "u";
     this.name = "最近关闭标签";
     this.description = "最近关闭标签";
 

@@ -1,6 +1,8 @@
 QuickNavigator
 ==============
 
+[中文介绍](https://github.com/qianlifeng/QuickNavigator/wiki/QuickNavigator-For-Chinese-Doc)
+
 a chrome extension for quick navigate. This is inspired by [Vimum](http://vimium.github.io/).
 When user type some key words in search box, it will give you all relevant urls including your history,bookmarks,popdomains and so on.
 
